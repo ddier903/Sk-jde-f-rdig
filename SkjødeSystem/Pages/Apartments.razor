@@ -1,5 +1,36 @@
-﻿<h3>Apartments</h3>
+﻿@page "/apartments"
+@using SkjødeSystem.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>Apartments</PageTitle>
+
+<h3>Apartments</h3>
+
+
+
+<ul>
+	@foreach (var apartment in apartments)
+	{
+		<li>
+			<strong>Apartment Id:</strong> @apartment.ApartmentId
+			<strong>Adress:</strong> @apartment.Address
+			<button @onclick="() => NavigateToCreateTask(apartment.ApartmentId)">Create Task!</button>
+		</li>
+	}
+</ul>
+
 
 @code {
+	private List<Apartment> apartments = new List<Apartment>
+	{
+		new Apartment { ApartmentId = 1, Address = "Sønderhøj 30"},
+		new Apartment { ApartmentId = 2, Address = "Bryggerivej 23"},
+		new Apartment { ApartmentId = 3, Address = "Fasanvej 99"}
+	};
 
+
+	private void NavigateToCreateTask(int ApartmentId)
+	{
+		NavigationManager.NavigateTo($"/createtask/{ApartmentId}");
+	}
 }
