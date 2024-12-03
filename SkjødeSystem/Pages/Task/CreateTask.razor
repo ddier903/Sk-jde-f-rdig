@@ -2,8 +2,74 @@
 
 <PageTitle>CreateTask</PageTitle>
 
-<h3>Create A New Task!</h3>
+<h3>Ny Opgave:</h3>
+
+
+<EditForm Model="@task" OnValidSubmit="@SubmitTask">
+    <DataAnnotationsValidator />
+
+    <div class="form-group row mb-3">
+        <label for="taskName">Opgave Navn:</label>
+        <InputText id="taskName" @bind-Value="task.TaskName" />
+    </div>
+
+    <div class="form-group row mb-3">
+        <label for="description">Beskrivelse:</label>
+        <InputText id="description" @bind-Value="task.Description" />
+    </div>
+
+    <div class="form-group row mb-3">
+        <label for="image">Billede:</label>
+        <InputText id="description" @bind-Value="task.Image" />
+    </div>
+
+    <div class="form-group row mb-3">
+        <label for="status">Ansvarlig:</label>
+        <InputSelect id="" class="form-control" @bind-Value="task.SubcontractorID">
+            @foreach (var subconctractor in Subcontractors)
+            {
+                <option value="@subconctractor">@subconctractor</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group row mb-3">
+        <label for="startDate">Start Dato:</label>
+        <InputDate id="startDate" @bind-Value="task.StartDate" TValue="DateOnly" />
+    </div>
+
+    <div class="form-group row mb-3">
+        <label for="status">Status:</label>
+        <InputSelect id="status" class="form-control" @bind-Value="task.Status">
+            @foreach (var status in Statuses)
+            {
+                <option value="@status">@status</option>
+            }
+        </InputSelect>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
 
 @code {
+    private string Status = "Not submitted";
+    private List<string> Statuses = new() { "Pending", "In Progress", "Done", };
+    private TaskItem task = new TaskItem();
+    private List<TaskItem> taskItems = new List<TaskItem>();
+    private List<string> Subcontractors = new() { "Maler", "Murer", "Tømrer", "VVS" };
 
+    void SubmitTask()
+    {
+        Status = "Form submitted";
+        taskItems.Add(task);
+
+
+        task = new TaskItem();
+        foreach (var task in taskItems)
+        {
+            Console.WriteLine($"Task Name: {task.TaskName}, Description: {task.Description}");
+        }
+    }
 }
