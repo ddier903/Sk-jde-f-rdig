@@ -1,4 +1,4 @@
-﻿@page "/createtask{ApartmentId}"
+﻿@page "/createtask/{ApartmentId:int}"
 
 <PageTitle>CreateTask</PageTitle>
 
@@ -72,4 +72,7 @@
             Console.WriteLine($"Task Name: {task.TaskName}, Description: {task.Description}");
         }
     }
+
+    [Parameter]
+    public int ApartmentId { get; set; }
 }
