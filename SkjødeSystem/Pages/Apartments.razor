@@ -14,7 +14,14 @@
 		<li>
 			<strong>Apartment Id:</strong> @apartment.ApartmentId
 			<strong>Adress:</strong> @apartment.Address
-			<button @onclick="() => NavigateToCreateTask(apartment.ApartmentId)">Create Task!</button>
+			<button @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" class="btn btn-primary" disabled="@IsStatusDone(apartment.Status)">
+				Create Task!</button>
+			<InputSelect class="form-control" @bind-Value="apartment.Status" style="width: 120px; display: inline-block; margin-left: 10px;">
+				@foreach (var status in Statuses)
+				{
+					<option value="@status">@status</option>
+				}
+			</InputSelect>
 		</li>
 	}
 </ul>
@@ -23,14 +30,20 @@
 @code {
 	private List<Apartment> apartments = new List<Apartment>
 	{
-		new Apartment { ApartmentId = 1, Address = "Sønderhøj 30"},
-		new Apartment { ApartmentId = 2, Address = "Bryggerivej 23"},
-		new Apartment { ApartmentId = 3, Address = "Fasanvej 99"}
+		new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Pending"},
+		new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Pending"},
+		new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Pending"}
 	};
 
+	private List<string> Statuses = new() { "Pending", "Done" };
 
 	private void NavigateToCreateTask(int ApartmentId)
 	{
 		NavigationManager.NavigateTo($"/createtask/{ApartmentId}");
+	}
+
+	private bool IsStatusDone (string status)
+	{
+		return status == "Done";
 	}
 }
