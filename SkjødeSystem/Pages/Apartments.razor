@@ -6,44 +6,58 @@
 
 <h3>Apartments</h3>
 
-
-
-<ul>
-	@foreach (var apartment in apartments)
-	{
-		<li>
-			<strong>Apartment Id:</strong> @apartment.ApartmentId
-			<strong>Adress:</strong> @apartment.Address
-			<button @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" class="btn btn-primary" disabled="@IsStatusDone(apartment.Status)">
-				Create Task!</button>
-			<InputSelect class="form-control" @bind-Value="apartment.Status" style="width: 120px; display: inline-block; margin-left: 10px;">
-				@foreach (var status in Statuses)
-				{
-					<option value="@status">@status</option>
-				}
-			</InputSelect>
-		</li>
-	}
-</ul>
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ApartmentId</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Create Task</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var apartment in apartments)
+        {
+            <tr>
+                <td>@apartment.ApartmentId</td>
+                <td>@apartment.Address</td>
+                <td>
+                    <InputSelect class="form-control" style="width: 110px; height: auto" @bind-Value="apartment.Status">
+                        @foreach (var status in Statuses)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                </td>
+                <td>
+                    <button class="btn btn-primary" 
+                            @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" 
+                            disabled="@IsStatusComplete(apartment.Status)">
+                        Create Task
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
-	private List<Apartment> apartments = new List<Apartment>
-	{
-		new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Pending"},
-		new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Pending"},
-		new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Pending"}
-	};
+    private List<Apartment> apartments = new List<Apartment>
+    {
+        new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Incomplete" },
+        new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Incomplete" },
+        new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Incomplete" }
+    };
 
-	private List<string> Statuses = new() { "Pending", "Done" };
+    private List<string> Statuses = new List<string> { "Incomplete", "Complete" };
 
-	private void NavigateToCreateTask(int ApartmentId)
-	{
-		NavigationManager.NavigateTo($"/createtask/{ApartmentId}");
-	}
+    private void NavigateToCreateTask(int apartmentId)
+    {
+        NavigationManager.NavigateTo($"/createtask/{apartmentId}");
+    }
 
-	private bool IsStatusDone (string status)
-	{
-		return status == "Done";
-	}
+    private bool IsStatusComplete(string status)
+    {
+        return status == "Complete";
+    }
 }

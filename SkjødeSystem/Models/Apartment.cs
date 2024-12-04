@@ -4,6 +4,6 @@
     {
         public int ApartmentId { get; set; }
         public string Address {  get; set; }
-        public string Status { get; set; } = "Pending";
+        public string Status { get; set; } = "Incomplete";
     }
 }
