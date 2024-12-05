@@ -2,8 +2,8 @@
 {
     public class Availability
     {
-        public DateTime? AvailabilityDate { get; set; }
-        public int ApartmentId { get; set; }
-
+        public int ApartmentID { get; set; } // Identifier for the apartment
+        public DateTime Date { get; set; }
+        public TimeOnly Time { get; set; }
     }
 }
