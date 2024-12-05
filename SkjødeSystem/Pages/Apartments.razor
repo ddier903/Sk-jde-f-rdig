@@ -39,7 +39,7 @@
                     <td>@apartment.ApartmentId</td>
                     <td>@apartment.Address</td>
                     <td>
-                        <InputSelect class="form-control" style="width: 110px; height: auto" @bind-Value="apartment.Status">
+                        <InputSelect class="form-control" style="@GetStatusStyle(apartment.Status)" @bind-Value="apartment.Status">
                             @foreach (var status in Statuses)
                             {
                                 <option value="@status">@status</option>
@@ -103,5 +103,12 @@
     private bool IsStatusComplete(string status)
     {
         return status == "Complete";
+    }
+
+    private string GetStatusStyle(string status)
+    {
+        return status == "Complete"
+            ? "background-color: green; color: white; width: 110px; height: auto;"
+            : "background-color: red; color: white; width: 110px; height: auto;";
     }
 }
