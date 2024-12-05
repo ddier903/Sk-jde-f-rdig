@@ -6,6 +6,21 @@
 
 <h3>Apartments</h3>
 
+
+<div class="d-flex mb-3">
+    <label for="filter" class="me-2">Filter: </label>
+    <InputSelect class="form-control" id="filter" @bind-Value="selectedFilter" style="width: 150px;">
+        <option value="All">All</option>
+        <option value="Complete">Complete</option>
+        <option value="Incomplete">Incomplete</option>
+    </InputSelect>
+</div>
+
+<div class="mb-3">
+    <label for="search">Search for Address: </label>
+    <input id="search" type="text" @bind="searchQuery" placeholder="Enter Address..."/>
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -18,25 +33,28 @@
     <tbody>
         @foreach (var apartment in apartments)
         {
-            <tr>
-                <td>@apartment.ApartmentId</td>
-                <td>@apartment.Address</td>
-                <td>
-                    <InputSelect class="form-control" style="width: 110px; height: auto" @bind-Value="apartment.Status">
-                        @foreach (var status in Statuses)
-                        {
-                            <option value="@status">@status</option>
-                        }
-                    </InputSelect>
-                </td>
-                <td>
-                    <button class="btn btn-primary" 
-                            @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" 
-                            disabled="@IsStatusComplete(apartment.Status)">
-                        Create Task
-                    </button>
-                </td>
-            </tr>
+            if(DisplayApartment(apartment))
+            {
+                <tr>
+                    <td>@apartment.ApartmentId</td>
+                    <td>@apartment.Address</td>
+                    <td>
+                        <InputSelect class="form-control" style="width: 110px; height: auto" @bind-Value="apartment.Status">
+                            @foreach (var status in Statuses)
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </InputSelect>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" 
+                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" 
+                        disabled="@IsStatusComplete(apartment.Status)">
+                            Create Task
+                        </button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
@@ -46,10 +64,36 @@
     {
         new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Incomplete" },
         new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Incomplete" },
-        new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Incomplete" }
+        new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Incomplete" },
+        new Apartment { ApartmentId = 4, Address = "Sønderhøj 30", Status = "Incomplete" },
+        new Apartment { ApartmentId = 5, Address = "Bryggerivej 23", Status = "Incomplete" },
+        new Apartment { ApartmentId = 6, Address = "Fasanvej 99", Status = "Incomplete" },
+        new Apartment { ApartmentId = 7, Address = "Sønderhøj 30", Status = "Incomplete" },
+        new Apartment { ApartmentId = 8, Address = "Bryggerivej 23", Status = "Incomplete" },
+        new Apartment { ApartmentId = 9, Address = "Fasanvej 99", Status = "Incomplete" },
+        new Apartment { ApartmentId = 10, Address = "Sønderhøj 30", Status = "Incomplete" },
+        new Apartment { ApartmentId = 11, Address = "Bryggerivej 23", Status = "Incomplete" },
+        new Apartment { ApartmentId = 12, Address = "Fasanvej 99", Status = "Incomplete" },
+        new Apartment { ApartmentId = 13, Address = "Sønderhøj 30", Status = "Incomplete" },
+        new Apartment { ApartmentId = 14, Address = "Bryggerivej 23", Status = "Incomplete" },
+        new Apartment { ApartmentId = 15, Address = "Fasanvej 99", Status = "Incomplete" }
     };
 
     private List<string> Statuses = new List<string> { "Incomplete", "Complete" };
+
+    private string searchQuery = "";
+
+    private string selectedFilter = "All";
+
+    private bool DisplayApartment(Apartment apartment)
+    {
+        if(!string.IsNullOrWhiteSpace(searchQuery) &&
+        !apartment.Address.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return selectedFilter == "All" || apartment.Status == selectedFilter;
+    }
 
     private void NavigateToCreateTask(int apartmentId)
     {
