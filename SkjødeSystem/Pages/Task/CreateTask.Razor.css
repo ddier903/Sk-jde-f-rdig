@@ -1,0 +1,20 @@
+﻿.grid-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #6a0dad; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
