@@ -44,7 +44,7 @@
 
     <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
-            <InputSelect id="" class="form-control" @bind-Value="task.SubcontractorID">
+            <InputSelect id="" class="form-control" @bind-Value="task.Subcontractor.UserId">
                @foreach (var subconctractor in Subcontractors)
                {
                   <option value="@subconctractor">@subconctractor</option>
@@ -65,7 +65,7 @@
 
      <div class="col-span-6 sm:col-span-3">
          <label for="adminid">Oprettet af:</label>
-         <InputNumber id="adminid" class="form-control" @bind-Value="task.AdminId" placeholder="xxx" readonly />
+         <InputNumber id="adminid" class="form-control" @bind-Value="task.Admin.UserId" placeholder="xxx" readonly />
     </div>
 
      <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
