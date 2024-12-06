@@ -15,9 +15,10 @@ namespace SkjødeSystem.Models
         public DateOnly? EndDate { get; set; }
         public string Status { get; set; } = "Pending";
         public string Comment { get; set; } = string.Empty;
-        public string SubcontractorID { get; set; }
-        public int AdminId { get; set; }
         public IBrowserFile? ToDoPDF { get; set; }
+        public Apartment Apartment { get; set; }
+        public Subcontractor Subcontractor { get; set; }
+        public Admin Admin { get; set; }
 
     }
 

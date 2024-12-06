@@ -2,7 +2,7 @@
 {
     public class Availability
     {
-        public int ApartmentID { get; set; } // Identifier for the apartment
+        public int AvailabilityID { get; set; }
         public DateTime Date { get; set; }
         public TimeOnly Time { get; set; }
     }
