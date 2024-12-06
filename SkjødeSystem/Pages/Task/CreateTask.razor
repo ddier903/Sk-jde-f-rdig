@@ -5,6 +5,7 @@
 <EditForm Model="@task" OnValidSubmit="@SubmitTask">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
 <div class="shadow overflow-hidden sm:rounded-md bg-white dark:bg-black">
 
 
@@ -54,7 +55,7 @@
 
     <div class="col-span-6 sm:col-span-3">
          <label for="address">Adresse:</label>
-         <InputText id="address" class="form-control" @bind-Value="apartment.Address" placeholder="Kommentar fra UE" readonly />
+         <InputText id="address" class="form-control" @bind-Value="apartment.Address" readonly />
     </div>
 
      <div class="col-span-6 sm:col-span-3">
@@ -76,7 +77,6 @@
  </div>
 </div>
 </div>
-
 
 </EditForm>
 
