@@ -1,0 +1,30 @@
+﻿@page "/viewapartmenttask/{apartmentId:int}/{address}"
+@using SkjødeSystem.Models
+@inject NavigationManager NavigationManager
+
+<h3>Opgaveliste</h3>
+
+<p><strong>Adresse: </strong>@address</p>
+<p><strong>Id: </strong>@apartmentId</p>
+
+<p><strong>Opgaver: </strong></p>
+<ul>
+	<li>Maler - Udføres af Kim Nørgaard</li>
+	<li>Murer - Udføres af Mark Vestergaard</li>
+	<li>VVS - Udføres af Bo Jespersen</li>
+</ul>
+
+
+
+@code {
+	[Parameter]
+	public int apartmentId { get; set; }
+
+	[Parameter]
+	public string address { get; set; }
+
+	protected override void OnInitialized()
+	{
+		address = Uri.UnescapeDataString(address);
+	}
+}

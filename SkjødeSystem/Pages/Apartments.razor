@@ -24,7 +24,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>ID</th>
             <th>Adresse</th>
             <th>Status</th>
             <th>Opret Opgave</th>
@@ -37,7 +37,10 @@
             {
                 <tr>
                     <td>@apartment.ApartmentId</td>
-                    <td>@apartment.Address</td>
+                    <td>
+                        <button class="btn btn-link" @onclick="() => NavigateToViewTask(apartment.ApartmentId, apartment.Address)">
+                            @apartment.Address</button>
+                    </td>
                     <td>
                         <InputSelect class="form-control" style="@GetStatusStyle(apartment.Status)" @bind-Value="apartment.Status">
                             @foreach (var status in Statuses)
@@ -98,6 +101,13 @@
     private void NavigateToCreateTask(int apartmentId)
     {
         NavigationManager.NavigateTo($"/createtask/{apartmentId}");
+    }
+
+    private void NavigateToViewTask(int apartmentId, string address) 
+    {
+        var Address = Uri.EscapeDataString(address);
+
+        NavigationManager.NavigateTo($"/viewapartmenttask/{apartmentId}/{Address}");
     }
 
     private bool IsStatusComplete(string status)
