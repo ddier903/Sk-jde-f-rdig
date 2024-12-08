@@ -1,6 +1,14 @@
-﻿namespace ServerAPI.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using ServerAPI.Repositories;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TaskController : ControllerBase
 {
-    public class TaskController
+    private readonly TaskRepository _repository;
+
+    public TaskController()
     {
+        _repository = new TaskRepository();
     }
 }

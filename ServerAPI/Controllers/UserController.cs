@@ -1,6 +1,13 @@
-﻿namespace ServerAPI.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using ServerAPI.Repositories;
+
+[ApiController]
+[Route("api/[controller]")]
+public class UserController : ControllerBase
 {
-    public class UserController
+    private readonly UserRepository _repository;
+
+    public UserController()
     {
+        _repository = new UserRepository();
     }
-}
