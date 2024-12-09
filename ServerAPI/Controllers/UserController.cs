@@ -11,3 +11,4 @@ public class UserController : ControllerBase
     {
         _repository = new UserRepository();
     }
+}
