@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel.DataAnnotations;
 
-namespace SkjødeSystem.Models
+namespace Core
 {
     public class TaskItem
     {

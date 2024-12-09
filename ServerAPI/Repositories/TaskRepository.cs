@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Core; 
 namespace ServerAPI.Repositories;
 
 public class TaskRepository

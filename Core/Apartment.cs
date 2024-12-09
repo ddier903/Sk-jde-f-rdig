@@ -1,4 +1,4 @@
-﻿namespace SkjødeSystem.Models
+﻿namespace Core
 {
     public class Apartment
     {

@@ -1,7 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Core; 
 namespace ServerAPI.Repositories;
+
 
 
 public class UserRepository

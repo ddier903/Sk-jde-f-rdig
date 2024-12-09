@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace SkjødeSystem.Models
+namespace Core
 {
     public class Admin : User
     {
