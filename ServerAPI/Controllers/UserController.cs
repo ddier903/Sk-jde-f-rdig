@@ -13,16 +13,40 @@ public class UserController : ControllerBase
         _repository = new UserRepository();
     }
 
-    //Add User
+    //Add Admin
     [HttpPost]
-    [Route("AddUser")]
-    public async Task<IActionResult> PostUser(User user)
+    [Route("AddAdmin")]
+    public async Task<IActionResult> PostAdmin(Admin admin)
 	{
 
-		await _repository.PostUser(user);
+		await _repository.PostAdmin(admin);
 		return Ok("User added successfully");
 
 	}
+
+    //Add Subcontractor
+
+    [HttpPost]
+    [Route("AddSubcontractor")]
+    public async Task<IActionResult> PostSubcontractor(Subcontractor subcontractor)
+    {
+
+        await _repository.PostSubcontractor(subcontractor);
+        return Ok("User added successfully");
+
+    }
+
+    //Add Tenant
+
+    [HttpPost]
+    [Route("AddTenant")]
+    public async Task<IActionResult> PostTenant(Tenant tenant)
+    {
+
+        await _repository.PostTenant(tenant);
+        return Ok("User added successfully");
+
+    }
 
     //Delete User
     [HttpDelete]

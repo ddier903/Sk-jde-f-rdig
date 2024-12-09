@@ -22,13 +22,28 @@ public class UserRepository
         collection = database.GetCollection<User>("User");
     }
 
-	//Add User
-	public async Task PostUser(User user)
+	//Add Admin User
+	public async Task PostAdmin(Admin admin)
 	{
-		await collection.InsertOneAsync(user);
+		admin.Role = "Admin";
+		await collection.InsertOneAsync(admin);
 	}
-	//Delete User
-	public async Task DeleteUSer(int userId)
+    //Add Subcontractor User
+    public async Task PostSubcontractor(Subcontractor subcontractor)
+    {
+        subcontractor.Role = "Subcontractor";
+        await collection.InsertOneAsync(subcontractor);
+    }
+
+    //Add Subcontractor User
+    public async Task PostTenant(Tenant tenant)
+    {
+        tenant.Role = "Tenant";
+        await collection.InsertOneAsync(tenant);
+    }
+
+    //Delete User
+    public async Task DeleteUSer(int userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		await collection.DeleteOneAsync(filter);

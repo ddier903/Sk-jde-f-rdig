@@ -44,7 +44,7 @@
             }
         </InputSelect>
 
-   <div class="col-span-6 sm:col-span-3">
+   @* <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
             <InputSelect id="" class="form-control" @bind-Value="task.Subcontractor.SubcontractorName">
                @foreach (var subconctractor in subcontractors)
@@ -52,12 +52,12 @@
                   <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
                }
            </InputSelect>
-    </div>
-@* 
+    </div> *@
+
     <div class="col-span-6 sm:col-span-3">
          <label for="address">Adresse:</label>
          <InputText id="address" class="form-control" @bind-Value="apartment.Address" readonly />
-    </div> *@
+    </div> 
 
      <div class="col-span-6 sm:col-span-3">
           <label for="comment">Kommentar:</label>

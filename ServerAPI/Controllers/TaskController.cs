@@ -21,6 +21,12 @@ public class TaskController : ControllerBase
     {
 
         await _repository.PostTask(task);
+
+        if (task == null)
+        {
+            return BadRequest("Task object is null");
+        }
+
         return Ok("Task added successfully");
 
     }
