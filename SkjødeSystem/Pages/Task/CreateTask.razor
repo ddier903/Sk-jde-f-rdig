@@ -1,8 +1,10 @@
 ﻿@page "/createtask/{ApartmentId:int}"
 @inject NavigationManager NavigationManager
+@inject HttpClient Http
+
 <PageTitle>CreateTask</PageTitle>
 
-<EditForm Model="@task" OnValidSubmit="@SubmitTask">
+<EditForm Model="@task" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -44,7 +46,7 @@
 
     <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
-            <InputSelect id="" class="form-control" @bind-Value="task.Subcontractor.UserId">
+            <InputSelect id="" class="form-control" @bind-Value="task.Subcontractor.SubcontractorName">
                @foreach (var subconctractor in Subcontractors)
                {
                   <option value="@subconctractor">@subconctractor</option>
@@ -73,6 +75,14 @@
         <button type="submit" class="btn btn-primary">Gem Opgave</button>
         </div>
      </div>
+        
+     @if (showSuccessMessage)
+        {
+         <div class="alert alert-success mt-3">
+             Listing added successfully!
+         </div>
+         }
+
   </div>
  </div>
 </div>
@@ -81,11 +91,11 @@
 </EditForm>
 
 @code {
-    private string Status = "Not submitted";
-    private List<string> Statuses = new() { "Afventer", "Iganværende", "Færdiggjort", };
+
+    private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
     private TaskItem task = new TaskItem();
-    private List<TaskItem> taskItems = new List<TaskItem>();
     private List<string> Subcontractors = new() { "Maler", "Murer", "Tømrer", "VVS" };
+    private bool showSuccessMessage = false;
 
     //In memory liste af apartments:
     private Apartment apartment;
@@ -104,19 +114,25 @@
     }
 
 
-    //SubtmitTask udføres når der trykkes på submit
-    void SubmitTask()
+    private async Task HandleValidSubmit()
     {
-        Status = "Form submitted";
-        taskItems.Add(task);
-        task = new TaskItem();
-        foreach (var task in taskItems)
+        
+        // Make HTTP POST request to save the listing
+        var response = await Http.PostAsJsonAsync("https://localhost:7275/api/Listing/AddListing", task);
+
+        if (response.IsSuccessStatusCode)
         {
-            Console.WriteLine($"Task Name: {task.TaskName}, Description: {task.Description}");
+            showSuccessMessage = true;
+            await Task.Delay(4000);
+            showSuccessMessage = false;
+
+            NavigationManager.NavigateTo($"/apartments");
         }
-
-        NavigationManager.NavigateTo($"/apartments");
-
+        else
+        {
+            // Handle error (e.g., show message)
+            Console.WriteLine("Error adding listing.");
+        }
     }
 
     [Parameter]
