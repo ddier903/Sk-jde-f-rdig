@@ -15,18 +15,48 @@ public class ApartmentRepository
     {
         mongoClient = new MongoClient(connectionString);
         database = mongoClient.GetDatabase("Skjøde");
-        //collection = database.GetCollection<Apartments>("Apartments");
+        collection = database.GetCollection<Apartment>("Apartments");
     }
 
     //Post apartment: 
-
+    public async Task PostApartment(Apartment apartment)
+    {
+        await collection.InsertOneAsync(apartment);
+    }
     //Update apartment: 
+    public async Task UpdateApartment(int id, Apartment updatedApartment)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, id);
+        await collection.ReplaceOneAsync(filter, updatedApartment);
+    }
 
     //Get all Apartments:
+    public async Task<List<Apartment>> GetAllApartments()
+    {
+        return await collection.Find(apartment => true).ToListAsync();
+    }
+
 
     // Get all apartments filtered by status:
+    public async Task<List<Apartment>> GetApartmentsByStatus(string status)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.Status, status);
+        return await collection.Find(filter).ToListAsync();
+    }
 
     //Get Apartment:
+    public async Task<Apartment> GetApartment(int apartmentId)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
+        return await collection.Find(filter).FirstOrDefaultAsync();
+    }
+
 
     //Get Apartments "Ikke færdig" Count. 
+    public async Task<long> GetApartmentsNotFinishedCount()
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.Status, "Ikke færdig");
+        return await collection.CountDocumentsAsync(filter);
+    }
+
 }
