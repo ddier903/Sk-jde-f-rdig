@@ -2,7 +2,6 @@
 using ServerAPI.Repositories;
 using Core;
 using System.Reflection;
-using SkjødeSystem.Models;
 
 [ApiController]
 [Route("api/[controller]")]

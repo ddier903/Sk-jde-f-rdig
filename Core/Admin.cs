@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
+﻿
 namespace Core
 {
     public class Admin : User

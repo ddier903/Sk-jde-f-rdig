@@ -71,10 +71,10 @@ public class TaskRepository
     }
 
     // Get Task by Id: 
-    public async Task<List<TaskItem>> GetTaskById(int id)
+    public async Task<TaskItem> GetTaskById(int taskId)
     {
-        var filter = Builders<TaskItem>.Filter.Eq("TaskId", id);
-        return await collection.Find(filter).ToListAsync();
+        var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
+        return await collection.Find(filter).FirstOrDefaultAsync(); ;
     }
 
     // Get All Task by status:
