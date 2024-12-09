@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-
 namespace ServerAPI.Repositories;
 
 
@@ -16,6 +15,6 @@ public class UserRepository
     {
         mongoClient = new MongoClient(connectionString);
         database = mongoClient.GetDatabase("Skjøde");
-        //collection = database.GetCollection<>("User"); mangler navn i krokodillemunden
+        //collection = database.GetCollection<User>("User"); mangler navn i krokodillemunden
     }
 }
