@@ -29,7 +29,7 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateApartment(int id, Apartment updatedApartment)
+	public async Task<IActionResult> UpdateApartment(int id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {
