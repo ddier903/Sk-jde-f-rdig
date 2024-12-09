@@ -16,7 +16,7 @@ public class ApartmentController : ControllerBase
     //Post apartment: 
 
     [HttpPost]
-	public async Task<IActionResult> PostApartment(Apartment apartment)
+	public async Task<IActionResult> PostApartment([FromBody]Apartment apartment)
     {
         if (apartment == null)
         {
