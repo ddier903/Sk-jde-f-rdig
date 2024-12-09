@@ -22,7 +22,7 @@ public class TaskController : ControllerBase
     {
 
         await _repository.PostTask(task);
-        return Ok();
+        return Ok("Task added successfully");
 
     }
 
@@ -33,7 +33,7 @@ public class TaskController : ControllerBase
     {
 
         await _repository.UpdateTask(taskId, updatedtask);
-        return Ok();
+        return Ok("Task updated successfully");
 
     }
 
@@ -44,7 +44,7 @@ public class TaskController : ControllerBase
     {
 
         await _repository.DeleteTask(taskId);
-        return Ok();
+        return Ok("Task deleted successfully");
 
     }
 

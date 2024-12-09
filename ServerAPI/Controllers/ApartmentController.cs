@@ -59,6 +59,7 @@ public class ApartmentController : ControllerBase
     public async Task<IActionResult> GetApartmentsByStatus(string status)
     {
         var apartments = await _repository.GetApartmentsByStatus(status);
+
         if (apartments == null || !apartments.Any())
         {
             return NotFound($"No apartments found with status '{status}'");
