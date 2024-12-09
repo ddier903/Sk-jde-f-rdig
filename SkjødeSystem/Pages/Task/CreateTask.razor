@@ -108,7 +108,6 @@
     // Find the apartment by ID in the in-memory list
     protected override void OnInitialized()
     {
-       
         apartment = apartments.FirstOrDefault(a => a.ApartmentId == ApartmentId);
     }
 
@@ -117,7 +116,7 @@
     {
         
         // Make HTTP POST request to save the listing
-        var response = await Http.PostAsJsonAsync("https://localhost:7275/api/Listing/AddListing", task);
+        var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Task/AddTask", task);
 
         if (response.IsSuccessStatusCode)
         {

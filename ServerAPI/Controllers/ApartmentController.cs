@@ -16,7 +16,8 @@ public class ApartmentController : ControllerBase
     //Post apartment: 
 
     [HttpPost]
-    public async Task<IActionResult> PostApartment(Apartment apartment)
+	[Route("AddApartment")]
+	public async Task<IActionResult> PostApartment(Apartment apartment)
     {
         if (apartment == null)
         {
@@ -29,7 +30,8 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateApartment(int id, Apartment updatedApartment)
+	[Route("UpdateApartment")]
+	public async Task<IActionResult> UpdateApartment(int id, Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {
@@ -42,7 +44,8 @@ public class ApartmentController : ControllerBase
 
     //Get all Apartments:
     [HttpGet]
-    public async Task<IActionResult> GetAllApartments()
+	[Route("GetAllApartments")]
+	public async Task<IActionResult> GetAllApartments()
     {
         var apartments = await _repository.GetAllApartments();
         if (apartments == null || !apartments.Any())
@@ -56,7 +59,8 @@ public class ApartmentController : ControllerBase
 
     // Get all apartments filtered by status:
     [HttpGet("status/{status}")]
-    public async Task<IActionResult> GetApartmentsByStatus(string status)
+	[Route("GetApartmentsByStatus")]
+	public async Task<IActionResult> GetApartmentsByStatus(string status)
     {
         var apartments = await _repository.GetApartmentsByStatus(status);
 
@@ -70,7 +74,8 @@ public class ApartmentController : ControllerBase
 
     //Get Apartment:
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetApartment(int id)
+	[Route("GetApartmentById")]
+	public async Task<IActionResult> GetApartment(int id)
     {
         var apartment = await _repository.GetApartment(id);
         if (apartment == null)
