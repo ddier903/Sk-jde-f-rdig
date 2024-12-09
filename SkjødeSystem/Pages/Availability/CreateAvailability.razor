@@ -65,11 +65,7 @@ else
 
     private void SaveAvailability()
     {
-        if (AvailabilltyID <= 0)
-        {
-            Message = "Please enter a valid Apartment ID.";
-            return;
-        }
+       
 
         if (!ValidateTime(EnteredTime))
         {
@@ -84,7 +80,7 @@ else
 
         var availability = new Availability
             {
-                ApartmentID = ApartmentID,
+             
                 Date = SelectedDate.Date,
                 Time = parsedTime
             };

@@ -2,6 +2,15 @@ using ServerAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Tilføj CORS service med en politik
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowSpecificOrigin",
+		policy => policy.WithOrigins("https://localhost:7227") // Tillader din frontend applikation
+			.AllowAnyHeader()
+			.AllowAnyMethod());
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -25,6 +34,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.MapControllers();
 

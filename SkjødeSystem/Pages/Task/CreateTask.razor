@@ -24,16 +24,16 @@
         <label for="description">Beskrivelse:</label>
         <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven"> </textarea>
     </div>
-
-    <div class="col-span-6 sm:col-span-3">
+    
+    @* <div class="col-span-6 sm:col-span-3">
         <label for="ToDo">Tilføj Mangelliste:</label>
         <InputFile id="ToDo" class="form-control" @bind-Value="task.ToDoPDF" />
-    </div>
+    </div> *@
 
     <div class="col-span-6 sm:col-span-3">
         <label for="startDate">Start Dato:</label>
         <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" TValue="DateOnly" />
-    </div>
+    </div> 
 
      <div class="col-span-6 sm:col-span-3">
         <label for="status">Status:</label>
@@ -44,7 +44,7 @@
             }
         </InputSelect>
 
-    <div class="col-span-6 sm:col-span-3">
+   @*  <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
             <InputSelect id="" class="form-control" @bind-Value="task.Subcontractor.SubcontractorName">
                @foreach (var subconctractor in Subcontractors)
@@ -52,22 +52,22 @@
                   <option value="@subconctractor">@subconctractor</option>
                }
            </InputSelect>
-    </div>
-
+    </div> *@
+@* 
     <div class="col-span-6 sm:col-span-3">
          <label for="address">Adresse:</label>
          <InputText id="address" class="form-control" @bind-Value="apartment.Address" readonly />
-    </div>
+    </div> *@
 
      <div class="col-span-6 sm:col-span-3">
           <label for="comment">Kommentar:</label>
           <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Kommentar fra UE" readonly />
      </div>
-
+@* 
      <div class="col-span-6 sm:col-span-3">
          <label for="adminid">Oprettet af:</label>
          <InputNumber id="adminid" class="form-control" @bind-Value="task.Admin.UserId" placeholder="xxx" readonly />
-    </div>
+    </div> *@
 
      <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
         <div class="flex justify-between items-center">
@@ -95,22 +95,7 @@
     private TaskItem task = new TaskItem();
     private List<string> Subcontractors = new() { "Maler", "Murer", "Tømrer", "VVS" };
     private bool showSuccessMessage = false;
-
-    //In memory liste af apartments:
     private Apartment apartment;
-    public List<Apartment> apartments = new List<Apartment>
-    {
-        new Apartment { ApartmentId = 1, Address = "Sønderhøj 30"},
-        new Apartment { ApartmentId = 2, Address = "Bryggerivej 23"},
-        new Apartment { ApartmentId = 3, Address = "Fasanvej 99"}
-    };
-
-    // Find the apartment by ID in the in-memory list
-    protected override void OnInitialized()
-    {
-        apartment = apartments.FirstOrDefault(a => a.ApartmentId == ApartmentId);
-    }
-
 
     private async Task HandleValidSubmit()
     {
@@ -124,7 +109,6 @@
             await Task.Delay(4000);
             showSuccessMessage = false;
 
-            NavigationManager.NavigateTo($"/apartments");
         }
         else
         {

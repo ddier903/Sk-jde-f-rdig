@@ -16,7 +16,6 @@ public class ApartmentController : ControllerBase
     //Post apartment: 
 
     [HttpPost]
-	[Route("AddApartment")]
 	public async Task<IActionResult> PostApartment(Apartment apartment)
     {
         if (apartment == null)
@@ -30,7 +29,6 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-	[Route("UpdateApartment")]
 	public async Task<IActionResult> UpdateApartment(int id, Apartment updatedApartment)
     {
         if (updatedApartment == null)
@@ -44,7 +42,6 @@ public class ApartmentController : ControllerBase
 
     //Get all Apartments:
     [HttpGet]
-	[Route("GetAllApartments")]
 	public async Task<IActionResult> GetAllApartments()
     {
         var apartments = await _repository.GetAllApartments();
@@ -59,7 +56,6 @@ public class ApartmentController : ControllerBase
 
     // Get all apartments filtered by status:
     [HttpGet("status/{status}")]
-	[Route("GetApartmentsByStatus")]
 	public async Task<IActionResult> GetApartmentsByStatus(string status)
     {
         var apartments = await _repository.GetApartmentsByStatus(status);
@@ -74,7 +70,6 @@ public class ApartmentController : ControllerBase
 
     //Get Apartment:
     [HttpGet("{id}")]
-	[Route("GetApartmentById")]
 	public async Task<IActionResult> GetApartment(int id)
     {
         var apartment = await _repository.GetApartment(id);
