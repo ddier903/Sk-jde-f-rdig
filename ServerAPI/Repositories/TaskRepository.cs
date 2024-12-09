@@ -17,4 +17,22 @@ public class TaskRepository
         database = mongoClient.GetDatabase("Skjøde");
         collection = database.GetCollection<TaskItem>("Task");
     }
+
+    // Post Task:
+
+    // Update Task: 
+
+    // Delete Task: 
+
+    //Get Task by ApartmentID:
+
+    //Get Task by ApartmentID, sorted by Status: 
+
+    //Get Task by Subconctractor:
+
+    // Get all Tasks:
+
+    // Get Task: 
+
+    // Get Task by status:
 }

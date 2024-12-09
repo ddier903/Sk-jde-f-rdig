@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SkjødeSystem\SkjødeSystem.csproj" />
+  </ItemGroup>
+
 </Project>

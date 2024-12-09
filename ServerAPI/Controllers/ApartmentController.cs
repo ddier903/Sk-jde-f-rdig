@@ -12,4 +12,19 @@ public class ApartmentController : ControllerBase
     {
         _repository = new ApartmentRepository();
     }
+
+
+    //Post apartment: 
+
+    //Update apartment: 
+
+    //Get all Apartments:
+
+    // Get all apartments filtered by status:
+
+    //Get Apartment:
+
+    //Get Apartments "Ikke færdig" Count. 
+
+
 }

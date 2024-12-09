@@ -8,7 +8,7 @@ namespace Core
         public int TaskId { get; set; }
         [Required]
         public string TaskName { get; set; } = string.Empty;
-        public string Image { get; set; } = string.Empty;
+        public IBrowserFile Image { get; set; }
         [Required]
         public string Description { get; set; } = string.Empty;
         public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);

@@ -19,4 +19,11 @@ public class UserRepository
         database = mongoClient.GetDatabase("Skjøde");
         //collection = database.GetCollection<User>("User"); mangler navn i krokodillemunden
     }
+
+    //Add User
+    //Delete User
+    //Update User
+
+    //Get User by Username and Password
+    //Get USer by UserID
 }
