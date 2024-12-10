@@ -19,10 +19,15 @@ public class UserController : ControllerBase
     public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
 	{
 
-		await _repository.PostAdmin(admin);
-		return Ok("User added successfully");
+        if (admin == null)
+        {
+            return BadRequest("Admin object is null");
+        }
 
-	}
+        await _repository.PostAdmin(admin);
+        return Ok("Admin added successfully");
+
+    }
 
     //Add Subcontractor
 
@@ -31,9 +36,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> PostSubcontractor([FromBody] Subcontractor subcontractor)
     {
 
-        await _repository.PostSubcontractor(subcontractor);
-        return Ok("User added successfully");
+        if (subcontractor == null)
+        {
+            return BadRequest("Subcontractor object is null");
+        }
 
+        await _repository.PostSubcontractor(subcontractor);
+        return Ok("Subcontractor added successfully");
     }
 
     //Add Tenant
@@ -43,8 +52,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> PostTenant([FromBody] Tenant tenant)
     {
 
+        if (tenant == null)
+        {
+            return BadRequest("Tenant object is null");
+        }
+
         await _repository.PostTenant(tenant);
-        return Ok("User added successfully");
+        return Ok("Tenant added successfully");
 
     }
 
@@ -73,24 +87,42 @@ public class UserController : ControllerBase
     [HttpGet]
     [Route("GetUserByUsernameAndPassword")]
 
-    public async Task<User> GetUserByUsernameAndPassword(string username, string password)
+    public async Task<IActionResult> GetUserByUsernameAndPassword(string username, string password)
 	{
-		return await _repository.GetUserByUsernameAndPassword(username, password);
-	}
+        var user = await _repository.GetUserByUsernameAndPassword(username, password);
+        if (user == null)
+        {
+            return NotFound($"Invalid username or password.");
+        }
+
+        return Ok(user);
+    }
 
     //Get USer by UserID
     [HttpGet]
     [Route("GetUserById")]
-    public async Task<User> GetUserById(int userId)
+    public async Task<IActionResult> GetUserById(int userId)
 	{
-		return await _repository.GetUserById(userId);
-	}
+        var user = await _repository.GetUserById(userId);
+        if (user == null)
+        {
+            return NotFound($"User with ID {userId} not found");
+        }
+
+        return Ok(user);
+    }
 
     //Get All Subcontractors
     [HttpGet]
     [Route("GetSubcontractors")]
-    public async Task<IEnumerable<User>> GetAllSubcontractors()
+    public async Task<IActionResult> GetAllSubcontractors()
 	{
-		return await _repository.GetAllSubcontractors();
-	}
+        var subcontractors = await _repository.GetAllSubcontractors();
+        if (subcontractors == null || !subcontractors.Any())
+        {
+            return NotFound("No subcontractors found");
+        }
+
+        return Ok(subcontractors);
+    }
 }

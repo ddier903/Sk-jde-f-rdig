@@ -17,6 +17,17 @@ builder.Services.AddScoped<UserRepository>();
 
 var app = builder.Build();
 
+// Tilføj CORS-politik
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorApp",
+        policy => policy
+            .WithOrigins("https://localhost:7227")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+});
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -24,7 +35,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(); 
 }
 
-app.UseAuthorization(); 
+app.UseAuthorization();
+
+// Brug CORS politikken
+app.UseCors("AllowBlazorApp");
 
 app.MapControllers(); 
 
