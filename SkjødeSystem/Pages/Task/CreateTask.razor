@@ -53,21 +53,16 @@
                }
            </InputSelect>
     </div> *@
-
+@* 
     <div class="col-span-6 sm:col-span-3">
          <label for="address">Adresse:</label>
          <InputText id="address" class="form-control" @bind-Value="apartment.Address" readonly />
-    </div> 
+    </div>  *@
 
      <div class="col-span-6 sm:col-span-3">
           <label for="comment">Kommentar:</label>
           <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Kommentar fra UE" readonly />
      </div>
-@* 
-     <div class="col-span-6 sm:col-span-3">
-         <label for="adminid">Oprettet af:</label>
-         <InputNumber id="adminid" class="form-control" @bind-Value="task.Admin.UserId" placeholder="xxx" readonly />
-    </div> *@
 
      <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
         <div class="flex justify-between items-center">
@@ -98,11 +93,11 @@
     private Apartment apartment;
 
 
-    protected override async Task OnInitializedAsync()
+    /*protected override async Task OnInitializedAsync()
     {
         // Fetch the list of subcontractors to display in the dropdown
         subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
-    }
+    }*/
 
 
     private async Task HandleValidSubmit()
@@ -120,7 +115,7 @@
         }
         else
         {
-            // Handle error (e.g., show message)
+            // Error message
             Console.WriteLine("Error adding listing.");
         }
     }

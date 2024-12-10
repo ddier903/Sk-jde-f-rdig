@@ -56,43 +56,75 @@ public class TaskController : ControllerBase
     //Get Task by ApartmentID:
     [HttpGet]
     [Route("GetTaskByApartmentId")]
-    public async Task<IEnumerable<TaskItem>> GetAllTasksByApartmentId(int apartmentId)
+    public async Task<IActionResult> GetAllTasksByApartmentId(int apartmentId)
     {
-        return await _repository.GetAllTaskByApartmentId(apartmentId);
+        var tasks = await _repository.GetAllTaskByApartmentId(apartmentId);
+        if (tasks == null || !tasks.Any())
+        {
+            return NotFound($"No tasks found with id: {apartmentId}");
+        }
+
+        return Ok(tasks);
+
     }
 
 
     //Get Task by ApartmentID, sorted by Status: 
 
+
     //Get Task by Subconctractor:
     [HttpGet]
     [Route("GetTaskBySubcontractor")]
-    public async Task<IEnumerable<TaskItem>> GetAllTasksBySubcontractor(int userId)
+    public async Task<IActionResult> GetAllTasksBySubcontractor(int userId)
     {
-        return await _repository.GetAllTasksBySubcontractor(userId);
+        var tasks = await _repository.GetAllTasksBySubcontractor(userId);
+        if(tasks == null || !tasks.Any()) 
+        {
+            return NotFound($"No tasks found for subcontractor with ID:{userId}");
+        }
+        return Ok(tasks);
     }
 
     // Get all Tasks:
     [HttpGet]
     [Route("GetAllTasks")]
-    public async Task<IEnumerable<TaskItem>> GetAllTasks() 
+    public async Task<IActionResult> GetAllTasks() 
     {
-        return await _repository.GetAllTasks();
+        var tasks = await _repository.GetAllTasks();
+        if (tasks == null || !tasks.Any())
+        {
+            return NotFound("No tasks found");
+        }
+
+        return Ok(tasks);
     }
 
     // Get Task by Id: 
     [HttpGet]
     [Route("GetTasksById")]
-    public async Task<TaskItem> GetTaskById(int taskId)
+    public async Task<IActionResult> GetTaskById(int taskId)
     {
-        return await _repository.GetTaskById(taskId);
+        var tasks = await _repository.GetTaskById(taskId);
+        if (tasks == null)
+        {
+            return NotFound($"Tasks with ID {taskId} not found");
+        }
+
+        return Ok(tasks);
     }
 
     // Get Tasks filtered by status:
     [HttpGet]
     [Route("GetTasksByStatus")]
-    public async Task<IEnumerable<TaskItem>> FilterTaskByStatus(string status)
+    public async Task<IActionResult> FilterTaskByStatus(string status)
     {
-        return await _repository.FilterTaskByStatus(status);
+        var tasks = await _repository.FilterTaskByStatus(status);
+
+        if (tasks == null || !tasks.Any())
+        {
+            return NotFound($"No tasks found with status '{status}'");
+        }
+
+        return Ok(tasks);
     }
 }
