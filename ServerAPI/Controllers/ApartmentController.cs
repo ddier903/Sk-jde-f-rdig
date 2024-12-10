@@ -16,7 +16,7 @@ public class ApartmentController : ControllerBase
     //Post apartment: 
 
     [HttpPost]
-	public async Task<IActionResult> PostApartment(Apartment apartment)
+	public async Task<IActionResult> PostApartment([FromBody]Apartment apartment)
     {
         if (apartment == null)
         {
@@ -29,7 +29,7 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateApartment(int id, Apartment updatedApartment)
+	public async Task<IActionResult> UpdateApartment(int id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {

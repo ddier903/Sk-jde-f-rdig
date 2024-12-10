@@ -17,7 +17,7 @@ public class TaskController : ControllerBase
     // Post Task:
     [HttpPost]
     [Route("AddTask")]
-    public async Task<IActionResult> PostTask(TaskItem task)
+    public async Task<IActionResult> PostTask([FromBody] TaskItem task)
     {
 
         await _repository.PostTask(task);
@@ -34,7 +34,7 @@ public class TaskController : ControllerBase
     // Update Task: 
     [HttpPut]
     [Route("UpdateTask")]
-    public async Task<IActionResult> UpdateTask(int taskId, TaskItem updatedtask)
+    public async Task<IActionResult> UpdateTask(int taskId, [FromBody] TaskItem updatedtask)
     {
 
         await _repository.UpdateTask(taskId, updatedtask);

@@ -16,7 +16,7 @@ public class UserController : ControllerBase
     //Add Admin
     [HttpPost]
     [Route("AddAdmin")]
-    public async Task<IActionResult> PostAdmin(Admin admin)
+    public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
 	{
 
 		await _repository.PostAdmin(admin);
@@ -28,7 +28,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("AddSubcontractor")]
-    public async Task<IActionResult> PostSubcontractor(Subcontractor subcontractor)
+    public async Task<IActionResult> PostSubcontractor([FromBody] Subcontractor subcontractor)
     {
 
         await _repository.PostSubcontractor(subcontractor);
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("AddTenant")]
-    public async Task<IActionResult> PostTenant(Tenant tenant)
+    public async Task<IActionResult> PostTenant([FromBody] Tenant tenant)
     {
 
         await _repository.PostTenant(tenant);
@@ -61,7 +61,7 @@ public class UserController : ControllerBase
     //Update User
     [HttpPut]
     [Route("UpdateUser")]
-    public async Task<IActionResult> UpdateUser(int userId, User updateduser)
+    public async Task<IActionResult> UpdateUser(int userId, [FromBody] User updateduser)
 	{
 
 		await _repository.UpdateUser(userId, updateduser);
