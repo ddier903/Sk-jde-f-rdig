@@ -81,7 +81,7 @@ public class UserRepository
 	//Get Subcontractors
 	public async Task<List<User>> GetAllSubcontractors()
 	{
-		var filter = Builders<User>.Filter.Eq("Role", "subcontractor");
+		var filter = Builders<User>.Filter.Eq("Role", "Subcontractor");
 		return await collection.Find(filter).ToListAsync();
 
 		/*return new List<User>() { new Subcontractor() { UserId = 1, Email = "Email123", SubcontractorName = "Maler",  Role = "subcontractor"  } };*/

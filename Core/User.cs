@@ -1,7 +1,15 @@
-﻿namespace Core
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Core
 {
-    public class User
+    [BsonDiscriminator(RootClass = true)] 
+    [BsonKnownTypes(typeof(Subcontractor))] 
+    public class User 
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } 
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
