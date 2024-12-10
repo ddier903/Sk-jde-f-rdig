@@ -15,18 +15,19 @@ builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<UserRepository>();
 
-var app = builder.Build();
-
-// Tilføj CORS-politik
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazorApp",
-        policy => policy
-            .WithOrigins("https://localhost:7227")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:7227") // Din frontend URL
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
+
+builder.Services.AddControllers();
+
+var app = builder.Build();
 
 
 if (app.Environment.IsDevelopment())
@@ -37,8 +38,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
-// Brug CORS politikken
-app.UseCors("AllowBlazorApp");
+app.UseCors("AllowFrontend"); // Brug CORS-politikken
 
 app.MapControllers(); 
 
