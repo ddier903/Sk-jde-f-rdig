@@ -35,7 +35,7 @@ public class UserRepository
         await collection.InsertOneAsync(subcontractor);
     }
 
-    //Add Subcontractor User1
+    //Add Tenant User
     public async Task PostTenant(Tenant tenant)
     {
         tenant.Role = "Tenant";

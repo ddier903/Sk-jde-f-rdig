@@ -32,7 +32,7 @@
 
     <div class="col-span-6 sm:col-span-3">
         <label for="startDate">Start Dato:</label>
-        <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" TValue="DateOnly" />
+        <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" />
     </div> 
 
      <div class="col-span-6 sm:col-span-3">
@@ -102,7 +102,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Henter list af subcontractors.
+        // Henter liste af subcontractors:
         subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
 
         // Hvis der allerede er en valgt subcontractor
@@ -110,6 +110,8 @@
         {
             selectedSubcontractorId = task.Subcontractor.UserId;
         }
+
+        //Henter valgte lejlighed:
 
     }
 

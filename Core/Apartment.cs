@@ -5,7 +5,9 @@ namespace Core
 {
     public class Apartment
     {
-
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId Id { get; set; }
         public int ApartmentId { get; set; }
 
         public string Address { get; set; }
