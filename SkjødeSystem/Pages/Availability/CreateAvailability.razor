@@ -12,11 +12,6 @@
     <input type="date" id="datePicker" @bind="SelectedDate" />
 </div>
 <div>
-    <label for="timePicker">Enter Time (HH:MM):</label>
-    <input type="text" id="timePicker" @bind="EnteredTime" placeholder="e.g., 14:30" />
-    <p class="text-danger" style="display: @(IsTimeValid ? "none" : "block")">Invalid time format. Please use HH:MM.</p>
-</div>
-<div>
     <button @onclick="SaveAvailability" class="btn btn-primary">Save Availability</button>
 </div>
 
@@ -47,7 +42,6 @@ else
                         <div>
                             <p class="card-text">
                                 <strong>Date:</strong> @availability.AvailabilityDate.ToShortDateString() <br />
-                                <strong>Time:</strong> @availability.Time.ToString("HH\\:mm")
                             </p>
                         </div>
                     </div>
@@ -60,7 +54,6 @@ else
     private int ApartmentID;
     private DateTime SelectedDate = DateTime.Now;
     private string EnteredTime = "";
-    private bool IsTimeValid = true;
     private List<Availability> Availabilities = new();
     private string Message;
 
@@ -72,22 +65,11 @@ else
             return;
         }
 
-        if (!ValidateTime(EnteredTime))
-        {
-            Message = "Please enter a valid time in HH:MM format.";
-            IsTimeValid = false;
-            return;
-        }
-
-
-        var parsedTime = TimeOnly.Parse(EnteredTime);
-
 
         var availability = new Availability
             {
                 ApartmentID = ApartmentID,
                 AvailabilityDate = SelectedDate.Date,
-                Time = parsedTime
             };
 
 
@@ -98,12 +80,5 @@ else
 
 
         SelectedDate = DateTime.Now;
-        EnteredTime = "";
-        IsTimeValid = true;
-    }
-
-    private bool ValidateTime(string time)
-    {
-        return TimeOnly.TryParse(time, out _);
     }
 }

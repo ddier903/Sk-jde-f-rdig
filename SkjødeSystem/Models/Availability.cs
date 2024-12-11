@@ -5,7 +5,5 @@
         public DateTime AvailabilityDate { get; set; }
         public int ApartmentID { get; set; }
         public int AvailabilityID { get; set; }
-
-        public TimeOnly Time {  get; set; }
     }
 }
