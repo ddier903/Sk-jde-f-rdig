@@ -7,7 +7,7 @@
 <p><strong>Adresse: </strong>@address</p>
 <p><strong>ID: </strong>@apartmentId</p>
 
-<table class="table" border="1" style="table-layout: fixed; width: 100%;">
+<table class="table table-bordered" border="3" style="table-layout: fixed; width: 100%;">
 	<thead>
 		<tr>
 			<th style="width: 40%;">Opgaver</th>
@@ -27,6 +27,12 @@
 	</tbody>
 </table>
 
+<div style="margin-top: 10px; text-align: left;">
+	<button class="btn btn-primary" @onclick="NavigateToCreateTask">
+		Opret opgave
+	</button>
+</div>
+
 @code {
 	[Parameter]
 	public int apartmentId { get; set; }
@@ -44,8 +50,13 @@
 		tasks = new List<TaskModel>{
 			new TaskModel {Description = "Male soveværelse", Subcontractor = "Kim Nørgaard", Date = "2024-10-12"},
 			new TaskModel {Description = "Reparere mur", Subcontractor = "Mark Vestergaard", Date = "2024-11-12" },
-			new TaskModel {Description = "Installere vandhane", Subcontractor = "Bo Jespersen", Date = "2024-12-12" }
+			new TaskModel {Description = "Installere vandhane", Subcontractor = "Bo Jespersen", Date = "2024-12-12" },
+			new TaskModel {Description = "Reparere mur", Subcontractor = "Mark Vestergaard", Date = "2024-11-12" }
 		};
+	}
+
+	private void NavigateToCreateTask(){
+		NavigationManager.NavigateTo($"/createtask/{apartmentId}");
 	}
 
 	private class TaskModel
