@@ -46,7 +46,7 @@
 
     <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
-            <InputSelect id="" class="form-control" @bind-Value="selectedSubcontractorId">
+                        <InputSelect id="" class="form-control" @bind-Value="selectedSubcontractorId" @onchange="HandleSubcontractorSelection">
                @foreach (var subconctractor in subcontractors)
                {
                   <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
