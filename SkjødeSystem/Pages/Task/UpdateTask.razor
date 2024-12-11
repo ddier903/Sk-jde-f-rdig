@@ -1,9 +1,6 @@
-﻿@page "/updatetask/{TaskId:int}"
+﻿@page "/updatetask/"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
-
-
-<h3>UpdateTask</h3>
 
 
 <PageTitle>CreateTask</PageTitle>
@@ -17,7 +14,7 @@
 
         <div class="grid grid-cols-6 gap-6">
             <div class="relative px-4 py-5 sm:p-6">
-                <h3>Ny Opgave:</h3>
+                <h3>Opdater Opgave:</h3>
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="taskName">Opgave Navn:</label>
@@ -50,12 +47,12 @@
 
                     <div class="col-span-6 sm:col-span-3">
                         <label for="comment">Kommentar:</label>
-                        <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Kommentar fra UE" readonly />
+                        <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Tilføj en kommentar" />
                     </div>
 
                     <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
                         <div class="flex justify-between items-center">
-                            <button type="submit" class="btn btn-primary">Gem Opgave</button>
+                            <button type="submit" class="btn btn-primary">Gem Ændringer</button>
                         </div>
                     </div>
 
