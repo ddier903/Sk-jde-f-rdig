@@ -1,5 +1,7 @@
 ﻿@page "/apartments"
 @inject NavigationManager NavigationManager
+@using MongoDB.Bson;
+@inject HttpClient Http;
 
 <PageTitle>Apartments</PageTitle>
 
@@ -37,7 +39,7 @@
                 <tr>
                     <td>@apartment.ApartmentId</td>
                     <td>
-                        <button class="btn btn-link" @onclick="() => NavigateToViewTask(apartment.ApartmentId, apartment.Address)">
+                        <button class="btn btn-link" @onclick="() => NavigateToViewTask(apartment.ApartmentId.ToString(), apartment.Address)">
                             @apartment.Address</button>
                     </td>
                     <td>
@@ -50,7 +52,7 @@
                     </td>
                     <td>
                         <button class="btn btn-primary" 
-                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" 
+                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId.ToString())" 
                         disabled="@IsStatusComplete(apartment.Status)">
                             Opret Opgave
                         </button>
@@ -62,30 +64,14 @@
 </table>
 
 @code {
-	private List<Apartment> apartments = new List<Apartment>
-{
-    new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 4, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 5, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 6, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 7, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 8, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 9, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 10, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 11, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 12, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 13, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 14, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-    new Apartment { ApartmentId = 15, Address = "Fasanvej 99", Status = "Ikke Fuldført" }
-};
+    private List<Apartment> apartments = new List<Apartment>();
 
     private List<string> Statuses = new List<string> { "Ikke Fuldført", "Fuldført" };
 
     private string searchQuery = "";
 
     private string selectedFilter = "Alle";
+
 
     private bool DisplayApartment(Apartment apartment)
     {
@@ -97,12 +83,12 @@
         return selectedFilter == "Alle" || apartment.Status == selectedFilter;
     }
 
-    private void NavigateToCreateTask(int apartmentId)
+    private void NavigateToCreateTask(string apartmentId)
     {
         NavigationManager.NavigateTo($"/createtask/{apartmentId}");
     }
 
-    private void NavigateToViewTask(int apartmentId, string address) 
+    private void NavigateToViewTask(string apartmentId, string address) 
     {
         var Address = Uri.EscapeDataString(address);
 
@@ -119,5 +105,13 @@
         return status == "Fuldført"
             ? "background-color: green; color: white; width: 115px; height: auto;"
             : "background-color: red; color: white; width: 115px; height: auto;";
+    }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        // Henter liste af alle lejligheder:
+        apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/User/GetAllApartments");
+      
+
     }
 }

@@ -9,8 +9,7 @@ namespace Core
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
-        public int TaskId  { get; set; }
+        public ObjectId TaskId { get; set; }
         [Required]
         [StringLength(50, ErrorMessage = "Navnet er for langt")]
         public string TaskName { get; set; } = string.Empty;
@@ -23,8 +22,8 @@ namespace Core
         public string? Comment { get; set; } = string.Empty;
         public string[]? ToDoPDF { get; set; }
         public Apartment Apartment { get; set; }
-        public Subcontractor Subcontractor { get; set; }
-        public Admin Admin { get; set; }
+        public Subcontractor AssignedTo { get; set; }
+        public Admin CreatedBy { get; set; }
 
     }
 

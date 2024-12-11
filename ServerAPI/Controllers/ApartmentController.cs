@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServerAPI.Repositories;
-using Core; 
+using Core;
+using MongoDB.Bson;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -29,7 +30,7 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateApartment(int id,[FromBody] Apartment updatedApartment)
+	public async Task<IActionResult> UpdateApartment(ObjectId id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {
@@ -42,7 +43,9 @@ public class ApartmentController : ControllerBase
 
     //Get all Apartments:
     [HttpGet]
-	public async Task<IActionResult> GetAllApartments()
+    [Route("GetAllApartments")]
+
+    public async Task<IActionResult> GetAllApartments()
     {
         var apartments = await _repository.GetAllApartments();
         if (apartments == null || !apartments.Any())
@@ -70,7 +73,7 @@ public class ApartmentController : ControllerBase
 
     //Get Apartment:
     [HttpGet("{id}")]
-	public async Task<IActionResult> GetApartment(int id)
+	public async Task<IActionResult> GetApartment(ObjectId id)
     {
         var apartment = await _repository.GetApartment(id);
         if (apartment == null)

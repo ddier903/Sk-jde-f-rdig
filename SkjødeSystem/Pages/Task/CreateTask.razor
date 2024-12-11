@@ -1,6 +1,7 @@
 ﻿@page "/createtask/{ApartmentId:int}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@using MongoDB.Bson
 
 <PageTitle>CreateTask</PageTitle>
 
@@ -49,7 +50,7 @@
                         <InputSelect id="" class="form-control" @bind-Value="selectedSubcontractorId" @onchange="HandleSubcontractorSelection">
                @foreach (var subconctractor in subcontractors)
                {
-                  <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
+                  <option value="@subconctractor.SubcontractorName">@subconctractor.SubcontractorName</option>
                }
            </InputSelect>
     </div> 
@@ -91,13 +92,13 @@
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
     private TaskItem task = new TaskItem
         {
-            Subcontractor = new Subcontractor(),
+            AssignedTo = new Subcontractor(),
             Apartment = new Apartment()
         };
     private List<Subcontractor> subcontractors = new List<Subcontractor>();
     private bool showSuccessMessage = false;
     private int currentApartmentId;
-    private int selectedSubcontractorId;
+    private string selectedSubcontractorId;
 
 
     protected override async Task OnInitializedAsync()
@@ -106,9 +107,9 @@
         subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
 
         // Hvis der allerede er en valgt subcontractor
-        if (task.Subcontractor != null)
+        if (task.AssignedTo != null)
         {
-            selectedSubcontractorId = task.Subcontractor.UserId;
+            selectedSubcontractorId = task.AssignedTo.SubcontractorName;
         }
 
         //Henter valgte lejlighed:
@@ -117,7 +118,7 @@
 
     private void HandleSubcontractorSelection()
     {
-        task.Subcontractor = subcontractors.FirstOrDefault(s => s.UserId == selectedSubcontractorId);
+        task.AssignedTo = subcontractors.FirstOrDefault(s => s.SubcontractorName == selectedSubcontractorId);
     }
 
 
@@ -142,5 +143,23 @@
     }
 
     [Parameter]
-    public int ApartmentId { get; set; }
+    public string ApartmentId { get; set; } // Received as string
+
+    private ObjectId apartmentObjectId;
+
+    //Konverterer string fra apartmentID tilbage til ObjectID
+
+    protected override void OnInitialized()
+    {
+        // Convert string to ObjectId
+        if (ObjectId.TryParse(ApartmentId, out var objectId))
+        {
+            apartmentObjectId = objectId;
+        }
+        else
+        {
+            // Handle invalid ObjectId format
+            throw new ArgumentException("Invalid ApartmentId format");
+        }
+    }
 }

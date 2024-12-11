@@ -5,13 +5,14 @@ using System.ComponentModel.DataAnnotations;
 namespace Core
 {
     [BsonDiscriminator(RootClass = true)] 
-    [BsonKnownTypes(typeof(Subcontractor))] 
+    [BsonKnownTypes(typeof(Subcontractor))]
+    [BsonKnownTypes(typeof(Admin))]
+    [BsonKnownTypes(typeof(Tenant))]
     public class User 
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id { get; set; } 
-        public int UserId { get; set; }
+        public ObjectId UserId { get; set; } 
         [Required]
         public string UserName { get; set; }
         [Required]

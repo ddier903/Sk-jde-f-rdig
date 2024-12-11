@@ -75,7 +75,7 @@
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
     private TaskItem task = new TaskItem
         {
-            Subcontractor = new Subcontractor(),
+            AssignedTo = new Subcontractor(),
             Apartment = new Apartment()
         };
     private bool showSuccessMessage = false;
