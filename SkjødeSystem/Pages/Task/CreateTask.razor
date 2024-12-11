@@ -58,7 +58,7 @@
 @* 
     <div class="col-span-6 sm:col-span-3">
          <label for="address">Adresse:</label>
-         <InputText id="address" class="form-control" @bind-Value="apartment.Address" readonly />
+         <InputText id="address" class="form-control" @bind-Value="Apartment.Address" readonly />
     </div>  *@
 
      <div class="col-span-6 sm:col-span-3">
@@ -91,11 +91,12 @@
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
     private TaskItem task = new TaskItem
         {
-            Subcontractor = new Subcontractor() 
+            Subcontractor = new Subcontractor(),
+            Apartment = new Apartment()
         };
     private List<Subcontractor> subcontractors = new List<Subcontractor>();
     private bool showSuccessMessage = false;
-    private Apartment apartment;
+    private int currentApartmentId;
     private int selectedSubcontractorId;
 
 
@@ -134,7 +135,7 @@
         else
         {
             // Error message
-            Console.WriteLine("Error adding listing.");
+            Console.WriteLine("Error adding task.");
         }
     }
 
