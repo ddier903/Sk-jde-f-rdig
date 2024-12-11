@@ -46,13 +46,6 @@
                             }
                         </InputSelect>
                     </td>
-                    <td>
-                        <button class="btn btn-primary" style="background-color: white; color: black; border: 1px solid black;"
-                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId)"
-                        disabled="@IsStatusComplete(apartment.Status)">
-                            Opret Opgave
-                        </button>
-                    </td>
                 </tr>
             }
         }
@@ -100,11 +93,6 @@
         }
 
         return selectedFilter == "Alle" || apartment.Status == selectedFilter;
-    }
-
-    private void NavigateToCreateTask(int apartmentId)
-    {
-        NavigationManager.NavigateTo($"/createtask/{apartmentId}");
     }
 
     private void NavigateToViewTask(int apartmentId, string address)
