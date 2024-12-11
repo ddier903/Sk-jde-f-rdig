@@ -2,19 +2,30 @@
 @using SkjødeSystem.Models
 @inject NavigationManager NavigationManager
 
-<h3>Opgaveliste</h3>
+<h1>Opgaveliste</h1>
 
 <p><strong>Adresse: </strong>@address</p>
-<p><strong>Id: </strong>@apartmentId</p>
+<p><strong>ID: </strong>@apartmentId</p>
 
-<p><strong>Opgaver: </strong></p>
-<ul>
-	<li>Maler - Udføres af Kim Nørgaard</li>
-	<li>Murer - Udføres af Mark Vestergaard</li>
-	<li>VVS - Udføres af Bo Jespersen</li>
-</ul>
-
-
+<table class="table" border="1" style="table-layout: fixed; width: 100%;">
+	<thead>
+		<tr>
+			<th style="width: 40%;">Opgaver</th>
+			<th style="width: 30%;">Underentreprenør</th>
+			<th style="width: 30%;">Dato</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var task in tasks)
+		{
+			<tr>
+				<td style="word-wrap: break-word;">@task.Description</td>
+				<td>@task.Subcontractor</td>
+				<td>@task.Date</td>
+			</tr>
+		}
+	</tbody>
+</table>
 
 @code {
 	[Parameter]
@@ -23,8 +34,24 @@
 	[Parameter]
 	public string address { get; set; }
 
+	private List<TaskModel> tasks;
+
 	protected override void OnInitialized()
 	{
 		address = Uri.UnescapeDataString(address);
+
+		// Midlertidig data
+		tasks = new List<TaskModel>{
+			new TaskModel {Description = "Male soveværelse", Subcontractor = "Kim Nørgaard", Date = "2024-10-12"},
+			new TaskModel {Description = "Reparere mur", Subcontractor = "Mark Vestergaard", Date = "2024-11-12" },
+			new TaskModel {Description = "Installere vandhane", Subcontractor = "Bo Jespersen", Date = "2024-12-12" }
+		};
+	}
+
+	private class TaskModel
+	{
+		public string Description { get; set; }
+		public string Subcontractor { get; set; }
+		public string Date { get; set; }
 	}
 }

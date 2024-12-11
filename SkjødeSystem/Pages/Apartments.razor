@@ -8,20 +8,16 @@
 
 
 <div class="d-flex mb-3">
-    <label for="filter" class="me-2">Filtrer: </label>
-    <InputSelect class="form-control" id="filter" @bind-Value="selectedFilter" style="width: 150px;">
-        <option value="Alle">Alle</option>
-        <option value="Fuldført">Fuldført</option>
-        <option value="Ikke Fuldført">Ikke Fuldført</option>
-    </InputSelect>
+    <label for="filter" class="me-2">Vis kun fuldførte opgaver </label>
+    <input id="filter" type="checkbox" @bind="showOnlyCompleted" />
 </div>
 
 <div class="mb-3">
     <label for="search">Søg efter adresse: </label>
-    <input id="search" type="text" @bind="searchQuery" placeholder="Skriv Adresse..."/>
+    <input id="search" type="text" @bind="searchQuery" placeholder="Skriv Adresse..." />
 </div>
 
-<table class="table table-striped">
+<table class="table table-striped table-sm">
     <thead>
         <tr>
             <th>ID</th>
@@ -33,16 +29,17 @@
     <tbody>
         @foreach (var apartment in apartments)
         {
-            if(DisplayApartment(apartment))
+            if (DisplayApartment(apartment))
             {
-                <tr>
+                <tr style="@GetStatusStyle(apartment.Status)">
                     <td>@apartment.ApartmentId</td>
                     <td>
-                        <button class="btn btn-link" @onclick="() => NavigateToViewTask(apartment.ApartmentId, apartment.Address)">
-                            @apartment.Address</button>
+                        <button class="btn btn-link" style="background-color: white; color: black; border: 1px solid black;" @onclick="() => NavigateToViewTask(apartment.ApartmentId, apartment.Address)">
+                            @apartment.Address
+                        </button>
                     </td>
                     <td>
-                        <InputSelect class="form-control" style="@GetStatusStyle(apartment.Status)" @bind-Value="apartment.Status">
+                        <InputSelect class="form-control" style="width: auto; background-color: white; color: black; border: 1px solid black;" @bind-Value="apartment.Status">
                             @foreach (var status in Statuses)
                             {
                                 <option value="@status">@status</option>
@@ -50,9 +47,9 @@
                         </InputSelect>
                     </td>
                     <td>
-                        <button class="btn btn-primary" 
-                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId)" 
-                        disabled="@IsStatusComplete(apartment.Status)">
+                        <button class="btn btn-primary" style="background-color: white; color: black; border: 1px solid black;"
+                                @onclick="() => NavigateToCreateTask(apartment.ApartmentId)"
+                                disabled="@IsStatusComplete(apartment.Status)">
                             Opret Opgave
                         </button>
                     </td>
@@ -64,23 +61,23 @@
 
 @code {
     private List<Apartment> apartments = new List<Apartment>
-    {
-        new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 4, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 5, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 6, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 7, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 8, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 9, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 10, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 11, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 12, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 13, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 14, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
-        new Apartment { ApartmentId = 15, Address = "Fasanvej 99", Status = "Ikke Fuldført" }
-    };
+{
+    new Apartment { ApartmentId = 1, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 2, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 3, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 4, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 5, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 6, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 7, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 8, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 9, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 10, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 11, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 12, Address = "Fasanvej 99", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 13, Address = "Sønderhøj 30", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 14, Address = "Bryggerivej 23", Status = "Ikke Fuldført" },
+    new Apartment { ApartmentId = 15, Address = "Fasanvej 99", Status = "Ikke Fuldført" }
+};
 
     private List<string> Statuses = new List<string> { "Ikke Fuldført", "Fuldført" };
 
@@ -88,13 +85,20 @@
 
     private string selectedFilter = "Alle";
 
+    private bool showOnlyCompleted = false;
+
     private bool DisplayApartment(Apartment apartment)
     {
-        if(!string.IsNullOrWhiteSpace(searchQuery) &&
-        !apartment.Address.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+        if (showOnlyCompleted && apartment.Status != "Fuldført")
         {
             return false;
         }
+
+        if (!string.IsNullOrWhiteSpace(searchQuery) && !apartment.Address.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
         return selectedFilter == "Alle" || apartment.Status == selectedFilter;
     }
 
@@ -103,7 +107,7 @@
         NavigationManager.NavigateTo($"/createtask/{apartmentId}");
     }
 
-    private void NavigateToViewTask(int apartmentId, string address) 
+    private void NavigateToViewTask(int apartmentId, string address)
     {
         var Address = Uri.EscapeDataString(address);
 
@@ -118,7 +122,7 @@
     private string GetStatusStyle(string status)
     {
         return status == "Fuldført"
-            ? "background-color: green; color: white; width: 115px; height: auto;"
-            : "background-color: red; color: white; width: 115px; height: auto;";
+            ? "background-color: rgb(60, 179, 113); color: #0c3812;" // Grøn
+            : "background-color: rgb(255, 0, 0, 0.8); color: #4d1a1f;"; // Rød
     }
 }
