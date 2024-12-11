@@ -1,4 +1,6 @@
 ﻿
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Core
 {
     public class Admin : User
