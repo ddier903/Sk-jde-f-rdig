@@ -14,7 +14,7 @@
 
         <div class="grid grid-cols-6 gap-6">
             <div class="relative px-4 py-5 sm:p-6">
-                <h3>Opdater Opgave:</h3>
+                <h3>Se Opgavedetaljer:</h3>
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="taskName">Opgave Navn:</label>
@@ -24,6 +24,11 @@
                 <div class="col-span-6 sm:col-span-3">
                     <label for="description">Beskrivelse:</label>
                     <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven" readonly> </textarea>
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="address">Addresse:</label>
+                    <InputText id="address" class="form-control" @bind-Value="task.AssignedApartment.Address" readonly />
                 </div>
 
                 @* <div class="col-span-6 sm:col-span-3">
@@ -80,7 +85,10 @@
 @code {
 
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
-    private TaskItem task = new TaskItem();
+    private TaskItem task = new TaskItem
+    {
+            AssignedApartment = new Apartment(),
+    };
     private bool isSuccess = false;
     private bool isError = false;
   
