@@ -112,8 +112,8 @@
         subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
 
         // Hent Apartment ved at bruge ApartmentId fra URL
-        var apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/{ApartmentId}");
-        task.AssignedApartment = apartment ?? new Apartment(); // Undgå null
+        var apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/GetApartmentById{ApartmentId}");
+        task.AssignedApartment = apartment ?? new Apartment();
 
     }
 

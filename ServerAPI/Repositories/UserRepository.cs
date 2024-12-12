@@ -43,13 +43,13 @@ public class UserRepository
     }
 
     //Delete User
-    public async Task DeleteUSer(int userId)
+    public async Task DeleteUSer(string userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		await collection.DeleteOneAsync(filter);
 	}
 	//Update User
-	public async Task UpdateUser(int userId, User updateduser)
+	public async Task UpdateUser(string userId, User updateduser)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 
@@ -72,7 +72,7 @@ public class UserRepository
 		return await collection.Find(combinedfilter).FirstOrDefaultAsync(); ;
 	}
 	//Get User by UserID
-	public async Task<User> GetUserById(int userId)
+	public async Task<User> GetUserById(string userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		return await collection.Find(filter).FirstOrDefaultAsync();

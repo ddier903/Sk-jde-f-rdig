@@ -33,8 +33,8 @@ public class TaskController : ControllerBase
 
     // Update Task: 
     [HttpPut]
-    [Route("UpdateTask")]
-    public async Task<IActionResult> UpdateTask(int taskId, [FromBody] TaskItem updatedtask)
+    [Route("UpdateTask{taskId}")]
+    public async Task<IActionResult> UpdateTask(string taskId, [FromBody] TaskItem updatedtask)
     {
 
         await _repository.UpdateTask(taskId, updatedtask);
@@ -44,8 +44,8 @@ public class TaskController : ControllerBase
 
     // Delete Task: 
     [HttpDelete]
-    [Route("DeleteTask")]
-    public async Task<IActionResult> DeleteTask(int taskId)
+    [Route("DeleteTask{taskId}")]
+    public async Task<IActionResult> DeleteTask(string taskId)
     {
 
         await _repository.DeleteTask(taskId);
@@ -55,8 +55,8 @@ public class TaskController : ControllerBase
 
     //Get Task by ApartmentID:
     [HttpGet]
-    [Route("GetTaskByApartmentId")]
-    public async Task<IActionResult> GetAllTasksByApartmentId(int apartmentId)
+    [Route("GetTaskByApartmentId{apartmentId}")]
+    public async Task<IActionResult> GetAllTasksByApartmentId(string apartmentId)
     {
         var tasks = await _repository.GetAllTaskByApartmentId(apartmentId);
         if (tasks == null || !tasks.Any())
@@ -74,8 +74,8 @@ public class TaskController : ControllerBase
 
     //Get Task by Subconctractor:
     [HttpGet]
-    [Route("GetTaskBySubcontractor")]
-    public async Task<IActionResult> GetAllTasksBySubcontractor(int userId)
+    [Route("GetTaskBySubcontractor{userId}")]
+    public async Task<IActionResult> GetAllTasksBySubcontractor(string userId)
     {
         var tasks = await _repository.GetAllTasksBySubcontractor(userId);
         if(tasks == null || !tasks.Any()) 
@@ -101,8 +101,8 @@ public class TaskController : ControllerBase
 
     // Get Task by Id: 
     [HttpGet]
-    [Route("GetTasksById")]
-    public async Task<IActionResult> GetTaskById(int taskId)
+    [Route("GetTasksById{taskId}")]
+    public async Task<IActionResult> GetTaskById(string taskId)
     {
         var tasks = await _repository.GetTaskById(taskId);
         if (tasks == null)
@@ -115,7 +115,7 @@ public class TaskController : ControllerBase
 
     // Get Tasks filtered by status:
     [HttpGet]
-    [Route("GetTasksByStatus")]
+    [Route("GetTasksByStatus{status}")]
     public async Task<IActionResult> FilterTaskByStatus(string status)
     {
         var tasks = await _repository.FilterTaskByStatus(status);

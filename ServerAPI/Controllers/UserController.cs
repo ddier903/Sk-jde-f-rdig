@@ -64,8 +64,8 @@ public class UserController : ControllerBase
 
     //Delete User
     [HttpDelete]
-    [Route("DeleteUser")]
-    public async Task<IActionResult> DeleteUser(int userId)
+    [Route("DeleteUser{userId}")]
+    public async Task<IActionResult> DeleteUser(string userId)
 	{
 
 		await _repository.DeleteUSer(userId);
@@ -74,8 +74,8 @@ public class UserController : ControllerBase
 	}
     //Update User
     [HttpPut]
-    [Route("UpdateUser")]
-    public async Task<IActionResult> UpdateUser(int userId, [FromBody] User updateduser)
+    [Route("UpdateUser{userId}")]
+    public async Task<IActionResult> UpdateUser(string userId, [FromBody] User updateduser)
 	{
 
 		await _repository.UpdateUser(userId, updateduser);
@@ -100,8 +100,8 @@ public class UserController : ControllerBase
 
     //Get USer by UserID
     [HttpGet]
-    [Route("GetUserById")]
-    public async Task<IActionResult> GetUserById(int userId)
+    [Route("GetUserById{userId}")]
+    public async Task<IActionResult> GetUserById(string userId)
 	{
         var user = await _repository.GetUserById(userId);
         if (user == null)

@@ -30,8 +30,9 @@ public class ApartmentController : ControllerBase
     }
 
     //Update apartment: 
-    [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateApartment(string id,[FromBody] Apartment updatedApartment)
+    [HttpPut]
+    [Route("UpdateApartment{id}")]
+    public async Task<IActionResult> UpdateApartment(string id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {
@@ -59,8 +60,9 @@ public class ApartmentController : ControllerBase
 
 
     // Get all apartments filtered by status:
-    [HttpGet("status/{status}")]
-	public async Task<IActionResult> GetApartmentsByStatus(string status)
+    [HttpGet]
+    [Route("GetApartmentByStatus{status}")]
+    public async Task<IActionResult> GetApartmentsByStatus(string status)
     {
         var apartments = await _repository.GetApartmentsByStatus(status);
 
@@ -73,8 +75,9 @@ public class ApartmentController : ControllerBase
     }
 
     //Get Apartment:
-    [HttpGet("{id}")]
-	public async Task<IActionResult> GetApartment(string id)
+    [HttpGet]
+    [Route("GetApartmentById{id}")]
+    public async Task<IActionResult> GetApartment(string id)
     {
         var apartment = await _repository.GetApartment(id);
         if (apartment == null)
@@ -87,7 +90,8 @@ public class ApartmentController : ControllerBase
 
 
     //Get Apartments "Ikke færdig" Count. 
-    [HttpGet("count/incomplete")]
+    [HttpGet]
+    [Route("GetApartmentsNotFinishedCount")]
     public async Task<IActionResult> GetApartmentsNotFinishedCount()
     {
         var count = await _repository.GetApartmentsNotFinishedCount();

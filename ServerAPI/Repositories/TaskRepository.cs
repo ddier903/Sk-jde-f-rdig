@@ -27,7 +27,7 @@ public class TaskRepository
 
     // Update Task: 
 
-    public async Task UpdateTask(int taskId, TaskItem updatedtask)
+    public async Task UpdateTask(string taskId, TaskItem updatedtask)
     {
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
 
@@ -40,14 +40,14 @@ public class TaskRepository
 
     // Delete Task: 
 
-    public async Task DeleteTask(int taskId)
+    public async Task DeleteTask(string taskId)
     {
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
         await collection.DeleteOneAsync(filter);
     }
 
     //Get All Task by ApartmentID:
-    public async Task<List<TaskItem>> GetAllTaskByApartmentId(int id)
+    public async Task<List<TaskItem>> GetAllTaskByApartmentId(string id)
     {
         var filter = Builders<TaskItem>.Filter.Eq("Apartment.ApartmentId", id);
         return await collection.Find(filter).ToListAsync();
@@ -57,7 +57,7 @@ public class TaskRepository
 
 
     //Get All Task by Subconctractor:
-    public async Task<List<TaskItem>> GetAllTasksBySubcontractor(int id)
+    public async Task<List<TaskItem>> GetAllTasksBySubcontractor(string id)
     {
         var filter = Builders<TaskItem>.Filter.Eq("Subcontractor.UserId", id);
         return await collection.Find(filter).ToListAsync();
@@ -71,7 +71,7 @@ public class TaskRepository
     }
 
     // Get Task by Id: 
-    public async Task<TaskItem> GetTaskById(int taskId)
+    public async Task<TaskItem> GetTaskById(string taskId)
     {
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
         return await collection.Find(filter).FirstOrDefaultAsync(); ;
