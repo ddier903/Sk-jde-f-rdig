@@ -24,7 +24,7 @@ public class ApartmentRepository
         await collection.InsertOneAsync(apartment);
     }
     //Update apartment: 
-    public async Task UpdateApartment(ObjectId id, Apartment updatedApartment)
+    public async Task UpdateApartment(string id, Apartment updatedApartment)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, id);
         await collection.ReplaceOneAsync(filter, updatedApartment);
@@ -45,7 +45,7 @@ public class ApartmentRepository
     }
 
     //Get Apartment:
-    public async Task<Apartment> GetApartment(ObjectId apartmentId)
+    public async Task<Apartment> GetApartment(string apartmentId)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
         return await collection.Find(filter).FirstOrDefaultAsync();

@@ -1,0 +1,77 @@
+﻿@page "/createapartment"
+@inject HttpClient Http
+@using MongoDB.Bson
+@using Core;
+
+<PageTitle>Create New Apartment</PageTitle>
+
+<h3>Opret ny Lejlighed</h3>
+
+<EditForm Model="@newApartment" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="address" class="form-label">Adresse</label>
+        <InputText id="address" class="form-control" @bind-Value="newApartment.Address" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <InputSelect id="status" class="form-control" @bind-Value="newApartment.Status" required>
+            <option value="Ikke Fuldført">Ikke Fuldført</option>
+            <option value="Fuldført">Fuldført</option>
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Opret Lejlighed</button>
+</EditForm>
+
+@if (isSuccess)
+{
+    <div class="alert alert-success mt-3">
+        Lejligheden blev oprettet succesfuldt!
+    </div>
+}
+
+@if (isError)
+{
+    <div class="alert alert-danger mt-3">
+        Der opstod en fejl under oprettelsen af lejligheden.
+    </div>
+}
+
+@code {
+    private Apartment newApartment = new Apartment();
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async System.Threading.Tasks.Task HandleValidSubmit()
+    {
+
+        newApartment.ApartmentId = ObjectId.GenerateNewId().ToString();
+        try
+        {
+            // Send Apartment objektet til API'et, som opretter det i databasen
+            var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Apartment/AddApartment", newApartment);
+
+            if (response.IsSuccessStatusCode)
+            {
+                isSuccess = true;
+                isError = false;
+                newApartment = new Apartment(); // Reset formularen
+            }
+            else
+            {
+                isSuccess = false;
+                isError = true;
+            }
+        }
+        catch (Exception)
+        {
+            isSuccess = false;
+            isError = true;
+        }
+    }
+}
+

@@ -1,4 +1,4 @@
-﻿@page "/createtask/{ApartmentId:int}"
+﻿@page "/createtask/{ApartmentId}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @using MongoDB.Bson
@@ -47,20 +47,18 @@
 
     <div class="col-span-6 sm:col-span-3">
          <label for="status">Udføres af:</label>
-                        <InputSelect id="" class="form-control" @bind-Value="selectedSubcontractorId" @onchange="HandleSubcontractorSelection">
+                        <InputSelect id="subcontractorSelect" class="form-control" @bind-Value="selectedSubcontractorId">
                @foreach (var subconctractor in subcontractors)
                {
-                  <option value="@subconctractor.SubcontractorName">@subconctractor.SubcontractorName</option>
+                  <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
                }
            </InputSelect>
-    </div> 
+    </div>
 
-
-@* 
     <div class="col-span-6 sm:col-span-3">
-         <label for="address">Adresse:</label>
-         <InputText id="address" class="form-control" @bind-Value="Apartment.Address" readonly />
-    </div>  *@
+         <label for="address">Opretter opgave for:</label>
+         <InputText id="address" class="form-control" @bind-Value="task.AssignedApartment.Address" readonly />
+    </div> 
 
      <div class="col-span-6 sm:col-span-3">
           <label for="comment">Kommentar:</label>
@@ -72,13 +70,20 @@
         <button type="submit" class="btn btn-primary">Gem Opgave</button>
         </div>
      </div>
-        
-     @if (showSuccessMessage)
-        {
-         <div class="alert alert-success mt-3">
-             Listing added successfully!
-         </div>
-         }
+
+                    @if (isSuccess)
+                    {
+                        <div class="alert alert-success mt-3">
+                            Opgaven blev oprettet succesfuldt!
+                        </div>
+                    }
+
+                    @if (isError)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            Der opstod en fejl under oprettelsen af Opgaven.
+                        </div>
+                    }
 
   </div>
  </div>
@@ -93,12 +98,12 @@
     private TaskItem task = new TaskItem
         {
             AssignedTo = new Subcontractor(),
-            Apartment = new Apartment()
+            AssignedApartment = new Apartment(),
         };
     private List<Subcontractor> subcontractors = new List<Subcontractor>();
-    private bool showSuccessMessage = false;
-    private int currentApartmentId;
     private string selectedSubcontractorId;
+    private bool isSuccess = false;
+    private bool isError = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -106,60 +111,61 @@
         // Henter liste af subcontractors:
         subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
 
-        // Hvis der allerede er en valgt subcontractor
-        if (task.AssignedTo != null)
-        {
-            selectedSubcontractorId = task.AssignedTo.SubcontractorName;
-        }
-
-        //Henter valgte lejlighed:
+        // Hent Apartment ved at bruge ApartmentId fra URL
+        var apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/{ApartmentId}");
+        task.AssignedApartment = apartment ?? new Apartment(); // Undgå null
 
     }
 
+
     private void HandleSubcontractorSelection()
     {
-        task.AssignedTo = subcontractors.FirstOrDefault(s => s.SubcontractorName == selectedSubcontractorId);
+        var selectedsubcontractor = subcontractors.FirstOrDefault(s => s.UserId == selectedSubcontractorId);
+
+
+        if (selectedsubcontractor != null)
+        {
+            // Tildel hele objektet til AssignedTo
+            task.AssignedTo = new Subcontractor
+                {
+                    UserId = selectedsubcontractor.UserId,
+                    UserName = selectedsubcontractor.UserName,
+                    Role = selectedsubcontractor.Role,
+                    Email = selectedsubcontractor.Email,
+                    Phone = selectedsubcontractor.Phone,
+                    SubcontractorName = selectedsubcontractor.SubcontractorName,
+                    Password = selectedsubcontractor.Password
+                };
+        }
     }
 
 
     private async Task HandleValidSubmit()
     {
-        
+
+        HandleSubcontractorSelection();
+
+        //Generer ID til task
+        task.TaskId = ObjectId.GenerateNewId().ToString();
+        Console.WriteLine($"Task: {task.TaskId}, AssignedTo: {task.AssignedTo?.SubcontractorName}, AssignedApartment: {task.AssignedApartment?.Address}");
+
         // Make HTTP POST request to save the listing
         var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Task/AddTask", task);
 
         if (response.IsSuccessStatusCode)
         {
-            showSuccessMessage = true;
-            await Task.Delay(4000);
-            showSuccessMessage = false;
-
+            isSuccess = true;
+            isError = false;
         }
         else
         {
-            // Error message
-            Console.WriteLine("Error adding task.");
+            isSuccess = false;
+            isError = true;
         }
+        var errorDetails = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"Error: {errorDetails}");
     }
 
     [Parameter]
-    public string ApartmentId { get; set; } // Received as string
-
-    private ObjectId apartmentObjectId;
-
-    //Konverterer string fra apartmentID tilbage til ObjectID
-
-    protected override void OnInitialized()
-    {
-        // Convert string to ObjectId
-        if (ObjectId.TryParse(ApartmentId, out var objectId))
-        {
-            apartmentObjectId = objectId;
-        }
-        else
-        {
-            // Handle invalid ObjectId format
-            throw new ArgumentException("Invalid ApartmentId format");
-        }
-    }
+    public string ApartmentId { get; set; } //Parameter modtaget som streng fra viewapartment
 }

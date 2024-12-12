@@ -17,7 +17,8 @@ public class ApartmentController : ControllerBase
     //Post apartment: 
 
     [HttpPost]
-	public async Task<IActionResult> PostApartment([FromBody]Apartment apartment)
+    [Route("AddApartment")]
+    public async Task<IActionResult> PostApartment([FromBody]Apartment apartment)
     {
         if (apartment == null)
         {
@@ -30,7 +31,7 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateApartment(ObjectId id,[FromBody] Apartment updatedApartment)
+	public async Task<IActionResult> UpdateApartment(string id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
         {
@@ -73,7 +74,7 @@ public class ApartmentController : ControllerBase
 
     //Get Apartment:
     [HttpGet("{id}")]
-	public async Task<IActionResult> GetApartment(ObjectId id)
+	public async Task<IActionResult> GetApartment(string id)
     {
         var apartment = await _repository.GetApartment(id);
         if (apartment == null)

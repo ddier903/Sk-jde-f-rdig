@@ -7,16 +7,15 @@ namespace Core
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId ApartmentId { get; set; }
+        public ObjectId Id { get; set; }
+        public string ApartmentId { get; set; }
 
         public string Address { get; set; }
 
         public string Status { get; set; } = "Ikke Fuldført";
 
-        public Tenant Tenant { get; set; }
+        public Tenant? Tenant { get; set; }
 
-        public bool IsComplete { get; set; } = false;
-
-        public List<Availability> Availability { get; set; }
+        public List<Availability>? Availability { get; set; }
     }
 }

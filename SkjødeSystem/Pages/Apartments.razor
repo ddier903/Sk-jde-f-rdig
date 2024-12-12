@@ -5,6 +5,7 @@
 
 <PageTitle>Apartments</PageTitle>
 
+
 <h3>Alle Lejligheder</h3>
 
 
@@ -84,7 +85,7 @@
     }
 
     private void NavigateToCreateTask(string apartmentId)
-    {
+    {  
         NavigationManager.NavigateTo($"/createtask/{apartmentId}");
     }
 
@@ -110,8 +111,14 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         // Henter liste af alle lejligheder:
-        apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/User/GetAllApartments");
-      
+        apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
+
+        if (apartments == null || !apartments.Any())
+        {
+            // Hvis ingen lejligheder findes, kan du vise en besked
+            Console.WriteLine("No apartments found");
+        }
 
     }
+   
 }
