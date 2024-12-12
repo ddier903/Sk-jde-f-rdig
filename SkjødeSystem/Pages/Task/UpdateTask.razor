@@ -1,4 +1,4 @@
-﻿@page "/updatetask/"
+﻿@page "/updatetask/{TaskId}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
@@ -56,10 +56,17 @@
                         </div>
                     </div>
 
-                    @if (showSuccessMessage)
+                    @if (isSuccess)
                     {
                         <div class="alert alert-success mt-3">
-                            Ændringer gemt!
+                            Opgaven blev ændret succesfuldt!
+                        </div>
+                    }
+
+                    @if (isError)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            Der opstod en fejl under ændring af Opgaven.
                         </div>
                     }
 
@@ -73,34 +80,44 @@
 @code {
 
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
-    private TaskItem task = new TaskItem
-        {
-            AssignedTo = new Subcontractor(),
-            AssignedApartment = new Apartment()
-        };
-    private bool showSuccessMessage = false;
-    private int currentApartmentId;
-    private int selectedSubcontractorId;
+    private TaskItem task = new TaskItem();
+    private bool isSuccess = false;
+    private bool isError = false;
+  
 
+    protected override async Task OnInitializedAsync()
+    {
 
+        // Hent Task ved at bruge TaskId
+        var initializedtask = await Http.GetFromJsonAsync<TaskItem>($"https://localhost:7210/api/Task/GetTasksById{TaskId}");
+        task = initializedtask ?? new TaskItem();
+
+    }
 
     private async Task HandleValidSubmit()
     {
+        task.EndDate = DateTime.Now; 
 
-        // Make HTTP POST request to save the listing
-        var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Task/UpdateTask", task);
+        // Make HTTP Update for at opdatere task objektet
+        var response = await Http.PutAsJsonAsync($"https://localhost:7210/api/Task/UpdateTask{TaskId}", task);
 
         if (response.IsSuccessStatusCode)
         {
-            showSuccessMessage = true;
-            await Task.Delay(4000);
-            showSuccessMessage = false;
-
+            isSuccess = true;
+            isError = false;
         }
         else
         {
-            // Error message
-            Console.WriteLine("Error updating task.");
+            isSuccess = false;
+            isError = true;
         }
+        var errorDetails = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"Error: {errorDetails}");
     }
+
+
+
+
+    [Parameter]
+    public string TaskId { get; set; } //Parameter modtaget som streng fra ViewTask
 }

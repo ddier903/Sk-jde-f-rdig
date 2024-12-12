@@ -32,10 +32,11 @@ public class TaskRepository
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
 
         var update = Builders<TaskItem>.Update
-       .Set(task => task.Image, updatedtask.Image)
        .Set(task => task.Status, updatedtask.Status)
        .Set(task => task.EndDate , updatedtask.EndDate)
        .Set(task => task.Comment, updatedtask.Comment);
+
+        var result = await collection.UpdateOneAsync(filter, update);
     }
 
     // Delete Task: 
