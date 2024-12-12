@@ -1,5 +1,4 @@
 ﻿@page "/createavailability"
-@using SkjødeSystem.Models
 
 <h3>Create Availability for Apartment</h3>
 
@@ -10,6 +9,11 @@
 <div>
     <label for="datePicker">Select Date:</label>
     <input type="date" id="datePicker" @bind="SelectedDate" />
+</div>
+<div>
+    <label for="timePicker">Enter Time (HH:MM):</label>
+    <input type="text" id="timePicker" @bind="EnteredTime" placeholder="e.g., 14:30" />
+    <p class="text-danger" style="display: @(IsTimeValid ? "none" : "block")">Invalid time format. Please use HH:MM.</p>
 </div>
 <div>
     <button @onclick="SaveAvailability" class="btn btn-primary">Save Availability</button>
@@ -33,19 +37,19 @@ else
         @foreach (var availability in Availabilities)
         {
             <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body d-flex">
-                        <div class="d-flex flex-column me-3">
-                            <h5 class="card-title">Apartment ID</h5>
-                            <div>@availability.AvailabilityID</div>
-                        </div>
-                        <div>
-                            <p class="card-text">
-                                <strong>Date:</strong> @availability.AvailabilityDate.ToShortDateString() <br />
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <div class="card">
+            <div class="card-body d-flex">
+            <div class="d-flex flex-column me-3">
+            <h5 class="card-title">Apartment ID</h5>
+            <div>@availability.AvailabilityID</div>
+            </div>
+            <div>
+            <p class="card-text">
+            <strong>Date:</strong> @availability.Date.ToShortDateString() <br />
+            </p>
+            </div>
+            </div>
+            </div>
             </div>
         }
     </div>
@@ -54,22 +58,30 @@ else
     private int ApartmentID;
     private DateTime SelectedDate = DateTime.Now;
     private string EnteredTime = "";
+    private bool IsTimeValid = true;
     private List<Availability> Availabilities = new();
     private string Message;
 
     private void SaveAvailability()
     {
-        if (ApartmentID <= 0)
+       
+
+        if (!ValidateTime(EnteredTime))
         {
-            Message = "Please enter a valid Apartment ID.";
+            Message = "Please enter a valid time in HH:MM format.";
+            IsTimeValid = false;
             return;
         }
 
 
+        var parsedTime = TimeOnly.Parse(EnteredTime);
+
+
         var availability = new Availability
             {
-                ApartmentID = ApartmentID,
-                AvailabilityDate = SelectedDate.Date,
+             
+                Date = SelectedDate.Date,
+           
             };
 
 
@@ -80,5 +92,12 @@ else
 
 
         SelectedDate = DateTime.Now;
+        EnteredTime = "";
+        IsTimeValid = true;
+    }
+
+    private bool ValidateTime(string time)
+    {
+        return TimeOnly.TryParse(time, out _);
     }
 }

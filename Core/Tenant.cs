@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace SkjødeSystem.Models
+namespace Core
 {
-    public class Admin : User
+    public class Tenant : User
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
     }
 }

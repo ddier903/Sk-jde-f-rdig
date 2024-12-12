@@ -1,0 +1,106 @@
+﻿@page "/updatetask/"
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+
+<PageTitle>CreateTask</PageTitle>
+
+<EditForm Model="@task" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="shadow overflow-hidden sm:rounded-md bg-white dark:bg-black">
+
+
+        <div class="grid grid-cols-6 gap-6">
+            <div class="relative px-4 py-5 sm:p-6">
+                <h3>Opdater Opgave:</h3>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="taskName">Opgave Navn:</label>
+                    <InputText id="taskName" class="form-control" @bind-Value="task.TaskName" placeholder="Navn på opgaven" readonly />
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="description">Beskrivelse:</label>
+                    <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven" readonly> </textarea>
+                </div>
+
+                @* <div class="col-span-6 sm:col-span-3">
+                <label for="ToDo">Tilføj Mangelliste:</label>
+                <InputFile id="ToDo" class="form-control" @bind-Value="task.ToDoPDF" />
+                </div> *@
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="startDate">Start Dato:</label>
+                    <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" readonly />
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="status">Status:</label>
+                    <InputSelect id="status" class="form-control" @bind-Value="task.Status">
+                        @foreach (var status in Statuses)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+
+                    <div class="col-span-6 sm:col-span-3">
+                        <label for="comment">Kommentar:</label>
+                        <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Tilføj en kommentar" />
+                    </div>
+
+                    <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                        <div class="flex justify-between items-center">
+                            <button type="submit" class="btn btn-primary">Gem Ændringer</button>
+                        </div>
+                    </div>
+
+                    @if (showSuccessMessage)
+                    {
+                        <div class="alert alert-success mt-3">
+                            Ændringer gemt!
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+
+    private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
+    private TaskItem task = new TaskItem
+        {
+            AssignedTo = new Subcontractor(),
+            AssignedApartment = new Apartment()
+        };
+    private bool showSuccessMessage = false;
+    private int currentApartmentId;
+    private int selectedSubcontractorId;
+
+
+
+    private async Task HandleValidSubmit()
+    {
+
+        // Make HTTP POST request to save the listing
+        var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Task/UpdateTask", task);
+
+        if (response.IsSuccessStatusCode)
+        {
+            showSuccessMessage = true;
+            await Task.Delay(4000);
+            showSuccessMessage = false;
+
+        }
+        else
+        {
+            // Error message
+            Console.WriteLine("Error updating task.");
+        }
+    }
+}

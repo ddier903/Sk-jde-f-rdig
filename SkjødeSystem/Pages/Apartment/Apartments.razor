@@ -1,0 +1,124 @@
+﻿@page "/apartments"
+@inject NavigationManager NavigationManager
+@using MongoDB.Bson;
+@inject HttpClient Http;
+
+<PageTitle>Apartments</PageTitle>
+
+
+<h3>Alle Lejligheder</h3>
+
+
+<div class="d-flex mb-3">
+    <label for="filter" class="me-2">Filtrer: </label>
+    <InputSelect class="form-control" id="filter" @bind-Value="selectedFilter" style="width: 150px;">
+        <option value="Alle">Alle</option>
+        <option value="Fuldført">Fuldført</option>
+        <option value="Ikke Fuldført">Ikke Fuldført</option>
+    </InputSelect>
+</div>
+
+<div class="mb-3">
+    <label for="search">Søg efter adresse: </label>
+    <input id="search" type="text" @bind="searchQuery" placeholder="Skriv Adresse..."/>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Adresse</th>
+            <th>Status</th>
+            <th>Opret Opgave</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var apartment in apartments)
+        {
+            if(DisplayApartment(apartment))
+            {
+                <tr>
+                    <td>@apartment.ApartmentId</td>
+                    <td>
+                        <button class="btn btn-link" @onclick="() => NavigateToViewTask(apartment.ApartmentId.ToString(), apartment.Address)">
+                            @apartment.Address</button>
+                    </td>
+                    <td>
+                        <InputSelect class="form-control" style="@GetStatusStyle(apartment.Status)" @bind-Value="apartment.Status">
+                            @foreach (var status in Statuses)
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </InputSelect>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" 
+                        @onclick="() => NavigateToCreateTask(apartment.ApartmentId.ToString())" 
+                        disabled="@IsStatusComplete(apartment.Status)">
+                            Opret Opgave
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Apartment> apartments = new List<Apartment>();
+
+    private List<string> Statuses = new List<string> { "Ikke Fuldført", "Fuldført" };
+
+    private string searchQuery = "";
+
+    private string selectedFilter = "Alle";
+
+
+    private bool DisplayApartment(Apartment apartment)
+    {
+        if(!string.IsNullOrWhiteSpace(searchQuery) &&
+        !apartment.Address.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return selectedFilter == "Alle" || apartment.Status == selectedFilter;
+    }
+
+    private void NavigateToCreateTask(string apartmentId)
+    {  
+        NavigationManager.NavigateTo($"/createtask/{apartmentId}");
+    }
+
+    private void NavigateToViewTask(string apartmentId, string address) 
+    {
+        var Address = Uri.EscapeDataString(address);
+
+        NavigationManager.NavigateTo($"/viewapartmenttask/{apartmentId}/{Address}");
+    }
+
+    private bool IsStatusComplete(string status)
+    {
+        return status == "Fuldført";
+    }
+
+    private string GetStatusStyle(string status)
+    {
+        return status == "Fuldført"
+            ? "background-color: green; color: white; width: 115px; height: auto;"
+            : "background-color: red; color: white; width: 115px; height: auto;";
+    }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        // Henter liste af alle lejligheder:
+        apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
+
+        if (apartments == null || !apartments.Any())
+        {
+            // Hvis ingen lejligheder findes, kan du vise en besked
+            Console.WriteLine("No apartments found");
+        }
+
+    }
+   
+}
