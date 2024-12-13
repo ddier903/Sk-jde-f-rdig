@@ -16,7 +16,7 @@ namespace Core
 
         public Tenant? Tenant { get; set; }
 
-        public List<Availability>? availabilities { get; set; } = new List<Availability>();
+        public List<Availability>? Availability { get; set; } = new List<Availability>();
     }
 
     
