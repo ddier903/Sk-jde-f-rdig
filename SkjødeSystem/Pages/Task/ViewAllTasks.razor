@@ -1,0 +1,70 @@
+﻿@page "/Viewalltasks"
+@inject NavigationManager NavigationManager
+@using MongoDB.Bson;
+@inject HttpClient Http;
+
+<PageTitle>Alle Opgaver</PageTitle>
+
+
+<h3>Alle Opgaver</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Navn</th>
+            <th>Status</th>
+            <th>Udføres af</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in tasks)
+        {
+                <tr>
+                    <td>@task.TaskId</td>
+                    <td>
+                        <button class="btn btn-link" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())">
+                            @task.TaskName
+                        </button>
+                    </td>
+                    <td>
+                       @task.Status
+                    </td>
+                    <td>
+                        @task.AssignedTo.SubcontractorName
+                    </td>
+                </tr>
+            
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<TaskItem> tasks = new List<TaskItem>();
+
+    private string searchQuery = "";
+
+    private string selectedFilter = "Alle";
+
+
+    private void NavigateToUpdateTask(string TaskId)
+    {
+
+        NavigationManager.NavigateTo($"/updatetask/{TaskId}");
+    }
+
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        // Henter liste af alle opgaver:
+        tasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
+
+        if (tasks == null || !tasks.Any())
+        {
+            // Hvis ingen opgaver findes, kan du vise en besked
+            Console.WriteLine("No tasks found");
+        }
+
+    }
+
+}
