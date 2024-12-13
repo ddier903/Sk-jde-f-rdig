@@ -34,9 +34,14 @@
     <div class="col-span-6 sm:col-span-3">
         <label for="startDate">Start Dato:</label>
         <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" />
-    </div> 
+    </div>
 
-     <div class="col-span-6 sm:col-span-3">
+    <div class="col-span-6 sm:col-span-3">
+        <label for="EndDate">Afsluttes før:</label>
+        <InputDate id="EndDate" class="form-control" @bind-Value="task.EndDate" />
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
         <label for="status">Status:</label>
         <InputSelect id="status" class="form-control" @bind-Value="task.Status">
             @foreach (var status in Statuses)
@@ -68,7 +73,7 @@
 
      <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
         <div class="flex justify-between items-center">
-        <button type="submit" class="btn btn-primary">Gem Opgave</button>
+        <button type="submit" class="btn btn-primary">Opret Opgave</button>
         </div>
      </div>
 

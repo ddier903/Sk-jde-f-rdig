@@ -32,10 +32,11 @@ public class TaskRepository
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
 
         var update = Builders<TaskItem>.Update
-       .Set(task => task.Image, updatedtask.Image)
        .Set(task => task.Status, updatedtask.Status)
-       .Set(task => task.EndDate , updatedtask.EndDate)
+       .Set(task => task.ActualEndDate , updatedtask.ActualEndDate)
        .Set(task => task.Comment, updatedtask.Comment);
+
+        var result = await collection.UpdateOneAsync(filter, update);
     }
 
     // Delete Task: 
@@ -49,7 +50,7 @@ public class TaskRepository
     //Get All Task by ApartmentID:
     public async Task<List<TaskItem>> GetAllTaskByApartmentId(string id)
     {
-        var filter = Builders<TaskItem>.Filter.Eq("Apartment.ApartmentId", id);
+        var filter = Builders<TaskItem>.Filter.Eq("AssignedApartment.ApartmentId", id);
         return await collection.Find(filter).ToListAsync();
     }
 
@@ -59,7 +60,7 @@ public class TaskRepository
     //Get All Task by Subconctractor:
     public async Task<List<TaskItem>> GetAllTasksBySubcontractor(string id)
     {
-        var filter = Builders<TaskItem>.Filter.Eq("Subcontractor.UserId", id);
+        var filter = Builders<TaskItem>.Filter.Eq("AssignedTo.UserId", id);
         return await collection.Find(filter).ToListAsync();
     }
 
