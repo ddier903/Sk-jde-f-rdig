@@ -3,15 +3,45 @@
 <head>
     <link href="/css/home.css" rel="stylesheet"/>
 </head>
-<PageTitle>Home</PageTitle>
 
-    <div class="content">
-        <h1>Skjøde Mangeludbedrings System</h1>
-        <p>Velkommen til!</p>
-        </div>
 
-        <div class="box-container">
-            <div class="box">Boks 1</div>
-            <div class="box">Boks 2</div>
-            <div class="box">Boks 3</div>
-        </div>
+<MudContainer Class="mt-16">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen User!</MudText>
+    <MudText Align="Align.Center">Vælg en plan for at komme i gang!</MudText>
+    <MudGrid Class="mt-8">
+        <!-- Beginner Card -->
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
+                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 150px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Primary" Size="Size.Large" />
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Start</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <!-- Starter Card -->
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
+                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 150px;">
+                    <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Color="Color.Primary" Size="Size.Large" />
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Start</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <!-- Professional Card -->
+        <MudItem xs="12" sm="12" md="4">
+            <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
+                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 150px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Work" Color="Color.Primary" Size="Size.Large" />
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width:50%;">Start</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+    
