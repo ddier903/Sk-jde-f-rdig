@@ -34,9 +34,14 @@
     <div class="col-span-6 sm:col-span-3">
         <label for="startDate">Start Dato:</label>
         <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" />
-    </div> 
+    </div>
 
-     <div class="col-span-6 sm:col-span-3">
+    <div class="col-span-6 sm:col-span-3">
+        <label for="EndDate">Afsluttes før:</label>
+        <InputDate id="EndDate" class="form-control" @bind-Value="task.EndDate" />
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
         <label for="status">Status:</label>
         <InputSelect id="status" class="form-control" @bind-Value="task.Status">
             @foreach (var status in Statuses)

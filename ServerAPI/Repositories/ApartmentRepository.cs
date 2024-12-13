@@ -21,6 +21,13 @@ public class ApartmentRepository
     //Post apartment: 
     public async Task PostApartment(Apartment apartment)
     {
+        var existingapartment = await collection.Find(a => a.Address == apartment.Address).FirstOrDefaultAsync();
+
+        if (existingapartment != null)
+        {
+            throw new InvalidOperationException($"An apartment with address '{apartment.Address}' already exists.");
+        }
+
         await collection.InsertOneAsync(apartment);
     }
     //Update apartment: 

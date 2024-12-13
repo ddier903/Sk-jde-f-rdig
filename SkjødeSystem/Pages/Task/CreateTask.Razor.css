@@ -70,7 +70,7 @@ button {
     font-size: 1rem;
     font-weight: 600;
     color: white;
-    background-color: #6366f1;
+    background-color: midnightblue;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -79,7 +79,7 @@ button {
 }
 
     button:hover {
-        background-color: #4f46e5;
+        background-color: darkslateblue;
     }
 
 /* Alert styles */
