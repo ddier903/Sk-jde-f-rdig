@@ -1,0 +1,82 @@
+﻿/* Generel styling */
+code {
+    color: #c02d76;
+}
+
+/* Task board styling */
+.task-board {
+    display: flex;
+    gap: 20px; /
+    padding: 0 20px; 
+}
+
+/* Kolonne styling */
+.column {
+    flex: 1;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; 
+    padding: 10px; 
+}
+
+/* Kolonnehoved styling */
+.column-header {
+    background: white; 
+    color: #333; 
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0; 
+    border: 1px solid #ccc; 
+    border-bottom: 2px solid #ccc; 
+    margin: 0 10px; 
+}
+
+/* Task Card Styles */
+.task-card {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: black;
+}
+
+    /* Pending Tasks */
+    .task-card.pending {
+        background: #aee9d1; 
+        border: 1px solid #88c8ab;
+    }
+
+    /* In Progress Tasks */
+    .task-card.in-progress {
+        background: #f5d3f6; 
+        border: 1px solid #e7aadf;
+    }
+
+    /* Completed Tasks */
+    .task-card.completed {
+        background: #d7e9fb; 
+        border: 1px solid #b3d4f5;
+    }
+
+/* Task Title Styling */
+.task-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Task Date Styling */
+.task-dates {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding: 55px 0; 
+    text-align: center; 
+}
