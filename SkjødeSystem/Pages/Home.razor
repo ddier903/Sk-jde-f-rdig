@@ -8,9 +8,8 @@
 @using SkjødeSystem.Pages.Apartment;
 
 <head>
-    <link href="/css/home.css" rel="stylesheet"/>
+    <link href="/css/home.css" rel="stylesheet" />
 </head>
-
 
 <MudContainer Class="mt-16">
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen User!</MudText>
@@ -19,7 +18,7 @@
     <MudGrid Class="mt-8">
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
-                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 100px;">
+                <MudCardContent Class="d-flex flex-column justify-center align-center">
                     <MudIcon Icon="@Icons.Material.Filled.Apartment" Color="Color.Dark" Size="Size.Large" />
                     <MudText Typo="Typo.body2" Class="mt-2" Style="margin-top: 40px;" Align="Align.Center">Få et overblik over alle boliger!</MudText>
                 </MudCardContent>
@@ -31,7 +30,7 @@
 
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
-                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 100px;">
+                <MudCardContent Class="d-flex flex-column justify-center align-center">
                     <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Dark" Size="Size.Large" />
                     <MudText Typo="Typo.body2" Class="mt-2" Style="margin-top: 40px;" Align="Align.Center">Få et overblik over alle opgaver!</MudText>
                 </MudCardContent>
@@ -43,7 +42,7 @@
 
         <MudItem xs="12" sm="12" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
-                <MudCardContent Class="d-flex flex-column justify-center align-center" Style="height: 100px;">
+                <MudCardContent Class="d-flex flex-column justify-center align-center">
                     <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Color="Color.Dark" Size="Size.Large" />
                     <MudText Typo="Typo.body2" Class="mt-2" Style="margin-top: 40px;" Align="Align.Center">Tilføj en underentreprenør!</MudText>
                 </MudCardContent>
@@ -58,8 +57,8 @@
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
                 <MudCardContent Class="d-flex flex-column justify-center align-center">
-                <MudText Typo="Typo.h6" Align="Align.Center">Så mange boliger er blevet oprettet:</MudText>
-                <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">@totalApartmentsCount</MudText>
+                    <MudText Typo="Typo.h6" Align="Align.Center">Så mange boliger er blevet oprettet:</MudText>
+                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">@totalApartmentsCount</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -75,13 +74,13 @@
 
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
-                <!-- Tomt kort, ingen indhold -->
+                <MudCardContent Class="d-flex flex-column justify-center align-center">
+                    <!-- Tomt kort, ingen indhold -->
+                </MudCardContent>
             </MudCard>
         </MudItem>
     </MudGrid>
 </MudContainer>
-
-
 
 @code {
     private int pendingTaskCount = 0; // Antallet af opgaver der mangler at blive fuldført
