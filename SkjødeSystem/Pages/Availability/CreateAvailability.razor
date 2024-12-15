@@ -1,4 +1,5 @@
-﻿@page "/createavailability"
+﻿@page "/createavailability/{UserId}"
+@inject HttpClient Http
 
 <h3>Opret Ledighed</h3>
 
@@ -9,7 +10,7 @@
 else
 {
     <div class="mb-3">
-        <h4>Apartment Address: @apartment.Address</h4>
+        <h4>Lejligheds Adresse: @apartment.Address</h4>
     </div>
 
     <EditForm Model="@availability" OnValidSubmit="SaveAvailability">
@@ -17,27 +18,32 @@ else
         <ValidationSummary />
 
         <div>
-            <label for="datePicker">Select Date:</label>
-            <InputDate id="datePicker" class="form-control" @bind-Value="availability.Date" />
-            @if (availability.Date == DateTime.MinValue)
+            <label for="datePicker">Vælg Dato:</label>
+            <InputDate TValue="DateTime" id="datePicker" class="form-control" @bind-Value="availability.Date" />
+        </div>
+
+        <div>
+            <label for="timeInput">Vælg Tid (timer/min):</label>
+            <input id="timeInput" type="text" class="form-control" @bind="timeInput" />
+            @if (isTimeInputInvalid)
             {
-                <span class="text-danger">Please select a valid date.</span>
+                <span class="text-danger">Invalid time format. Please use HH:mm.</span>
             }
         </div>
 
         <div>
-            <button class="btn btn-primary mt-3" type="submit">Save Availability</button>
+            <button class="btn btn-primary mt-3" type="submit">Gem Ledighed</button>
         </div>
     </EditForm>
 
-@if (Message != null)
-{
-    <p class="text-success">@Message</p>
-}
+    @if (Message != null)
+    {
+        <p class="text-success mt-3">@Message</p>
+    }
 
-<hr />
+    <hr />
 
-    <h3>Availabilities for Apartment</h3>
+    <h3>Ledighed for Lejligheden</h3>
     @if (availabilityDates == null || !availabilityDates.Any())
     {
         <p>No availabilities found.</p>
@@ -47,38 +53,41 @@ else
         <ul>
             @foreach (var avail in availabilityDates)
             {
-                <li>@avail.Date.ToShortDateString()</li>
+                <li>@avail.Date.ToString("dd.MM.yyyy") @avail.Date.TimeOfDay.ToString(@"hh\:mm")</li>
             }
         </ul>
     }
 }
 
 @code {
-    private int ApartmentID;
-    private DateTime SelectedDate = DateTime.Now;
-    private string EnteredTime = "";
-    private bool IsTimeValid = true;
-    private List<Availability> Availabilities = new();
+    private Apartment apartment; 
+    private List<Availability> availabilityDates = new List<Availability>();
     private string Message;
-    private Availability availability = new Availability();
+    private Availability availability = new Availability
+        {
+            Date = DateTime.Today 
+        };
+    private string timeInput = "00:00"; 
+    private bool isTimeInputInvalid = false; 
 
     [Parameter]
-    public string UserId { get; set; } // Correctly matches the @page directive
+    public string UserId { get; set; } 
 
-    private void SaveAvailability()
+    protected override async Task OnInitializedAsync()
     {
-       
-
-        if (!ValidateTime(EnteredTime))
+        try
         {
-            Message = "Please enter a valid time in HH:MM format.";
-            IsTimeValid = false;
-            return;
-        }
+            
+            apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/user/{UserId}");
 
+            if (apartment == null)
+            {
+                Message = "No apartment found for this user.";
+                return;
+            }
 
-        var parsedTime = TimeOnly.Parse(EnteredTime);
-
+           
+            availabilityDates = await Http.GetFromJsonAsync<List<Availability>>($"https://localhost:7210/api/Apartment/GetAvailability/{apartment.ApartmentId}");
 
             if (availabilityDates == null || !availabilityDates.Any())
             {
@@ -87,23 +96,41 @@ else
         }
         catch (Exception ex)
         {
-          
+            Message = $"Error: {ex.Message}";
         }
     }
 
-        Availabilities.Add(availability);
+    private async Task SaveAvailability()
+    {
+        if (availability.Date == DateTime.MinValue)
+        {
+            Message = "Please select a valid date.";
+            return;
+        }
 
-        availability.Date = availability.Date.ToLocalTime().Date;
+        if (!TimeSpan.TryParseExact(timeInput, @"hh\:mm", null, out var parsedTime))
+        {
+            isTimeInputInvalid = true;
+            return;
+        }
 
+        isTimeInputInvalid = false;
 
-        // Add the new availability to the apartment's availability list
-        apartment.Availability ??= new List<Availability>(); // Ensure the list is initialized
+        
+        availability.Date = availability.Date.Date + parsedTime;
+
+        
+        apartment.Availability ??= new List<Availability>();
         apartment.Availability.Add(availability);
 
-        // Update the apartment with the new availability list
         await Http.PutAsJsonAsync($"https://localhost:7210/api/Apartment/UpdateAvailability/{apartment.ApartmentId}", apartment.Availability);
 
-        // Reset the form for a new entry
-        availability = new Availability();
+        
+        availability = new Availability
+            {
+                Date = DateTime.Today
+            };
+        timeInput = "00:00"; // Reset time input
+        Message = "Ledighed gemt med succes!";
     }
 }
