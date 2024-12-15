@@ -78,14 +78,7 @@
 
         // Henter liste af alle opgaver for den pågældene subcontractor:
         tasks = await Http.GetFromJsonAsync<List<TaskItem>>($"https://localhost:7210/api/Task/GetTaskBySubcontractor{UserId}");
-
-        if (tasks == null || !tasks.Any())
-        {
-            // Hvis ingen opgaver findes, kan du vise en besked
-            Console.WriteLine($"No tasks found for subcontractor with ID: {UserId}");
-        }
-
-        Console.WriteLine($"Received tasks count: {tasks?.Count}");
+       
 
     }
 
