@@ -6,7 +6,7 @@ code {
 /* Task board styling */
 .task-board {
     display: flex;
-    gap: 20px; /
+    gap: 20px; 
     padding: 0 20px; 
 }
 
