@@ -98,6 +98,91 @@ public class ApartmentController : ControllerBase
         return Ok(new { Count = count });
     }
 
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetApartmentByUserId(string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return BadRequest("UserId is required.");
+        }
+
+        var apartment = await _repository.GetApartmentByUserId(userId);
+
+        if (apartment == null)
+        {
+            return NotFound($"No apartment found for UserId: {userId}");
+        }
+
+        return Ok(apartment);
+    }
+
+
+    [HttpPut("assign-tenant/{apartmentId}")]
+    public async Task<IActionResult> AssignTenant(string apartmentId, [FromBody] Tenant tenant)
+    {
+        if (tenant == null)
+        {
+            return BadRequest("Tenant data is null.");
+        }
+
+        var success = await _repository.AssignTenantToApartment(apartmentId, tenant);
+
+        if (!success)
+        {
+            return NotFound($"Apartment with ID {apartmentId} not found.");
+        }
+
+        return Ok($"Tenant assigned to apartment with ID {apartmentId}.");
+    }
+
+    [HttpPut("UpdateAvailability/{apartmentId}")]
+    public async Task<IActionResult> UpdateAvailability(string apartmentId, [FromBody] List<Availability> availabilities)
+    {
+        if (availabilities == null || !availabilities.Any())
+        {
+            return BadRequest("Availability list is null or empty.");
+        }
+
+        // Convert each date in the list to UTC
+        foreach (var availability in availabilities)
+        {
+            availability.Date = availability.Date.ToUniversalTime();
+        }
+
+        var success = await _repository.UpdateApartmentAvailability(apartmentId, availabilities);
+
+        if (!success)
+        {
+            return NotFound($"Apartment with ID {apartmentId} not found.");
+        }
+
+        return Ok("Availability updated successfully.");
+    }
+
+
+    [HttpGet("GetAvailability/{apartmentId}")]
+    public async Task<IActionResult> GetAvailability(string apartmentId)
+    {
+        var apartment = await _repository.GetApartment(apartmentId);
+
+        if (apartment == null)
+        {
+            return NotFound($"Apartment with ID {apartmentId} not found.");
+        }
+
+      
+        if (apartment.Availability != null)
+        {
+            foreach (var availability in apartment.Availability)
+            {
+                availability.Date = availability.Date.ToLocalTime();
+
+            }
+        }
+
+        return Ok(apartment.Availability);
+    }
+
 
 
 }

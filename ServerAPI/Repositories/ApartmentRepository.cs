@@ -66,4 +66,60 @@ public class ApartmentRepository
         return await collection.CountDocumentsAsync(filter);
     }
 
+
+    public async Task<Apartment> GetApartmentByUserId(string userId)
+    {
+        
+        var filter = Builders<Apartment>.Filter.Eq(a => a.Tenant.UserId, userId);
+
+       
+        return await collection.Find(filter).FirstOrDefaultAsync();
+    }
+
+
+    public async Task<bool> AssignTenantToApartment(string apartmentId, Tenant tenant)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
+        var update = Builders<Apartment>.Update.Set(a => a.Tenant, tenant);
+        var result = await collection.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0; // Return true if a document was modified
+    }
+    // Add Availability to an Apartment
+    public async Task<bool> UpdateApartmentAvailability(string apartmentId, List<Availability> availabilities)
+    {
+        
+        foreach (var availability in availabilities)
+        {
+            availability.Date = availability.Date.ToUniversalTime();
+        }
+
+
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
+        var update = Builders<Apartment>.Update.Set(a => a.Availability, availabilities);
+        var result = await collection.UpdateOneAsync(filter, update);
+
+        return result.ModifiedCount > 0;
+    }
+
+
+    // Get All Availabilities for an Apartment
+    public async Task<List<Availability>> GetAvailabilitiesByApartmentId(string apartmentId)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
+        var apartment = await collection.Find(filter).FirstOrDefaultAsync();
+
+        if (apartment?.Availability != null)
+        {
+            foreach (var availability in apartment.Availability)
+            {
+                availability.Date = availability.Date.ToLocalTime();
+
+            }
+        }
+
+        return apartment?.Availability ?? new List<Availability>();
+    }
+
+
 }

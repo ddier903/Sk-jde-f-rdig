@@ -1,23 +1,34 @@
 ﻿@page "/createavailability"
 
-<h3>Create Availability for Apartment</h3>
+<h3>Opret Ledighed</h3>
 
-<div>
-    <label for="apartmentId">Apartment ID:</label>
-    <input type="number" id="apartmentId" @bind="ApartmentID" />
-</div>
-<div>
-    <label for="datePicker">Select Date:</label>
-    <input type="date" id="datePicker" @bind="SelectedDate" />
-</div>
-<div>
-    <label for="timePicker">Enter Time (HH:MM):</label>
-    <input type="text" id="timePicker" @bind="EnteredTime" placeholder="e.g., 14:30" />
-    <p class="text-danger" style="display: @(IsTimeValid ? "none" : "block")">Invalid time format. Please use HH:MM.</p>
-</div>
-<div>
-    <button @onclick="SaveAvailability" class="btn btn-primary">Save Availability</button>
-</div>
+@if (apartment == null)
+{
+    <div class="alert alert-danger">No apartment found for this user.</div>
+}
+else
+{
+    <div class="mb-3">
+        <h4>Apartment Address: @apartment.Address</h4>
+    </div>
+
+    <EditForm Model="@availability" OnValidSubmit="SaveAvailability">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="datePicker">Select Date:</label>
+            <InputDate id="datePicker" class="form-control" @bind-Value="availability.Date" />
+            @if (availability.Date == DateTime.MinValue)
+            {
+                <span class="text-danger">Please select a valid date.</span>
+            }
+        </div>
+
+        <div>
+            <button class="btn btn-primary mt-3" type="submit">Save Availability</button>
+        </div>
+    </EditForm>
 
 @if (Message != null)
 {
@@ -26,34 +37,22 @@
 
 <hr />
 
-<h3>All Existing Availabilities</h3>
-@if (Availabilities == null || !Availabilities.Any())
-{
-    <p>No availabilities found.</p>
+    <h3>Availabilities for Apartment</h3>
+    @if (availabilityDates == null || !availabilityDates.Any())
+    {
+        <p>No availabilities found.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var avail in availabilityDates)
+            {
+                <li>@avail.Date.ToShortDateString()</li>
+            }
+        </ul>
+    }
 }
-else
-{
-    <div class="row">
-        @foreach (var availability in Availabilities)
-        {
-            <div class="col-md-4 mb-3">
-            <div class="card">
-            <div class="card-body d-flex">
-            <div class="d-flex flex-column me-3">
-            <h5 class="card-title">Apartment ID</h5>
-            <div>@availability.AvailabilityID</div>
-            </div>
-            <div>
-            <p class="card-text">
-            <strong>Date:</strong> @availability.Date.ToShortDateString() <br />
-            </p>
-            </div>
-            </div>
-            </div>
-            </div>
-        }
-    </div>
-}
+
 @code {
     private int ApartmentID;
     private DateTime SelectedDate = DateTime.Now;
@@ -61,6 +60,10 @@ else
     private bool IsTimeValid = true;
     private List<Availability> Availabilities = new();
     private string Message;
+    private Availability availability = new Availability();
+
+    [Parameter]
+    public string UserId { get; set; } // Correctly matches the @page directive
 
     private void SaveAvailability()
     {
@@ -77,27 +80,30 @@ else
         var parsedTime = TimeOnly.Parse(EnteredTime);
 
 
-        var availability = new Availability
+            if (availabilityDates == null || !availabilityDates.Any())
             {
-             
-                Date = SelectedDate.Date,
-           
-            };
-
+                Message = "No availability dates found for this apartment.";
+            }
+        }
+        catch (Exception ex)
+        {
+          
+        }
+    }
 
         Availabilities.Add(availability);
 
+        availability.Date = availability.Date.ToLocalTime().Date;
 
-        Message = $"Availability saved successfully for Apartment ID {ApartmentID}!";
 
+        // Add the new availability to the apartment's availability list
+        apartment.Availability ??= new List<Availability>(); // Ensure the list is initialized
+        apartment.Availability.Add(availability);
 
-        SelectedDate = DateTime.Now;
-        EnteredTime = "";
-        IsTimeValid = true;
-    }
+        // Update the apartment with the new availability list
+        await Http.PutAsJsonAsync($"https://localhost:7210/api/Apartment/UpdateAvailability/{apartment.ApartmentId}", apartment.Availability);
 
-    private bool ValidateTime(string time)
-    {
-        return TimeOnly.TryParse(time, out _);
+        // Reset the form for a new entry
+        availability = new Availability();
     }
 }
