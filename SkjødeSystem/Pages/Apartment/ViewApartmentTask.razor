@@ -1,6 +1,7 @@
 ﻿@page "/viewapartmenttask/{apartmentId}/{address}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@inject ITaskService TaskService
 
 <head>
     <link href="css/viewapartmenttask.css" rel="stylesheet" />
@@ -79,9 +80,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-
-        // Hent opgaver for den valgte lejlighed
-        tasks = await Http.GetFromJsonAsync<List<TaskItem>>($"https://localhost:7210/api/Task/GetTaskByApartmentId{apartmentId}");
+        // Brug TaskService i stedet for HttpClient
+        tasks = await TaskService.GetTasksByApartmentId(apartmentId);
 
         if (tasks == null || !tasks.Any())
         {

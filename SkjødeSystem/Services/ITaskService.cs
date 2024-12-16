@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SkjødeSystem.Services;
 
-namespace ClientApp.Services
+namespace SkjødeSystem.Services
 {
     public interface ITaskService
     {

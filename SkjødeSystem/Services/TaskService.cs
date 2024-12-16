@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using Core;
 using SkjødeSystem.Services;
 
-namespace ClientApp.Services
+namespace SkjødeSystem.Services
 {
+
+
     public class TaskService : ITaskService
     {
         private readonly HttpClient _httpClient;
 
-        // Adresse på server, hvor din API er hostet
-        private string serverUrl = "https://localhost:7210"; // 
+        // Adresse på server, hvor API er hostet
+        private string serverUrl = "https://localhost:7210"; 
 
         // Constructor for at injicere HttpClient
         public TaskService(HttpClient httpClient)
@@ -34,7 +36,7 @@ namespace ClientApp.Services
             return tasks;
         }
 
-        // Hent opgaver for en underleverandør
+        // Hent opgaver for en underentreprenør
         public async Task<List<TaskItem>> GetTasksBySubcontractor(string userId)
         {
             var tasks = await _httpClient.GetFromJsonAsync<List<TaskItem>>($"{serverUrl}/api/task/GetTaskBySubcontractor{userId}");
