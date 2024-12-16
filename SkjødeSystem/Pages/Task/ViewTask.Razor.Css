@@ -3,11 +3,13 @@ code {
     color: #c02d76;
 }
 
-/
+
 .task-board {
     display: flex;
-    gap: 20px; 
-    padding: 0 20px; 
+    gap: 20px;
+    padding: 0 20px;
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 
@@ -16,8 +18,9 @@ code {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc; 
-    padding: 10px; 
+    border: 1px solid #ccc;
+    padding: 10px;
+    min-width: 0; 
 }
 
 
