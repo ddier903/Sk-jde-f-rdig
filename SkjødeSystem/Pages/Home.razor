@@ -76,7 +76,7 @@
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
                 <MudCardContent Class="d-flex flex-column justify-center align-center">
                     <MudText Typo="Typo.h6" Align="Align.Center">Så mange underentreprenører er blevet tilføjet:</MudText>
-                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">@totalSubcontractorsCount</MudText>
+                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center"></MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -86,7 +86,6 @@
 @code {
     private int pendingTaskCount = 0; // Antallet af opgaver der mangler at blive fuldført
     private int totalApartmentsCount; // Antallet af Apartments som er blevet oprettet
-    private int totalSubcontractorsCount = 0;
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
@@ -101,10 +100,6 @@
 
         var apartments = await Http.GetFromJsonAsync<List<Core.Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
         totalApartmentsCount = apartments?.Count ?? 0; // Tæller lejlighederne eller sætter til 0, hvis null
-
-        // Hent alle underentreprenører og opdater antallet
-        var subcontractors = await Http.GetFromJsonAsync<List<Core.Subcontractor>>("https://localhost:7210/api/Subcontractor/GetSubcontractors");
-        totalSubcontractorsCount = subcontractors?.Count ?? 0; // Sætter antallet eller 0, hvis null
     }
 
 }
