@@ -1,0 +1,66 @@
+﻿@page "/Login"
+@using SkjødeSystem.Service
+@inject NavigationManager navManager
+@inject NavigationManager Navigation
+@inject ILoginService loginService
+
+<div>
+    <h1>Login</h1>
+    <p>Login for at tilgå din konto</p>
+</div>
+<div class="login-container">
+    <form @onsubmit="HandleValidSubmit">
+        <div>
+            <div>
+                <label for="username">Username</label>
+                <InputText id="username" class="form-control" @bind-Value="loginUser.UserName" />
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <InputText id="password" class="form-control" @bind-Value="loginUser.Password" type="password" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Log Ind</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@code {
+    private LoginUser loginUser = new LoginUser();
+
+    private async System.Threading.Tasks.Task HandleValidSubmit()
+    {
+        var role = await loginService.Login(loginUser.UserName, loginUser.Password);
+        if (!string.IsNullOrEmpty(role))
+        {
+            switch (role)
+            {
+                case "Admin":
+                    navManager.NavigateTo("/admin/home");
+                    break;
+                case "Subcontractor":
+                    navManager.NavigateTo($"/subcontractor/viewtask{loginUser.UserId}");
+                    break;
+                case "Tenant":
+                    navManager.NavigateTo($"/tenant/createavailability{loginUser.UserId}");
+                    break;
+                default:
+                    Console.WriteLine("Unknown role");
+                    break;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Login failed");
+        }
+    }
+
+    public class LoginUser
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+}
+

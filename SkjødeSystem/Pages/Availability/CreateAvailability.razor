@@ -1,7 +1,7 @@
 ﻿@page "/createavailability/{UserId}"
 @inject HttpClient Http
 
-<h3>Opret Ledighed</h3>
+<h3>Der er blevet tid til mangeludbedring i din bolig, venligst angiv minimum 3 ledige datoer.</h3>
 
 @if (apartment == null)
 {
@@ -10,7 +10,7 @@
 else
 {
     <div class="mb-3">
-        <h4>Lejligheds Adresse: @apartment.Address</h4>
+        <h4>Lejlighedens Adresse: @apartment.Address</h4>
     </div>
 
     <EditForm Model="@availability" OnValidSubmit="SaveAvailability">

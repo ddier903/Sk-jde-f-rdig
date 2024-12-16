@@ -1,0 +1,103 @@
+﻿@page "/addtenant"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@using System.ComponentModel.DataAnnotations
+@using MongoDB.Bson
+
+<PageTitle>Add Tenant</PageTitle>
+
+<EditForm Model="@tenant" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <h3>Opret bruger til beboer:</h3>
+
+    <div class="form-group">
+        <label for="fornavn">Fornavn på Beboer:</label>
+        <InputText id="fornavn" class="form-control" @bind-Value="tenant.FirstName" />
+    </div>
+    <div class="form-group">
+        <label for="efternavn">Efternavn på Beboer:</label>
+        <InputText id="efternavn" class="form-control" @bind-Value="tenant.LastName" />
+    </div>
+
+    <div class="form-group">
+        <label for="userName">Brugernavn:</label>
+        <InputText id="userName" class="form-control" @bind-Value="tenant.UserName" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Adgangskode:</label>
+        <InputText id="password" type="form-control" class="form-control" @bind-Value="tenant.Password" />
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Tlf:</label>
+        <InputText id="phone" class="form-control" @bind-Value="tenant.Phone" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" type="form-control" class="form-control" @bind-Value="tenant.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="status">Rolle:</label>
+        <InputText id="role" class="form-control" @bind-Value="tenant.Role" ActiveRole>
+
+        </InputText>
+    </div>
+    
+
+    <button type="submit" class="btn btn-primary">Opret Bruger</button>
+</EditForm>
+
+@if (isSuccess)
+{
+    <div class="alert alert-success mt-3">
+        Tenant added successfully!
+    </div>
+}
+
+@if (isError)
+{
+    <div class="alert alert-danger mt-3">
+        An error occurred while adding the tenant.
+    </div>
+}
+
+@code {
+    private Tenant tenant = new Tenant();
+    private bool isSuccess = false;
+    private bool isError = false;
+    private string ActiveRole = "Tenant";
+
+    private async System.Threading.Tasks.Task HandleValidSubmit()
+    {
+
+        tenant.UserId = ObjectId.GenerateNewId().ToString();
+        try
+        {
+            // Send Subcontractor objektet til API'et, som opretter det i databasen
+            var response = await Http.PostAsJsonAsync("https://localhost:7210/api/User/AddTenant", tenant);
+
+            if (response.IsSuccessStatusCode)
+            {
+                isSuccess = true;
+                isError = false;
+                tenant = new Tenant(); // Reset formularen
+            }
+            else
+            {
+                isSuccess = false;
+                isError = true;
+            }
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error: {errorDetails}");
+        }
+        catch (Exception)
+        {
+            isSuccess = false;
+            isError = true;
+        }
+    }
+}
