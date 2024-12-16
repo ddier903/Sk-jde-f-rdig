@@ -25,6 +25,16 @@
         <label for="description">Beskrivelse:</label>
         <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven"> </textarea>
     </div>
+
+    <div class="col-span-6 sm:col-span-3">
+        <label for="type">Type:</label>
+        <InputSelect id="type" class="form-control" @bind-Value="task.Type">
+            @foreach (var type in Types)
+            {
+               <option value="@type">@type</option>
+            }
+        </InputSelect>
+    </div>
     
     @* <div class="col-span-6 sm:col-span-3">
         <label for="ToDo">Tilføj Mangelliste:</label>
@@ -101,6 +111,7 @@
 @code {
 
     private List<string> Statuses = new() { "Afventer", "Igangværende", "Færdiggjort", };
+    private List<string> Types = new() { "1 års eftersyn", "5 års eftersyn", };
     private TaskItem task = new TaskItem
         {
             AssignedTo = new Subcontractor(),
