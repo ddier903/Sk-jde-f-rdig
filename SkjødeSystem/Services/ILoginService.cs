@@ -8,8 +8,6 @@ namespace SkjødeSystem.Services
 
         Task Logout();
 
-        Task GetAllUsers();
-
     }
 
 }

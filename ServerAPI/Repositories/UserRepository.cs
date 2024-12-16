@@ -60,10 +60,10 @@ public class UserRepository
 	}
 
 	//Get User by Username and Password
-	public async Task<User> GetUserByUsernameAndPassword(string username, string password)
+	public async Task<User> Authenticate(User user )
 	{
-		var filter1 = Builders<User>.Filter.Eq("UserName", username);
-		var filter2 = Builders<User>.Filter.Eq("Password", password);
+		var filter1 = Builders<User>.Filter.Eq("UserName", user.UserName);
+		var filter2 = Builders<User>.Filter.Eq("Password", user.Password);
 		var combinedfilter = Builders<User>.Filter.And(
 		filter1,
 		filter2

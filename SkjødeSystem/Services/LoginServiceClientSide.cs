@@ -1,14 +1,21 @@
 ﻿using Blazored.LocalStorage;
 using Core;
+using Microsoft.AspNetCore.Components;
 using SkjødeSystem.Services;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using WebApp1.Service.Login;
 
 namespace SkjødeSystem.Service
 {
+
+    
     public class LoginServiceClientSide : ILoginService
     {
+
+        private readonly LoginServiceServerSide LoginServer;
+
         private readonly ILocalStorageService localStorage;
 
         // Initialisere en liste af Users
@@ -27,28 +34,35 @@ namespace SkjødeSystem.Service
         }
 
 
-        // Validate user credentials
+        // Validerer Loginoplysninger
         public async Task<string> Login(string username, string password)
         {
-            var user = users.FirstOrDefault(u => u.UserName == username && u.Password == password);
-            if (user != null)
+            bool isValid = await Validate(username, password); 
+
+            if (isValid)
             {
-                await localStorage.SetItemAsync("user", user); // Store user in local storage
-                return user.Role; // Return the user's role
+                // Hvis validiteten er sand, så modtager vi brugerdata fra serveren
+                var user = await LoginServer.GetUserByUsernameAndPassword(username, password);
+
+                // Gem brugeren i localStorage
+                await localStorage.SetItemAsync("user", user);
+                return user.Role; 
             }
+
             return null;
         }
 
-        // Logout method to clear stored user
-        public async Task Logout()
+            // Log ud
+            public async Task Logout()
         {
             await localStorage.RemoveItemAsync("user");
         }
 
-        //Henter alle brugere fra db
-        public async Task GetAllUsers()
+        protected virtual async Task<bool> Validate(string username, string password)
         {
+            var isValid = await LoginServer.Validate(username, password);
 
+            return isValid;
         }
 
     }
