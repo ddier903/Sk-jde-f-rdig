@@ -1,103 +1,136 @@
-﻿@page "/createavailability"
+﻿@page "/createavailability/{UserId}"
+@inject HttpClient Http
 
-<h3>Create Availability for Apartment</h3>
+<h3>Opret Ledighed</h3>
 
-<div>
-    <label for="apartmentId">Apartment ID:</label>
-    <input type="number" id="apartmentId" @bind="ApartmentID" />
-</div>
-<div>
-    <label for="datePicker">Select Date:</label>
-    <input type="date" id="datePicker" @bind="SelectedDate" />
-</div>
-<div>
-    <label for="timePicker">Enter Time (HH:MM):</label>
-    <input type="text" id="timePicker" @bind="EnteredTime" placeholder="e.g., 14:30" />
-    <p class="text-danger" style="display: @(IsTimeValid ? "none" : "block")">Invalid time format. Please use HH:MM.</p>
-</div>
-<div>
-    <button @onclick="SaveAvailability" class="btn btn-primary">Save Availability</button>
-</div>
-
-@if (Message != null)
+@if (apartment == null)
 {
-    <p class="text-success">@Message</p>
-}
-
-<hr />
-
-<h3>All Existing Availabilities</h3>
-@if (Availabilities == null || !Availabilities.Any())
-{
-    <p>No availabilities found.</p>
+    <div class="alert alert-danger">No apartment found for this user.</div>
 }
 else
 {
-    <div class="row">
-        @foreach (var availability in Availabilities)
-        {
-            <div class="col-md-4 mb-3">
-            <div class="card">
-            <div class="card-body d-flex">
-            <div class="d-flex flex-column me-3">
-            <h5 class="card-title">Apartment ID</h5>
-            <div>@availability.AvailabilityID</div>
-            </div>
-            <div>
-            <p class="card-text">
-            <strong>Date:</strong> @availability.Date.ToShortDateString() <br />
-            </p>
-            </div>
-            </div>
-            </div>
-            </div>
-        }
+    <div class="mb-3">
+        <h4>Lejligheds Adresse: @apartment.Address</h4>
     </div>
-}
-@code {
-    private int ApartmentID;
-    private DateTime SelectedDate = DateTime.Now;
-    private string EnteredTime = "";
-    private bool IsTimeValid = true;
-    private List<Availability> Availabilities = new();
-    private string Message;
 
-    private void SaveAvailability()
+    <EditForm Model="@availability" OnValidSubmit="SaveAvailability">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="datePicker">Vælg Dato:</label>
+            <InputDate TValue="DateTime" id="datePicker" class="form-control" @bind-Value="availability.Date" />
+        </div>
+
+        <div>
+            <label for="timeInput">Vælg Tid (timer/min):</label>
+            <input id="timeInput" type="text" class="form-control" @bind="timeInput" />
+            @if (isTimeInputInvalid)
+            {
+                <span class="text-danger">Invalid time format. Please use HH:mm.</span>
+            }
+        </div>
+
+        <div>
+            <button class="btn btn-primary mt-3" type="submit">Gem Ledighed</button>
+        </div>
+    </EditForm>
+
+    @if (Message != null)
     {
-       
+        <p class="text-success mt-3">@Message</p>
+    }
 
-        if (!ValidateTime(EnteredTime))
+    <hr />
+
+    <h3>Ledighed for Lejligheden</h3>
+    @if (availabilityDates == null || !availabilityDates.Any())
+    {
+        <p>No availabilities found.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var avail in availabilityDates)
+            {
+                <li>@avail.Date.ToString("dd.MM.yyyy") @avail.Date.TimeOfDay.ToString(@"hh\:mm")</li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    private Apartment apartment; 
+    private List<Availability> availabilityDates = new List<Availability>();
+    private string Message;
+    private Availability availability = new Availability
         {
-            Message = "Please enter a valid time in HH:MM format.";
-            IsTimeValid = false;
+            Date = DateTime.Today 
+        };
+    private string timeInput = "00:00"; 
+    private bool isTimeInputInvalid = false; 
+
+    [Parameter]
+    public string UserId { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            
+            apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/user/{UserId}");
+
+            if (apartment == null)
+            {
+                Message = "No apartment found for this user.";
+                return;
+            }
+
+           
+            availabilityDates = await Http.GetFromJsonAsync<List<Availability>>($"https://localhost:7210/api/Apartment/GetAvailability/{apartment.ApartmentId}");
+
+            if (availabilityDates == null || !availabilityDates.Any())
+            {
+                Message = "No availability dates found for this apartment.";
+            }
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+
+    private async Task SaveAvailability()
+    {
+        if (availability.Date == DateTime.MinValue)
+        {
+            Message = "Please select a valid date.";
             return;
         }
 
+        if (!TimeSpan.TryParseExact(timeInput, @"hh\:mm", null, out var parsedTime))
+        {
+            isTimeInputInvalid = true;
+            return;
+        }
 
-        var parsedTime = TimeOnly.Parse(EnteredTime);
+        isTimeInputInvalid = false;
 
+        
+        availability.Date = availability.Date.Date + parsedTime;
 
-        var availability = new Availability
+        
+        apartment.Availability ??= new List<Availability>();
+        apartment.Availability.Add(availability);
+
+        await Http.PutAsJsonAsync($"https://localhost:7210/api/Apartment/UpdateAvailability/{apartment.ApartmentId}", apartment.Availability);
+
+        
+        availability = new Availability
             {
-             
-                Date = SelectedDate.Date,
-           
+                Date = DateTime.Today
             };
-
-
-        Availabilities.Add(availability);
-
-
-        Message = $"Availability saved successfully for Apartment ID {ApartmentID}!";
-
-
-        SelectedDate = DateTime.Now;
-        EnteredTime = "";
-        IsTimeValid = true;
-    }
-
-    private bool ValidateTime(string time)
-    {
-        return TimeOnly.TryParse(time, out _);
+        timeInput = "00:00"; // Reset time input
+        Message = "Ledighed gemt med succes!";
     }
 }
