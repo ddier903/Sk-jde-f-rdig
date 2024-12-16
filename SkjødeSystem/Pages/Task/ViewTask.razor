@@ -13,9 +13,7 @@
     <h3>Viser opgaver for @currentsubcontractor.SubcontractorName</h3>
 </div>
 
-<!-- Opgave List -->
 <div class="task-board">
-    <!-- Pending Opgaves -->
     <div class="column">
         <div class="column-header">Modtaget</div>
         @foreach (var task in tasks.Where(t => t.Status == "Afventer"))
@@ -31,7 +29,6 @@
         }
     </div>
 
-    <!-- In Progress Opgaves -->
     <div class="column">
         <div class="column-header">Igangværende</div>
         @foreach (var task in tasks.Where(t => t.Status == "Igangværende"))
@@ -47,7 +44,6 @@
         }
     </div>
 
-    <!-- Completed Opgaves -->
     <div class="column">
         <div class="column-header">Færdiggjort</div>
         @foreach (var task in tasks.Where(t => t.Status == "Færdiggjort"))
@@ -65,7 +61,7 @@
 </div>
 
 @code {
-    // Sample task data with additional entries
+   
     private List<TaskItem> tasks = new List<TaskItem>();
     private Subcontractor currentsubcontractor = new Subcontractor();
 
