@@ -1,10 +1,89 @@
-﻿@page "/viewtask"
+﻿@page "/viewtask/{UserId}"
+@inject NavigationManager NavigationManager
+@using MongoDB.Bson;
+@inject HttpClient Http;
 
-<PageTitle>ViewTask</PageTitle>
 
-<h3>ViewTask</h3>
+
+<PageTitle>View My Opgave</PageTitle>
+
+
+
+<div class="header-container">
+    <h3>Viser opgaver for @currentsubcontractor.SubcontractorName</h3>
+</div>
+
+<div class="task-board">
+    <div class="column">
+        <div class="column-header">Modtaget</div>
+        @foreach (var task in tasks.Where(t => t.Status == "Afventer"))
+        {
+            <div class="task-card pending" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())" style="cursor: pointer;">
+                <h5>@task.TaskName</h5>
+                <p>@task.Description</p>
+                <p>@task.AssignedApartment.Address</p>
+                <small>Start: @task.StartDate.ToString()</small>
+                <br />
+                <small>End: @task.ActualEndDate?.ToString() </small>
+            </div>
+        }
+    </div>
+
+    <div class="column">
+        <div class="column-header">Igangværende</div>
+        @foreach (var task in tasks.Where(t => t.Status == "Igangværende"))
+        {
+            <div class="task-card in-progress" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())" style="cursor: pointer;">
+                <h5>@task.TaskName</h5>
+                <p>@task.Description</p>
+                <p>@task.AssignedApartment.Address</p>
+                <small>Start: @task.StartDate.ToString()</small>
+                <br />
+                <small>End: @task.ActualEndDate?.ToString() </small>
+            </div>
+        }
+    </div>
+
+    <div class="column">
+        <div class="column-header">Færdiggjort</div>
+        @foreach (var task in tasks.Where(t => t.Status == "Færdiggjort"))
+        {
+            <div class="task-card completed" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())" style="cursor: pointer;">
+                <h5>@task.TaskName</h5>
+                <p>@task.Description</p>
+                <p>@task.AssignedApartment.Address</p>
+                <small>Start: @task.StartDate.ToString()</small>
+                <br />
+                <small>End: @task.ActualEndDate?.ToString() </small>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
+   
+    private List<TaskItem> tasks = new List<TaskItem>();
+    private Subcontractor currentsubcontractor = new Subcontractor();
 
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        //Henter Subcontractor ud fra ID
+
+        currentsubcontractor = await Http.GetFromJsonAsync<Subcontractor>($"https://localhost:7210/api/User/GetUserById{UserId}");
+
+
+        // Henter liste af alle opgaver for den pågældene subcontractor:
+        tasks = await Http.GetFromJsonAsync<List<TaskItem>>($"https://localhost:7210/api/Task/GetTaskBySubcontractor{UserId}");
+       
+
+    }
+
+    public void NavigateToUpdateTask(string taskId)
+    {
+        NavigationManager.NavigateTo($"/updatetask/{taskId}");
+    }
+
+    [Parameter]
+    public string UserId { get; set; } //Parameter modtaget som streng 
 }
 
