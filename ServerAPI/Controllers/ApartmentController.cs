@@ -31,7 +31,7 @@ public class ApartmentController : ControllerBase
 
     //Update apartment: 
     [HttpPut]
-    [Route("UpdateApartment{id}")]
+    [Route("UpdateApartment/{id}")]
     public async Task<IActionResult> UpdateApartment(string id,[FromBody] Apartment updatedApartment)
     {
         if (updatedApartment == null)
@@ -61,7 +61,7 @@ public class ApartmentController : ControllerBase
 
     // Get all apartments filtered by status:
     [HttpGet]
-    [Route("GetApartmentByStatus{status}")]
+    [Route("GetApartmentByStatus/{status}")]
     public async Task<IActionResult> GetApartmentsByStatus(string status)
     {
         var apartments = await _repository.GetApartmentsByStatus(status);
@@ -76,7 +76,7 @@ public class ApartmentController : ControllerBase
 
     //Get Apartment:
     [HttpGet]
-    [Route("GetApartmentById{id}")]
+    [Route("GetApartmentById/{id}")]
     public async Task<IActionResult> GetApartment(string id)
     {
         var apartment = await _repository.GetApartment(id);
