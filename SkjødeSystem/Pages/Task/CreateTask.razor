@@ -12,73 +12,73 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-<div class="shadow overflow-hidden sm:rounded-md bg-white dark:bg-black">
+    <div class="shadow overflow-hidden sm:rounded-md bg-white dark:bg-black">
 
 
- <div class="grid grid-cols-6 gap-6">
-  <div class="relative px-4 py-5 sm:p-6">
-   <h3>Ny Opgave:</h3>
+        <div class="grid grid-cols-6 gap-6">
+            <div class="relative px-4 py-5 sm:p-6">
+                <h3>Ny Opgave:</h3>
 
-    <div class="col-span-6 sm:col-span-3">
-        <label for="taskName">Opgave Navn:</label>
-        <InputText id="taskName" class="form-control" @bind-Value="task.TaskName" placeholder="Navn på opgaven" />
-    </div>
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="taskName">Opgave Navn:</label>
+                    <InputText id="taskName" class="form-control" @bind-Value="task.TaskName" placeholder="Navn på opgaven" />
+                </div>
 
-    <div class="col-span-6 sm:col-span-3">
-        <label for="description">Beskrivelse:</label>
-        <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven"> </textarea>
-    </div>
-    
-    @* <div class="col-span-6 sm:col-span-3">
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="description">Beskrivelse:</label>
+                    <textarea id="description" class="form-control" @bind="task.Description" placeholder="Tilføj en beskrivelse til opgaven"> </textarea>
+                </div>
+
+                @* <div class="col-span-6 sm:col-span-3">
         <label for="ToDo">Tilføj Mangelliste:</label>
         <InputFile id="ToDo" class="form-control" @bind-Value="task.ToDoPDF" />
     </div> *@
 
-    <div class="col-span-6 sm:col-span-3">
-        <label for="startDate">Start Dato:</label>
-        <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" />
-    </div>
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="startDate">Start Dato:</label>
+                    <InputDate id="startDate" class="form-control" @bind-Value="task.StartDate" />
+                </div>
 
-    <div class="col-span-6 sm:col-span-3">
-        <label for="EndDate">Afsluttes før:</label>
-        <InputDate id="EndDate" class="form-control" @bind-Value="task.EndDate" />
-    </div>
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="EndDate">Afsluttes før:</label>
+                    <InputDate id="EndDate" class="form-control" @bind-Value="task.EndDate" />
+                </div>
 
-    <div class="col-span-6 sm:col-span-3">
-        <label for="status">Status:</label>
-        <InputSelect id="status" class="form-control" @bind-Value="task.Status">
-            @foreach (var status in Statuses)
-            {
-                <option value="@status">@status</option>
-            }
-        </InputSelect>
+                <div class="col-span-6 sm:col-span-3">
+                    <label for="status">Status:</label>
+                    <InputSelect id="status" class="form-control" @bind-Value="task.Status">
+                        @foreach (var status in Statuses)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
 
-    <div class="col-span-6 sm:col-span-3">
-         <label for="status">Udføres af:</label>
+                    <div class="col-span-6 sm:col-span-3">
+                        <label for="status">Udføres af:</label>
                         <InputSelect id="subcontractorSelect" class="form-control" @bind-Value="selectedSubcontractorId">
-               @foreach (var subconctractor in subcontractors)
-               {
-                  <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
-               }
-               <p> @selectedSubcontractorId</p>
-           </InputSelect>
-    </div>
+                            @foreach (var subconctractor in subcontractors)
+                            {
+                                <option value="@subconctractor.UserId">@subconctractor.SubcontractorName</option>
+                            }
+                            <p> @selectedSubcontractorId</p>
+                        </InputSelect>
+                    </div>
 
-    <div class="col-span-6 sm:col-span-3">
-         <label for="address">Opretter opgave for:</label>
-         <InputText id="address" class="form-control" @bind-Value="task.AssignedApartment.Address" readonly />
-    </div> 
+                    <div class="col-span-6 sm:col-span-3">
+                        <label for="address">Opretter opgave for:</label>
+                        <InputText id="address" class="form-control" @bind-Value="task.AssignedApartment.Address" readonly />
+                    </div> 
 
-     <div class="col-span-6 sm:col-span-3">
-          <label for="comment">Kommentar:</label>
-          <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Kommentar fra UE" readonly />
-     </div>
+                    <div class="col-span-6 sm:col-span-3">
+                        <label for="comment">Kommentar:</label>
+                        <InputText id="comment" class="form-control" @bind-Value="task.Comment" placeholder="Kommentar fra UE" readonly />
+                    </div>
 
-     <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
-        <div class="flex justify-between items-center">
-        <button type="submit" class="btn btn-primary">Opret Opgave</button>
-        </div>
-     </div>
+                    <div class="mt-4 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                        <div class="flex justify-between items-center">
+                            <button type="submit" class="btn btn-primary">Opret Opgave</button>
+                        </div>
+                    </div>
 
                     @if (isSuccess)
                     {
@@ -94,10 +94,10 @@
                         </div>
                     }
 
-  </div>
- </div>
-</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </EditForm>
 
@@ -155,9 +155,10 @@
         task.TaskId = ObjectId.GenerateNewId().ToString();
         Console.WriteLine($"Task: {task.TaskId}, AssignedTo: {task.AssignedTo?.SubcontractorName}, AssignedApartment: {task.AssignedApartment?.Address}");
 
-        // Make HTTP POST request to save the listing
-        var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Task/AddTask", task);
+        // Bruger TaskService
+        var response = await TaskService.CreateTask(task);
 
+        // Håndter responsen
         if (response.IsSuccessStatusCode)
         {
             isSuccess = true;
@@ -167,11 +168,12 @@
         {
             isSuccess = false;
             isError = true;
-        }
-        var errorDetails = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"Error: {errorDetails}");
-    }
 
+            // Log fejl for debugging
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error: {errorDetails}");
+        }
+    }
     [Parameter]
     public string ApartmentId { get; set; } //Parameter modtaget som streng fra viewapartment
-}
+}   
