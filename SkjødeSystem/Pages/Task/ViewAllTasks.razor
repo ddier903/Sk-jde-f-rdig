@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
+@inject ITaskService TaskService
 
 <PageTitle>Alle Opgaver</PageTitle>
 
@@ -57,7 +58,7 @@
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         // Henter liste af alle opgaver:
-        tasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
+        tasks = await TaskService.GetAllTasks();
 
         if (tasks == null || !tasks.Any())
         {

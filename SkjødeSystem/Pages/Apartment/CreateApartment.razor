@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @using MongoDB.Bson
 @using Core;
+@inject IApartmentService ApartmentService;
 
 <PageTitle>Create New Apartment</PageTitle>
 
@@ -52,10 +53,10 @@
         newApartment.ApartmentId = ObjectId.GenerateNewId().ToString();
         try
         {
-            // Send Apartment objektet til API'et, som opretter det i databasen
-            var response = await Http.PostAsJsonAsync("https://localhost:7210/api/Apartment/AddApartment", newApartment);
+            
+            var result = await ApartmentService.AddApartment(newApartment);
 
-            if (response.IsSuccessStatusCode)
+            if (result != null)  
             {
                 isSuccess = true;
                 isError = false;
@@ -74,4 +75,3 @@
         }
     }
 }
-

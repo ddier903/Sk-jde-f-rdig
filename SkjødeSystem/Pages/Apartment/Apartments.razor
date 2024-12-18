@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
-
+@inject IApartmentService ApartmentService;
 <PageTitle>Apartments</PageTitle>
 
 
@@ -108,17 +108,8 @@
             : "background-color: red; color: white; width: 115px; height: auto;";
     }
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        // Henter liste af alle lejligheder:
-        apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
-
-        if (apartments == null || !apartments.Any())
-        {
-            // Hvis ingen lejligheder findes, kan du vise en besked
-            Console.WriteLine("No apartments found");
-        }
-
+        apartments = await ApartmentService.GetAllApartments();
     }
-   
 }

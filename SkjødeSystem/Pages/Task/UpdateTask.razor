@@ -1,7 +1,9 @@
 ﻿@page "/updatetask/{TaskId}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
-
+@inject ITaskService TaskService
+@inject IApartmentService ApartmentService
+@inject IUserService UserService
 
 <PageTitle>CreateTask</PageTitle>
 
@@ -100,11 +102,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-
-        // Hent Task ved at bruge TaskId
-        var initializedtask = await Http.GetFromJsonAsync<TaskItem>($"https://localhost:7210/api/Task/GetTasksById{TaskId}");
-        task = initializedtask ?? new TaskItem();
-
+        task = await TaskService.GetTaskById(TaskId);
     }
 
     private async Task HandleValidSubmit()
@@ -124,6 +122,7 @@
             isSuccess = false;
             isError = true;
         }
+
         var errorDetails = await response.Content.ReadAsStringAsync();
         Console.WriteLine($"Error: {errorDetails}");
     }

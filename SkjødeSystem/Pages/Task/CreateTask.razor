@@ -2,6 +2,9 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @using MongoDB.Bson
+@inject ITaskService TaskService
+@inject IUserService UserService
+@inject IApartmentService ApartmentService
 
 <PageTitle>CreateTask</PageTitle>
 
@@ -114,13 +117,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Henter liste af subcontractors:
-        subcontractors = await Http.GetFromJsonAsync<List<Subcontractor>>("https://localhost:7210/api/User/GetSubcontractors");
+        subcontractors = await UserService.GetAllSubcontractors();
 
-        // Hent Apartment ved at bruge ApartmentId fra URL
-        var apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/GetApartmentById{ApartmentId}");
+        var apartment = await ApartmentService.GetApartmentById(ApartmentId);
         task.AssignedApartment = apartment ?? new Apartment();
-
     }
 
 

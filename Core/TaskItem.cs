@@ -30,6 +30,4 @@ namespace Core
         public Subcontractor AssignedTo { get; set; }
 
     }
-
-
 }
