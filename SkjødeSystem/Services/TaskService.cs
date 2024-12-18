@@ -64,9 +64,9 @@ namespace SkjødeSystem.Services
         }
 
         // Opdater en eksisterende opgave
-        public async Task UpdateTask(string taskId, TaskItem task)
+        public async Task<HttpResponseMessage> UpdateTask(string taskId, TaskItem task)
         {
-            await _httpClient.PutAsJsonAsync($"{serverUrl}/api/task/UpdateTask{taskId}", task);
+            return await _httpClient.PutAsJsonAsync($"{serverUrl}/api/task/UpdateTask{taskId}", task);
         }
 
         // Slet en opgave

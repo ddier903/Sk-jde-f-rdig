@@ -28,14 +28,14 @@ public class ApartmentService : IApartmentService
     // Hent lejlighed ved ID
     public async Task<Apartment> GetApartmentById(string id)
     {
-        var apartment = await _httpClient.GetFromJsonAsync<Apartment>($"{serverUrl}/api/apartment/GetApartmentById{id}");
+        var apartment = await _httpClient.GetFromJsonAsync<Apartment>($"{serverUrl}/api/apartment/GetApartmentById/{id}");
         return apartment;
     }
 
     // Hent lejligheder filtreret efter status
     public async Task<List<Apartment>> GetApartmentsByStatus(string status)
     {
-        var apartments = await _httpClient.GetFromJsonAsync<List<Apartment>>($"{serverUrl}/api/apartment/GetApartmentByStatus{status}");
+        var apartments = await _httpClient.GetFromJsonAsync<List<Apartment>>($"{serverUrl}/api/apartment/GetApartmentByStatus/{status}");
         return apartments;
     }
 
@@ -50,7 +50,7 @@ public class ApartmentService : IApartmentService
     // Opdater en lejlighed
     public async Task<Apartment> UpdateApartment(string id, Apartment updatedApartment)
     {
-        var response = await _httpClient.PutAsJsonAsync($"{serverUrl}/api/apartment/UpdateApartment{id}", updatedApartment);
+        var response = await _httpClient.PutAsJsonAsync($"{serverUrl}/api/apartment/UpdateApartment/{id}", updatedApartment);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<Apartment>();
     }

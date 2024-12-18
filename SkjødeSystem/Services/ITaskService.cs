@@ -13,7 +13,7 @@ namespace SkjødeSystem.Services
         Task<List<TaskItem>> GetTasksByStatus(string status);
         Task<TaskItem> GetTaskById(string taskId);
         Task<HttpResponseMessage> CreateTask(TaskItem task);
-        Task UpdateTask(string taskId, TaskItem task);
+        Task<HttpResponseMessage> UpdateTask(string taskId, TaskItem task);
         Task DeleteTask(string taskId);
     }
 }
