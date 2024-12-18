@@ -1,5 +1,6 @@
 ﻿@page "/createavailability/{UserId}"
 @inject HttpClient Http
+@inject IApartmentService ApartmentService
 
 <h3>Opret Ledighed</h3>
 
@@ -77,8 +78,8 @@ else
     {
         try
         {
-            
-            apartment = await Http.GetFromJsonAsync<Apartment>($"https://localhost:7210/api/Apartment/user/{UserId}");
+
+            apartment = await ApartmentService.GetApartmentByUserId(UserId);
 
             if (apartment == null)
             {
@@ -86,8 +87,8 @@ else
                 return;
             }
 
-           
-            availabilityDates = await Http.GetFromJsonAsync<List<Availability>>($"https://localhost:7210/api/Apartment/GetAvailability/{apartment.ApartmentId}");
+
+            availabilityDates = await ApartmentService.GetAvailabilityByApartmentId(apartment.ApartmentId);
 
             if (availabilityDates == null || !availabilityDates.Any())
             {
@@ -96,7 +97,7 @@ else
         }
         catch (Exception ex)
         {
-            
+
         }
     }
 
@@ -116,21 +117,23 @@ else
 
         isTimeInputInvalid = false;
 
-        
+
         availability.Date = availability.Date.Date + parsedTime;
 
-        
+
         apartment.Availability ??= new List<Availability>();
         apartment.Availability.Add(availability);
 
-        await Http.PutAsJsonAsync($"https://localhost:7210/api/Apartment/UpdateAvailability/{apartment.ApartmentId}", apartment.Availability);
+        var success = await ApartmentService.UpdateApartmentAvailability(apartment.ApartmentId, apartment.Availability);
 
-        
-        availability = new Availability
-            {
-                Date = DateTime.Today
-            };
-        timeInput = "00:00"; // Reset time input
-        Message = "Ledighed gemt med succes!";
+        if (success)
+        {
+            availability = new Availability
+                {
+                    Date = DateTime.Today
+                };
+            timeInput = "00:00"; // Reset time input
+            Message = "Ledighed gemt med succes!";
+        }
     }
 }

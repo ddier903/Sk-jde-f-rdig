@@ -58,15 +58,15 @@ namespace SkjødeSystem.Services
         }
 
         // Opret en ny opgave
-        public async Task CreateTask(TaskItem task)
+        public async Task<HttpResponseMessage> CreateTask(TaskItem task)
         {
-            await _httpClient.PostAsJsonAsync($"{serverUrl}/api/task/AddTask", task);
+           return await _httpClient.PostAsJsonAsync($"{serverUrl}/api/task/AddTask", task);
         }
 
         // Opdater en eksisterende opgave
-        public async Task UpdateTask(string taskId, TaskItem task)
+        public async Task<HttpResponseMessage> UpdateTask(string taskId, TaskItem task)
         {
-            await _httpClient.PutAsJsonAsync($"{serverUrl}/api/task/UpdateTask{taskId}", task);
+            return await _httpClient.PutAsJsonAsync($"{serverUrl}/api/task/UpdateTask{taskId}", task);
         }
 
         // Slet en opgave
