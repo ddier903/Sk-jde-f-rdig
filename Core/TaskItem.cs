@@ -17,7 +17,6 @@ namespace Core
         public string[]? Image { get; set; }
         [Required]
         public string Description { get; set; } = string.Empty;
-        public string Type { get; set; }
         [Required]
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime? EndDate { get; set; } = DateTime.Now;

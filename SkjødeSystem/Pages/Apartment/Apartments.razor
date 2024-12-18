@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Apartments</PageTitle>
 
@@ -73,6 +74,8 @@
 
     private string selectedFilter = "Alle";
 
+    private Admin? currentUser;
+
 
     private bool DisplayApartment(Apartment apartment)
     {
@@ -110,6 +113,13 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Henter liste af alle lejligheder:
         apartments = await Http.GetFromJsonAsync<List<Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
 

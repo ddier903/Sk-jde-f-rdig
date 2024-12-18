@@ -1,82 +1,103 @@
-﻿/* General Reset */
+﻿
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
 }
+h1 {
+    text-align: center;
+    margin-top: 40px;
+}
 
-/* Login Container */
+p {
+    text-align: center;
+    font-size: 18px;
+}
+
+.login-logo {
+    max-width: 100px; 
+    height: auto; 
+    margin-bottom: 20px; 
+}
+
+
 .login-container {
-    width: 400px; /* Increased width */
+    width: 400px; 
     margin: 100px auto;
-    padding: 30px; /* Increased padding */
+    padding: 30px; 
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-    /* Labels */
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    
     .login-container label {
         display: block;
-        margin-bottom: 10px; /* Increased margin */
+        margin-bottom: 10px; 
         font-weight: bold;
-        font-size: 16px; /* Increased font size */
+        font-size: 16px; 
     }
 
-    /* Input Fields */
+    
     .login-container input[type="text"],
     .login-container input[type="password"] {
         width: 100%;
-        padding: 12px; /* Increased padding */
-        margin-bottom: 20px; /* Increased margin */
+        padding: 12px; 
+        margin-bottom: 20px; 
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
-        font-size: 16px; /* Increased font size */
+        font-size: 16px; 
     }
 
-    /* Focused Input Fields */
+    
     .login-container input:focus {
         border-color: #b9e8e1;
         outline: none;
     }
 
-    /* Button */
+    
     .login-container button {
         width: 100%;
-        padding: 12px; /* Increased padding */
-        background-color: #bf8bb6;
+        padding: 12px; 
+        background-color: midnightblue;
         color: white;
         border: none;
         border-radius: 4px;
-        font-size: 18px; /* Increased font size */
+        font-size: 18px; 
         font-weight: bold;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        margin-top: 20px;
     }
 
-        /* Button Hover */
+        
         .login-container button:hover {
-            background-color: #8a6f84;
+            background-color: cornflowerblue;
         }
 
-    /* Message Styling */
+    
     .login-container p {
-        font-size: 16px; /* Increased font size */
+        font-size: 16px; 
         text-align: center;
         margin-top: 10px;
-        color: #d9534f; /* Default color for error messages */
+        color: #d9534f; 
     }
 
         .login-container p.success {
             color: #28a745;
         }
 
-/* Responsive Design */
+
 @media (max-width: 480px) {
     .login-container {
-        width: 90%; /* Slightly smaller width on mobile */
+        width: 90%; 
         margin: 50px auto;
     }
 }

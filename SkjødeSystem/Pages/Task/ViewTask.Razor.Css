@@ -45,22 +45,22 @@ code {
     color: black;
 }
 
-    
+
     .task-card.pending {
-        background: #aee9d1; 
-        border: 1px solid #88c8ab;
+        background: #f5d3f6;
+        border: 1px solid #f5d3f6;
     }
 
-    
+
     .task-card.in-progress {
-        background: #f5d3f6; 
-        border: 1px solid #e7aadf;
+        background: #d7e9fb;
+        border: 1px solid #d7e9fb;
     }
 
-    
+
     .task-card.completed {
-        background: #d7e9fb; 
-        border: 1px solid #b3d4f5;
+        background: #aee9d1;
+        border: 1px solid #aee9d1;
     }
 
 
@@ -82,4 +82,8 @@ code {
     align-items: center; 
     padding: 55px 0; 
     text-align: center; 
+}
+
+.extra-bold {
+    font-weight: 900;
 }

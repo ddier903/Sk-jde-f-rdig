@@ -6,14 +6,16 @@
 @using System.Net.Http
 @using System.Net.Http.Json
 @using SkjødeSystem.Pages.Apartment;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <head>
     <link href="/css/home.css" rel="stylesheet" />
 </head>
 
+<SkjødeSystem.Components.Logout/>
+
 <MudContainer Class="mt-16">
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen User!</MudText>
-    <MudText Align="Align.Center">Vælg en plan for at komme i gang!</MudText>
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen Admin!</MudText>
 
     <MudGrid Class="mt-8">
         <MudItem xs="12" sm="6" md="4">
@@ -86,20 +88,31 @@
 @code {
     private int pendingTaskCount = 0; // Antallet af opgaver der mangler at blive fuldført
     private int totalApartmentsCount; // Antallet af Apartments som er blevet oprettet
-
+    private Admin? currentUser;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Hent alle opgaver
         var allTasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
 
         if (allTasks != null)
         {
             // Filtrér opgaver med status "Pending" på klienten
-            pendingTaskCount = allTasks.Count(task => task.Status == "Pending" || task.Status == "Afventer" || task.Status == "Igangværende");
+            pendingTaskCount = allTasks.Count(task => task.Status == "Modtaget" || task.Status == "Igangværende");
         }
 
         var apartments = await Http.GetFromJsonAsync<List<Core.Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
         totalApartmentsCount = apartments?.Count ?? 0; // Tæller lejlighederne eller sætter til 0, hvis null
+
     }
+
+
+
 
 }

@@ -27,11 +27,6 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <label for="type">Type:</label>
-                    <InputText id="type" class="form-control" @bind-Value="task.Type" readonly />
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
                     <label for="address">Addresse:</label>
                     <InputText id="address" class="form-control" @bind-Value="task.AssignedApartment.Address" readonly />
                 </div>
@@ -43,7 +38,7 @@
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="status">Status:</label>
-                    <InputSelect id="status" class="form-control" @bind-Value="task.Status">
+                    <InputSelect id="status" class="form-control" @bind-Value="task.Status" disabled="@IsTaskCompleted">
                         @foreach (var status in Statuses)
                         {
                             <option value="@status">@status</option>
@@ -91,7 +86,7 @@
     };
     private bool isSuccess = false;
     private bool isError = false;
-  
+    private bool IsTaskCompleted => task.Status == "Færdiggjort";
 
     protected override async Task OnInitializedAsync()
     {

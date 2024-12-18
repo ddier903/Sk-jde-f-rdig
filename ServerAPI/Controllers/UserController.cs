@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServerAPI.Repositories;
-using Core; 
+using Core;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -17,7 +17,7 @@ public class UserController : ControllerBase
     [HttpPost]
     [Route("AddAdmin")]
     public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
-	{
+    {
 
         if (admin == null)
         {
@@ -66,37 +66,54 @@ public class UserController : ControllerBase
     [HttpDelete]
     [Route("DeleteUser{userId}")]
     public async Task<IActionResult> DeleteUser(string userId)
-	{
+    {
 
-		await _repository.DeleteUSer(userId);
-		return Ok("User deleted successfully");
+        await _repository.DeleteUSer(userId);
+        return Ok("User deleted successfully");
 
-	}
+    }
     //Update User
     [HttpPut]
     [Route("UpdateUser{userId}")]
     public async Task<IActionResult> UpdateUser(string userId, [FromBody] User updateduser)
-	{
+    {
 
-		await _repository.UpdateUser(userId, updateduser);
-		return Ok("User updated successfully");
+        await _repository.UpdateUser(userId, updateduser);
+        return Ok("User updated successfully");
 
-	}
+    }
 
     //Get User by Username and Password
-    [HttpPost]
+    [HttpGet]
     [Route("Authenticate")]
 
-    public async Task<IActionResult> Authenticate(User user)
-	{
-        var userlogin = await _repository.Authenticate(user);
-        if (userlogin == null)
+    public async Task<IActionResult> Authenticate([FromQuery] string username, string password)
+    {
+        var userlogin = await _repository.Authenticate(username, password);
+        if (!userlogin)
         {
-            return NotFound($"Invalid username or password.");
+            return NotFound(new { success = false, message = "Invalid username or password." });
         }
 
-        return Ok( new { userlogin.UserId, userlogin.UserName, userlogin.Role });
+        return Ok(new { success = true });
     }
+
+    //Get logged in user:
+
+    [HttpGet]
+    [Route("GetLoggedInUser")]
+
+    public async Task<IActionResult> GetLoggedInUser([FromQuery] string username)
+    {
+        var LoggedInUser = await _repository.GetLoggedInUser(username);
+
+        if (LoggedInUser == null)
+        {
+            return NotFound("Invalid username or password");
+        }
+        return Ok(LoggedInUser);
+    }
+
 
     //Get USer by UserID
     [HttpGet]

@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Alle Opgaver</PageTitle>
 
@@ -13,6 +14,7 @@
         <tr>
             <th>ID</th>
             <th>Navn</th>
+            <th>Addresse</th>
             <th>Status</th>
             <th>Udføres af</th>
         </tr>
@@ -26,6 +28,9 @@
                         <button class="btn btn-link" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())">
                             @task.TaskName
                         </button>
+                    </td>
+                    <td>
+                        @task.AssignedApartment.Address
                     </td>
                     <td>
                        @task.Status
@@ -43,7 +48,7 @@
     private List<TaskItem> tasks = new List<TaskItem>();
 
     private string searchQuery = "";
-
+    private Admin? currentUser;
     private string selectedFilter = "Alle";
 
 
@@ -56,6 +61,13 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Henter liste af alle opgaver:
         tasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
 

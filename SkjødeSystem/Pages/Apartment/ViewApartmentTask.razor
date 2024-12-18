@@ -1,6 +1,7 @@
 ﻿@page "/viewapartmenttask/{apartmentId}/{address}"
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <head>
     <link href="css/viewapartmenttask.css" rel="stylesheet" />
@@ -71,7 +72,7 @@ else
 @code {
     [Parameter]
     public string apartmentId { get; set; }
-
+    private Admin? currentUser;
     [Parameter]
     public string address { get; set; }
 
@@ -79,6 +80,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
 
         // Hent opgaver for den valgte lejlighed
         tasks = await Http.GetFromJsonAsync<List<TaskItem>>($"https://localhost:7210/api/Task/GetTaskByApartmentId{apartmentId}");

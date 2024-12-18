@@ -2,21 +2,21 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
+@layout EmptyLayout
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 
 <PageTitle>View My Opgave</PageTitle>
 
-
-
 <div class="header-container">
-    <h3>Viser opgaver for @currentsubcontractor.SubcontractorName</h3>
+    <h3 class="extra-bold">Viser opgaver for @currentsubcontractor.SubcontractorName</h3>
 </div>
 
 <div class="task-board">
     <div class="column">
         <div class="column-header">Modtaget</div>
-        @foreach (var task in tasks.Where(t => t.Status == "Afventer"))
+        @foreach (var task in tasks.Where(t => t.Status == "Modtaget"))
         {
             <div class="task-card pending" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())" style="cursor: pointer;">
                 <h5>@task.TaskName</h5>
@@ -61,12 +61,20 @@
 </div>
 
 @code {
-   
-    private List<TaskItem> tasks = new List<TaskItem>();
-    private Subcontractor currentsubcontractor = new Subcontractor();
 
+    private List<TaskItem>? tasks = new List<TaskItem>();
+    private Subcontractor currentsubcontractor = new Subcontractor();
+    private Subcontractor? currentUser;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Subcontractor>("user");
+        if (currentUser == null || currentUser.Role != "Subcontractor")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         //Henter Subcontractor ud fra ID
 
         currentsubcontractor = await Http.GetFromJsonAsync<Subcontractor>($"https://localhost:7210/api/User/GetUserById{UserId}");

@@ -4,10 +4,11 @@ namespace SkjødeSystem.Services
 {
     public interface ILoginService
     {
-        Task<string> Login(string username, string password);
+        Task<bool> ValidateLogin(string username, string password);
+        Task<User> GetUserLoggedIn(string username);
 
         Task Logout();
 
-    }
 
+    }
 }

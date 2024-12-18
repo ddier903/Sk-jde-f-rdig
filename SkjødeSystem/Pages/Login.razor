@@ -1,14 +1,17 @@
-﻿@page "/Login"
-@using SkjødeSystem.Service
+﻿@page "/login"
+@using SkjødeSystem.Services
 @inject NavigationManager navManager
-@inject NavigationManager Navigation
-@inject ILoginService loginService
+@inject Blazored.LocalStorage.ILocalStorageService Localstorage
+@layout EmptyLayout
+
 
 <div>
     <h1>Login</h1>
     <p>Login for at tilgå din konto</p>
 </div>
 <div class="login-container">
+    <div class="login-header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdbM-LdWNHfzJou1I3VpZOWbAE9s9ZJsxvCA&s" alt="Logo" class="login-logo" />
     <form @onsubmit="HandleValidSubmit">
         <div>
             <div>
@@ -20,34 +23,36 @@
                 <InputText id="password" class="form-control" @bind-Value="loginUser.Password" type="password" />
             </div>
             <div>
-                <button type="submit" class="btn btn-primary">Log Ind</button>
+                <button type="submit" class="btn btn-primary">Log In</button>
             </div>
         </div>
     </form>
+    </div>
 </div>
 
 @code {
-    private LoginUser loginUser = new LoginUser();
+    private Core.User loginUser = new Core.User();
 
     private async System.Threading.Tasks.Task HandleValidSubmit()
     {
-        var role = await loginService.Login(loginUser.UserName, loginUser.Password);
-        if (!string.IsNullOrEmpty(role))
+        var res = await LoginService.ValidateLogin(loginUser.UserName, loginUser.Password);
+        if (res)
         {
-            switch (role)
+            var user = await LoginService.GetUserLoggedIn(loginUser.UserName);
+            await Localstorage.SetItemAsync("user", user);
+
+            switch (user.Role)
             {
                 case "Admin":
-                    navManager.NavigateTo("/admin/home");
+                    navManager.NavigateTo("/");
                     break;
                 case "Subcontractor":
-                    navManager.NavigateTo($"/subcontractor/viewtask{loginUser.UserId}");
+                    navManager.NavigateTo($"/viewtask/{user.UserId}");
                     break;
                 case "Tenant":
-                    navManager.NavigateTo($"/tenant/createavailability{loginUser.UserId}");
+                    navManager.NavigateTo($"/createavailability/{user.UserId}");
                     break;
-                default:
-                    Console.WriteLine("Unknown role");
-                    break;
+                
             }
         }
         else
@@ -56,11 +61,8 @@
         }
     }
 
-    public class LoginUser
-    {
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
+    [Inject]
+    private ILoginService LoginService { get; set; }
+
 }
 
