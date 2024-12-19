@@ -33,7 +33,7 @@ public class TaskController : ControllerBase
 
     // Update Task: 
     [HttpPut]
-    [Route("UpdateTask{taskId}")]
+    [Route("UpdateTask/{taskId}")]
     public async Task<IActionResult> UpdateTask(string taskId, [FromBody] TaskItem updatedtask)
     {
 
