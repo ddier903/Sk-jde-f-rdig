@@ -98,4 +98,5 @@ public class UserRepository
         
         return result.OfType<Subcontractor>().ToList();
     }
+
 }

@@ -58,7 +58,7 @@ namespace SkjødeSystem.Services
         }
         public async Task<Subcontractor> GetSubcontractorById(string userId)
         {
-            return await _httpClient.GetFromJsonAsync<Subcontractor>($"{_serverUrl}/api/user/GetSubcontractorById/{userId}");
+            return await _httpClient.GetFromJsonAsync<Subcontractor>($"{_serverUrl}/api/user/GetUserById/{userId}");
         }
     }
 }
