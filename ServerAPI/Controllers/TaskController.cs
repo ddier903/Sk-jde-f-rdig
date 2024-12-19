@@ -73,20 +73,25 @@ public class TaskController : ControllerBase
 
 
     //Get Task by Subconctractor:
-    [HttpGet]
-    [Route("GetTaskBySubcontractor{userId}")]
+    [HttpGet("GetTaskBySubcontractor/{userId}")]
     public async Task<IActionResult> GetAllTasksBySubcontractor(string userId)
     {
+        Console.WriteLine($"Fetching tasks for subcontractor with ID: {userId}");
+
         var tasks = await _repository.GetAllTasksBySubcontractor(userId);
-        if(tasks == null || !tasks.Any()) 
+        if (tasks == null || !tasks.Any())
         {
-            return NotFound($"No tasks found for subcontractor with ID:{userId}");
+            Console.WriteLine($"No tasks found for subcontractor with ID: {userId}");
+            return NotFound($"No tasks found for subcontractor with ID: {userId}");
         }
+
+        Console.WriteLine($"Tasks found: {tasks.Count}");
         return Ok(tasks);
     }
 
-    // Get all Tasks:
-    [HttpGet]
+
+// Get all Tasks:
+[HttpGet]
     [Route("GetAllTasks")]
     public async Task<IActionResult> GetAllTasks() 
     {
