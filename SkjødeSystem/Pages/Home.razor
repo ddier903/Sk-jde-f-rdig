@@ -7,6 +7,8 @@
 @using System.Net.Http.Json
 @using SkjødeSystem.Pages.Apartment;
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject ITaskService TaskService
+@inject IApartmentService ApartmentService
 
 <head>
     <link href="/css/home.css" rel="stylesheet" />
@@ -98,15 +100,15 @@
         }
 
         // Hent alle opgaver
-        var allTasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
+        var tasks = await TaskService.GetAllTasks();
 
-        if (allTasks != null)
+        if (tasks != null)
         {
             // Filtrér opgaver med status "Pending" på klienten
-            pendingTaskCount = allTasks.Count(task => task.Status == "Pending" || task.Status == "Afventer" || task.Status == "Igangværende");
+            pendingTaskCount = tasks.Count(task => task.Status == "Pending" || task.Status == "Afventer" || task.Status == "Igangværende");
         }
 
-        var apartments = await Http.GetFromJsonAsync<List<Core.Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
+        var apartments = await ApartmentService.GetAllApartments();
         pendingApartmentCount = apartments.Count(apartment => apartment.Status == "Ikke Fuldført"); // Tæller lejlighederne eller sætter til 0, hvis null
     }
 
