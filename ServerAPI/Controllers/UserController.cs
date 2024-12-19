@@ -116,15 +116,17 @@ public class UserController : ControllerBase
 
     //Get USer by UserID
     [HttpGet]
-    [Route("GetUserById{userId}")]
+    [Route("GetUserById/{userId}")]
     public async Task<IActionResult> GetUserById(string userId)
 	{
+        Console.WriteLine($"Fetching user with ID: {userId}");
         var user = await _repository.GetUserById(userId);
         if (user == null)
         {
+            Console.WriteLine($"User with ID {userId} not found.");
             return NotFound($"User with ID {userId} not found");
         }
-
+        Console.WriteLine($"User found: {user.UserName}");
         return Ok(user);
     }
 
