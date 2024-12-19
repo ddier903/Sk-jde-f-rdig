@@ -29,6 +29,8 @@ namespace SkjødeSystem.Services
 
         // Get Alle Subcontractors
         Task<List<Subcontractor>> GetAllSubcontractors();
+
+        Task<Subcontractor> GetSubcontractorById(string userId);
     }
 }
 

@@ -34,7 +34,7 @@ var app = builder.Build();
 app.UseCors("AllowBlazorApp"); 
 
 
-// Configure the HTTP request pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

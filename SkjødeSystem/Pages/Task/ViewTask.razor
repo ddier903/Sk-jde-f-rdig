@@ -83,7 +83,7 @@
 
         //Henter Subcontractor ud fra ID
 
-        currentsubcontractor = await UserService.GetUserById(UserId) as Subcontractor;
+        currentsubcontractor = await UserService.GetSubcontractorById(UserId);
 
 
         // Henter liste af alle opgaver for den pågældene subcontractor:
