@@ -74,10 +74,9 @@ public class TaskRepository
     // Get Task by Id: 
     public async Task<TaskItem> GetTaskById(string taskId)
     {
-        var filter = Builders<TaskItem>.Filter.Eq("_id", new ObjectId(taskId));
-        return await collection.Find(filter).FirstOrDefaultAsync();
+        var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
+        return await collection.Find(filter).FirstOrDefaultAsync(); ;
     }
-
 
     // Get All Task by status:
     public async Task<List<TaskItem>> FilterTaskByStatus(string status)
