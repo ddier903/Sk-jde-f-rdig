@@ -19,11 +19,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins(
-            "https://projekt-cggugnd7dggchdan.eastus-01.azurewebsites.net/"
-        )
-        .AllowAnyMethod()
-        .AllowAnyHeader();
+        policy.WithOrigins("https://localhost:7227") // Din frontend URL
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
