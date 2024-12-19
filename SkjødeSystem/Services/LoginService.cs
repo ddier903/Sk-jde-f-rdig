@@ -7,18 +7,20 @@ namespace SkjødeSystem.Services
 {
     public class LoginService : ILoginService
     {
-        HttpClient http;
-        private string _serverUrl = "https://localhost:7210";
-        private ILocalStorageService localStorage { get; set; }
+        private readonly HttpClient _httpClient;
+        private readonly string _serverUrl;
+        private readonly ILocalStorageService _localStorage;
 
-        public LoginService(HttpClient http)
+        public LoginService(HttpClient httpClient, IConfiguration configuration, ILocalStorageService localStorage)
         {
-            this.http = http;
+            _httpClient = httpClient;
+            _serverUrl = configuration["ApiBaseUrl"]; 
+            _localStorage = localStorage;
         }
 
         public async Task<bool> ValidateLogin(string username, string password)
         {
-            var response = await http.GetFromJsonAsync<JsonElement>($"{_serverUrl}/api/User/Authenticate?username={username}&password={password}");
+            var response = await _httpClient.GetFromJsonAsync<JsonElement>($"{_serverUrl}/api/User/Authenticate?username={username}&password={password}");
 
             if (response.TryGetProperty("success", out var successProperty))
             {
@@ -30,17 +32,12 @@ namespace SkjødeSystem.Services
 
         public async Task<User> GetUserLoggedIn(string username)
         {
-            var user = await http.GetFromJsonAsync<User>($"{_serverUrl}/api/User/GetLoggedInUser?username={username}");
-            return user;
-
+            return await _httpClient.GetFromJsonAsync<User>($"{_serverUrl}/api/User/GetLoggedInUser?username={username}");
         }
 
-        // Logout method to clear stored user
         public async Task Logout()
         {
-            await localStorage.RemoveItemAsync("user");
+            await _localStorage.RemoveItemAsync("user");
         }
-
-
     }
 }
