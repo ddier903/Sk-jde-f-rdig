@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkjødeSystem", "SkjødeSystem\SkjødeSystem.csproj", "{A0C1FF77-64AB-45DA-911B-330D16AF76E8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4439B0CA-2AFE-499D-B3E9-CBBC4BFD026D} = {4439B0CA-2AFE-499D-B3E9-CBBC4BFD026D}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAPI", "ServerAPI\ServerAPI.csproj", "{4439B0CA-2AFE-499D-B3E9-CBBC4BFD026D}"
 EndProject
