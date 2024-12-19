@@ -105,17 +105,20 @@ public class TaskController : ControllerBase
     }
 
     // Get Task by Id: 
-    [HttpGet]
-    [Route("GetTasksById{taskId}")]
-    public async Task<IActionResult> GetTaskById(string taskId)
+    [HttpGet("GetTasksById/{taskId}")]
+    public async Task<IActionResult> GetTasksById(string taskId)
     {
-        var tasks = await _repository.GetTaskById(taskId);
-        if (tasks == null)
+        Console.WriteLine($"Request received for GetTasksById with ID: {taskId}");
+
+        var task = await _repository.GetTaskById(taskId);
+        if (task == null)
         {
-            return NotFound($"Tasks with ID {taskId} not found");
+            Console.WriteLine($"Task with ID {taskId} not found");
+            return NotFound($"Task with ID {taskId} not found");
         }
 
-        return Ok(tasks);
+        Console.WriteLine($"Task found: {task.TaskName}");
+        return Ok(task);
     }
 
     // Get Tasks filtered by status:
