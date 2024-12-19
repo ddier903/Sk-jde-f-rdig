@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @inject ITaskService TaskService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <head>
     <link href="css/viewapartmenttask.css" rel="stylesheet" />
@@ -77,9 +78,17 @@ else
     public string address { get; set; }
 
     private List<TaskItem> tasks = new List<TaskItem>();
+    private Admin? currentUser;
 
     protected override async Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Brug TaskService i stedet for HttpClient
         tasks = await TaskService.GetTasksByApartmentId(apartmentId);
 

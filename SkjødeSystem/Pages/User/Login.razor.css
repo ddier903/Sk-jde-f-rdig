@@ -1,0 +1,104 @@
+﻿
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+}
+
+p {
+    text-align: center;
+    font-size: 18px;
+}
+
+.login-logo {
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+.login-container {
+    width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.login-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+
+.login-container input:focus {
+    border-color: #b9e8e1;
+    outline: none;
+}
+
+
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: midnightblue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+
+    .login-container button:hover {
+        background-color: cornflowerblue;
+    }
+
+
+.login-container p {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 10px;
+    color: #d9534f;
+}
+
+    .login-container p.success {
+        color: #28a745;
+    }
+
+
+@media (max-width: 480px) {
+    .login-container {
+        width: 90%;
+        margin: 50px auto;
+    }
+}

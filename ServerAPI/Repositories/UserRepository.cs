@@ -59,20 +59,30 @@ public class UserRepository
 	 
 	}
 
-	//Get User by Username and Password
-	public async Task<User> GetUserByUsernameAndPassword(string username, string password)
-	{
-		var filter1 = Builders<User>.Filter.Eq("UserName", username);
-		var filter2 = Builders<User>.Filter.Eq("Password", password);
-		var combinedfilter = Builders<User>.Filter.And(
-		filter1,
-		filter2
-		);
+    //Get User by Username and Password
+    public async Task<bool> Authenticate(string username, string password)
+    {
+        var filter1 = Builders<User>.Filter.Eq("UserName", username);
+        var filter2 = Builders<User>.Filter.Eq("Password", password);
+        var combinedfilter = Builders<User>.Filter.And(
+        filter1,
+        filter2
+        );
 
-		return await collection.Find(combinedfilter).FirstOrDefaultAsync(); ;
-	}
-	//Get User by UserID
-	public async Task<User> GetUserById(string userId)
+        var user = await collection.Find(combinedfilter).FirstOrDefaultAsync(); ;
+
+        return user != null;
+    }
+
+    public async Task<User> GetLoggedInUser(string username)
+    {
+        var filter1 = Builders<User>.Filter.Eq("UserName", username);
+
+        return await collection.Find(filter1).FirstOrDefaultAsync(); ;
+    }
+
+    //Get User by UserID
+    public async Task<User> GetUserById(string userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		return await collection.Find(filter).FirstOrDefaultAsync();

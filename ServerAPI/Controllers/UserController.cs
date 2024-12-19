@@ -85,17 +85,33 @@ public class UserController : ControllerBase
 
     //Get User by Username and Password
     [HttpGet]
-    [Route("GetUserByUsernameAndPassword")]
+    [Route("Authenticate")]
 
-    public async Task<IActionResult> GetUserByUsernameAndPassword(string username, string password)
-	{
-        var user = await _repository.GetUserByUsernameAndPassword(username, password);
-        if (user == null)
+    public async Task<IActionResult> Authenticate([FromQuery] string username, string password)
+    {
+        var userlogin = await _repository.Authenticate(username, password);
+        if (!userlogin)
         {
-            return NotFound($"Invalid username or password.");
+            return NotFound(new { success = false, message = "Invalid username or password." });
         }
 
-        return Ok(user);
+        return Ok(new { success = true });
+    }
+
+    //Get logged in user:
+
+    [HttpGet]
+    [Route("GetLoggedInUser")]
+
+    public async Task<IActionResult> GetLoggedInUser([FromQuery] string username)
+    {
+        var LoggedInUser = await _repository.GetLoggedInUser(username);
+
+        if (LoggedInUser == null)
+        {
+            return NotFound("Invalid username or password");
+        }
+        return Ok(LoggedInUser);
     }
 
     //Get USer by UserID

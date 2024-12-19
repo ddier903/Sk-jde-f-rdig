@@ -1,6 +1,8 @@
 ﻿@page "/createavailability/{UserId}"
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 @inject IApartmentService ApartmentService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h3>Opret Ledighed</h3>
 
@@ -69,13 +71,21 @@ else
             Date = DateTime.Today 
         };
     private string timeInput = "00:00"; 
-    private bool isTimeInputInvalid = false; 
+    private bool isTimeInputInvalid = false;
+    private Tenant? currentUser;
 
     [Parameter]
     public string UserId { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Tenant>("user");
+        if (currentUser == null || currentUser.Role != "Tenant")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         try
         {
 
