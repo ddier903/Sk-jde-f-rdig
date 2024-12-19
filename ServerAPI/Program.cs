@@ -17,7 +17,7 @@ builder.Services.AddScoped<UserRepository>();
 // Add CORS Policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowBlazorApp", policy =>
     {
         policy.WithOrigins("https://projekt-cggugnd7dggchdan.eastus-01.azurewebsites.net/") // Din frontend URL
               .AllowAnyMethod()
@@ -30,6 +30,10 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// Bruger Cors policy
+app.UseCors("AllowBlazorApp"); 
+
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -39,7 +43,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
-app.UseCors("AllowFrontend"); // Use the CORS policy
 
 app.MapControllers();
 
