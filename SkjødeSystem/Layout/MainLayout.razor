@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+﻿  @inherits LayoutComponentBase
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -8,7 +8,13 @@
 <MudLayout>
     <MudAppBar>
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        Skjøde mangeludbedrings system
+        SKJØDE MANGELUDBEDRINGS SYSTEM
+
+        <MudSpacer />
+
+        <MudButton Color="Color.Inherit" OnClick="@Logout">
+            <MudIcon Icon="@Icons.Material.Filled.ExitToApp" /> Log ud
+        </MudButton>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" Elevation="20">
         <MudDrawerHeader>
@@ -28,5 +34,19 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    [Inject]
+    private Blazored.LocalStorage.ILocalStorageService LocalStorage { get; set; }
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    private async Task Logout()
+    {
+        // Fjern brugeren fra lokal lagring
+        await LocalStorage.RemoveItemAsync("user");
+
+        // Naviger tilbage til login-siden
+        NavigationManager.NavigateTo("/login");
     }
 }
