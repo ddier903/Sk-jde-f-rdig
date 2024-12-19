@@ -3,6 +3,7 @@
 @using MongoDB.Bson;
 @inject HttpClient Http;
 @inject ITaskService TaskService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Alle Opgaver</PageTitle>
 
@@ -14,8 +15,10 @@
         <tr>
             <th>ID</th>
             <th>Navn</th>
+            <th>Addresse</th>
             <th>Status</th>
             <th>Udføres af</th>
+            <th>Slet Opgave</th>
         </tr>
     </thead>
     <tbody>
@@ -24,15 +27,23 @@
                 <tr>
                     <td>@task.TaskId</td>
                     <td>
-                        <button class="btn btn-link" @onclick="() => NavigateToUpdateTask(task.TaskId.ToString())">
+                        <button class="btn btn-link" @onclick="() => NavigateToUpdateTask(task.TaskId)">
                             @task.TaskName
                         </button>
+                    </td>
+                    <td>
+                        @task.AssignedApartment.Address
                     </td>
                     <td>
                        @task.Status
                     </td>
                     <td>
                         @task.AssignedTo.SubcontractorName
+                    </td>
+                    <td>
+                    <button class="btn btn-danger" @onclick="() => DeleteTask(task.TaskId)">
+                        Slet Opgave
+                    </button>
                     </td>
                 </tr>
             
@@ -46,6 +57,7 @@
     private string searchQuery = "";
 
     private string selectedFilter = "Alle";
+    private Admin? currentUser;
 
 
     private void NavigateToUpdateTask(string TaskId)
@@ -57,6 +69,13 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Henter liste af alle opgaver:
         tasks = await TaskService.GetAllTasks();
 
@@ -66,6 +85,13 @@
             Console.WriteLine("No tasks found");
         }
 
+    }
+
+    private async Task DeleteTask(string taskId)
+    {
+        await TaskService.DeleteTask(taskId);
+        // Eventuelt opdater UI efter sletning
+        tasks = await TaskService.GetAllTasks();
     }
 
 }

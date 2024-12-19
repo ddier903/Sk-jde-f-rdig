@@ -12,7 +12,6 @@ namespace Core
         public ObjectId Id { get; set; }
         public string TaskId { get; set; }
         [Required]
-        [StringLength(50, ErrorMessage = "Navnet er for langt")]
         public string TaskName { get; set; } = string.Empty;
         public string[]? Image { get; set; }
         [Required]

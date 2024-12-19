@@ -5,6 +5,7 @@
 @inject ITaskService TaskService
 @inject IUserService UserService
 @inject IApartmentService ApartmentService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>CreateTask</PageTitle>
 
@@ -113,10 +114,18 @@
     private string selectedSubcontractorId;
     private bool isSuccess = false;
     private bool isError = false;
+    private Admin? currentUser;
 
 
     protected override async Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         subcontractors = await UserService.GetAllSubcontractors();
 
         var apartment = await ApartmentService.GetApartmentById(ApartmentId);

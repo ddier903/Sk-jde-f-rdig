@@ -6,13 +6,14 @@
 @using System.Net.Http
 @using System.Net.Http.Json
 @using SkjødeSystem.Pages.Apartment;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <head>
     <link href="/css/home.css" rel="stylesheet" />
 </head>
 
 <MudContainer Class="mt-16">
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen User!</MudText>
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Velkommen Admin!</MudText>
     <MudText Align="Align.Center">Vælg en plan for at komme i gang!</MudText>
 
     <MudGrid Class="mt-8">
@@ -57,8 +58,8 @@
         <MudItem xs="12" sm="6" md="4">
             <MudCard Elevation="25" Class="rounded-lg pb-4 card-border">
                 <MudCardContent Class="d-flex flex-column justify-center align-center">
-                    <MudText Typo="Typo.h6" Align="Align.Center">Så mange boliger er blevet oprettet:</MudText>
-                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">@totalApartmentsCount</MudText>
+                    <MudText Typo="Typo.h6" Align="Align.Center">Så mange boliger mangler udbedring:</MudText>
+                    <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">@pendingApartmentCount</MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>
@@ -85,10 +86,17 @@
 
 @code {
     private int pendingTaskCount = 0; // Antallet af opgaver der mangler at blive fuldført
-    private int totalApartmentsCount; // Antallet af Apartments som er blevet oprettet
-
+    private int pendingApartmentCount; // Antallet af Apartments som er blevet oprettet
+    private Admin? currentUser;
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Admin>("user");
+        if (currentUser == null || currentUser.Role != "Admin")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         // Hent alle opgaver
         var allTasks = await Http.GetFromJsonAsync<List<TaskItem>>("https://localhost:7210/api/Task/GetAllTasks");
 
@@ -99,7 +107,7 @@
         }
 
         var apartments = await Http.GetFromJsonAsync<List<Core.Apartment>>("https://localhost:7210/api/Apartment/GetAllApartments");
-        totalApartmentsCount = apartments?.Count ?? 0; // Tæller lejlighederne eller sætter til 0, hvis null
+        pendingApartmentCount = apartments.Count(apartment => apartment.Status == "Ikke Fuldført"); // Tæller lejlighederne eller sætter til 0, hvis null
     }
 
 }

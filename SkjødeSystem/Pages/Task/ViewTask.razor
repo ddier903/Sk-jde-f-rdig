@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using MongoDB.Bson;
 @inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 
@@ -64,9 +65,17 @@
    
     private List<TaskItem> tasks = new List<TaskItem>();
     private Subcontractor currentsubcontractor = new Subcontractor();
+    private Subcontractor? currentUser;
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
+        //Tjekker nuværende bruger:
+        currentUser = await localStorage.GetItemAsync<Subcontractor>("user");
+        if (currentUser == null || currentUser.Role != "Subcontractor")
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
         //Henter Subcontractor ud fra ID
 
         currentsubcontractor = await Http.GetFromJsonAsync<Subcontractor>($"https://localhost:7210/api/User/GetUserById{UserId}");

@@ -1,0 +1,66 @@
+﻿@page "/login"
+@using SkjødeSystem.Services
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService Localstorage
+
+
+<div>
+    <h1>Login</h1>
+    <p>Login for at tilgå din konto</p>
+</div>
+<div class="login-container">
+    <div class="login-header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdbM-LdWNHfzJou1I3VpZOWbAE9s9ZJsxvCA&s" alt="Logo" class="login-logo" />
+        <form @onsubmit="HandleValidSubmit">
+            <div>
+                <div>
+                    <label for="username">Username</label>
+                    <InputText id="username" class="form-control" @bind-Value="loginUser.UserName" />
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <InputText id="password" class="form-control" @bind-Value="loginUser.Password" type="password" />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+    private Core.User loginUser = new Core.User();
+
+    private async System.Threading.Tasks.Task HandleValidSubmit()
+    {
+        var res = await LoginService.ValidateLogin(loginUser.UserName, loginUser.Password);
+        if (res)
+        {
+            var user = await LoginService.GetUserLoggedIn(loginUser.UserName);
+            await Localstorage.SetItemAsync("user", user);
+
+            switch (user.Role)
+            {
+                case "Admin":
+                    NavigationManager.NavigateTo("/");
+                    break;
+                case "Subcontractor":
+                    NavigationManager.NavigateTo($"/viewtask/{user.UserId}");
+                    break;
+                case "Tenant":
+                    NavigationManager.NavigateTo($"/createavailability/{user.UserId}");
+                    break;
+
+            }
+        }
+        else
+        {
+            Console.WriteLine("Login failed");
+        }
+    }
+
+    [Inject]
+    private ILoginService LoginService { get; set; }
+
+}
