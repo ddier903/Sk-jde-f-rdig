@@ -13,7 +13,7 @@ namespace Core
         public string TaskId { get; set; }
         [Required]
         public string TaskName { get; set; } = string.Empty;
-        public string[]? Image { get; set; }
+        public string? Image { get; set; }
         [Required]
         public string Description { get; set; } = string.Empty;
         [Required]
@@ -22,7 +22,7 @@ namespace Core
         public DateTime? ActualEndDate { get; set; }
         public string Status { get; set; } = "Pending";
         public string? Comment { get; set; } = string.Empty;
-        public string[]? ToDoPDF { get; set; }
+        public string? ToDoPDF { get; set; }
         [Required]
         public Apartment AssignedApartment { get; set; }
         [Required]
