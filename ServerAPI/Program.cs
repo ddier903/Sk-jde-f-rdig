@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorApp", policy =>
     {
-        policy.WithOrigins("https://projekt-cggugnd7dggchdan.eastus-01.azurewebsites.net/") // Din frontend URL
+        policy.WithOrigins("https://projekt-cggugnd7dggchdan.eastus-01.azurewebsites.net") // Din frontend URL
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
