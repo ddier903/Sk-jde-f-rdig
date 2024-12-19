@@ -5,41 +5,44 @@ using ServerAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddControllers(); 
-builder.Services.AddEndpointsApiExplorer(); 
-builder.Services.AddSwaggerGen(); 
-
+// Add services to the container
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<UserRepository>();
 
+// Add CORS Policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:7227") // Din frontend URL
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+            "https://myfrontend.azurewebsites.net"  
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader();
     });
 });
 
+// Add controllers
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(); 
+    app.UseSwaggerUI();
 }
 
 app.UseAuthorization();
 
-app.UseCors("AllowFrontend"); // Brug CORS-politikken
+app.UseCors("AllowFrontend"); // Use the CORS policy
 
-app.MapControllers(); 
+app.MapControllers();
 
 app.Run();
