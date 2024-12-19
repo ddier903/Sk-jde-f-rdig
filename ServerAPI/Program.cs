@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "https://myfrontend.azurewebsites.net"  
+            "https://projekt-cggugnd7dggchdan.eastus-01.azurewebsites.net/"
         )
         .AllowAnyMethod()
         .AllowAnyHeader();
