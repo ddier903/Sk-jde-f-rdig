@@ -66,7 +66,7 @@ public class UserController : ControllerBase
 
     //Sletter en bruger baseret på deres userID
     [HttpDelete]
-    [Route("DeleteUser{userId}")]
+    [Route("DeleteUser/{userId}")]
     public async Task<IActionResult> DeleteUser(string userId)
 	{
 

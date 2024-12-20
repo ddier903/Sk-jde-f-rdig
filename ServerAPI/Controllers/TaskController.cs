@@ -46,7 +46,7 @@ public class TaskController : ControllerBase
 
     //Sletter en opgave baseret på ID
     [HttpDelete]
-    [Route("DeleteTask{taskId}")]
+    [Route("DeleteTask/{taskId}")]
     public async Task<IActionResult> DeleteTask(string taskId)
     {
 
@@ -57,7 +57,7 @@ public class TaskController : ControllerBase
 
     //Henter alle opgaver for en given lejlighed baseret på apartmentID
     [HttpGet]
-    [Route("GetTaskByApartmentId{apartmentId}")]
+    [Route("GetTaskByApartmentId/{apartmentId}")]
     public async Task<IActionResult> GetAllTasksByApartmentId(string apartmentId)
     {
         var tasks = await _repository.GetAllTaskByApartmentId(apartmentId);
