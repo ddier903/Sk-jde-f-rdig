@@ -122,7 +122,7 @@ public class TaskController : ControllerBase
 
     // Filtrerer opgaver baseret på status
     [HttpGet]
-    [Route("GetTasksByStatus{status}")]
+    [Route("GetTasksByStatus/{status}")]
     public async Task<IActionResult> FilterTaskByStatus(string status)
     {
         var tasks = await _repository.FilterTaskByStatus(status);
