@@ -76,7 +76,7 @@
     private string selectedFilter = "Alle";
     private Admin? currentUser;
 
-
+    // funktion der bestemmer om lejlighed skal vises baseret på søgning og filter
     private bool DisplayApartment(Apartment apartment)
     {
         if(!string.IsNullOrWhiteSpace(searchQuery) &&
@@ -86,31 +86,31 @@
         }
         return selectedFilter == "Alle" || apartment.Status == selectedFilter;
     }
-
+    // navigere til siden for at oprette en lejlgihed
     private void NavigateToCreateTask(string apartmentId)
     {  
         NavigationManager.NavigateTo($"/createtask/{apartmentId}");
     }
-
+    // navigere til siden for at se opgaver til en specifik lejlighed
     private void NavigateToViewTask(string apartmentId, string address) 
     {
         var Address = Uri.EscapeDataString(address);
 
         NavigationManager.NavigateTo($"/viewapartmenttask/{apartmentId}/{Address}");
     }
-
+    // Kontrollere om lejligheden er Fuldført
     private bool IsStatusComplete(string status)
     {
         return status == "Fuldført";
     }
-
+    
     private string GetStatusStyle(string status)
     {
         return status == "Fuldført"
             ? "background-color: green; color: white; width: 115px; height: auto;"
             : "background-color: red; color: white; width: 115px; height: auto;";
     }
-
+    //initialiserer siden og henter alle lejligheder
     protected override async Task OnInitializedAsync()
     {
         //Tjekker nuværende bruger:

@@ -22,33 +22,33 @@ public class UserRepository
         collection = database.GetCollection<User>("User");
     }
 
-	//Add Admin User
+	//Tilføjer en admin
 	public async Task PostAdmin(Admin admin)
 	{
 		admin.Role = "Admin";
 		await collection.InsertOneAsync(admin);
 	}
-    //Add Subcontractor User
+    //Tilføjer en ny subcontractor
     public async Task PostSubcontractor(Subcontractor subcontractor)
     {
         subcontractor.Role = "Subcontractor";
         await collection.InsertOneAsync(subcontractor);
     }
 
-    //Add Tenant User
+    //Tilføjer en lejer
     public async Task PostTenant(Tenant tenant)
     {
         tenant.Role = "Tenant";
         await collection.InsertOneAsync(tenant);
     }
 
-    //Delete User
+    //Sletter en bruger
     public async Task DeleteUSer(string userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		await collection.DeleteOneAsync(filter);
 	}
-	//Update User
+	//Opdaterer en bruger
 	public async Task UpdateUser(string userId, User updateduser)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
@@ -59,7 +59,7 @@ public class UserRepository
 	 
 	}
 
-    //Get User by Username and Password
+    //Godkender en bruger baseret på brugernavn og adgangskode
     public async Task<bool> Authenticate(string username, string password)
     {
         var filter1 = Builders<User>.Filter.Eq("UserName", username);
@@ -73,7 +73,7 @@ public class UserRepository
 
         return user != null;
     }
-
+    //Henter en bruger der er logget ind baseret på brugernavn
     public async Task<User> GetLoggedInUser(string username)
     {
         var filter1 = Builders<User>.Filter.Eq("UserName", username);
@@ -81,14 +81,14 @@ public class UserRepository
         return await collection.Find(filter1).FirstOrDefaultAsync(); ;
     }
 
-    //Get User by UserID
+    //Henter en bruger baseret på deres bruger ID
     public async Task<User> GetUserById(string userId)
 	{
 		var filter = Builders<User>.Filter.Eq("UserId", userId);
 		return await collection.Find(filter).FirstOrDefaultAsync();
 	}
 
-	//Get Subcontractors
+	//Henter alle underentreprenører 
 	public async Task<List<Subcontractor>> GetAllSubcontractors()
 	{
 		var filter = Builders<User>.Filter.Eq("Role", "Subcontractor");

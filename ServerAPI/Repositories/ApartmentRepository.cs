@@ -18,7 +18,7 @@ public class ApartmentRepository
         collection = database.GetCollection<Apartment>("Apartments");
     }
 
-    //Post apartment: 
+   //Tilføjer en lejlighed
     public async Task PostApartment(Apartment apartment)
     {
         var existingapartment = await collection.Find(a => a.Address == apartment.Address).FirstOrDefaultAsync();
@@ -30,28 +30,28 @@ public class ApartmentRepository
 
         await collection.InsertOneAsync(apartment);
     }
-    //Update apartment: 
+    //Opdaterer en lejlighed baseret på ID
     public async Task UpdateApartment(string id, Apartment updatedApartment)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, id);
         await collection.ReplaceOneAsync(filter, updatedApartment);
     }
 
-    //Get all Apartments:
+    //Henter en liste over alle lejligheder
     public async Task<List<Apartment>> GetAllApartments()
     {
         return await collection.Find(apartment => true).ToListAsync();
     }
 
 
-    // Get all apartments filtered by status:
+    // Henter lejligheder med specifik status
     public async Task<List<Apartment>> GetApartmentsByStatus(string status)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.Status, status);
         return await collection.Find(filter).ToListAsync();
     }
 
-    //Get Apartment:
+    // Henter en lejlighed baseret på dens ID
     public async Task<Apartment> GetApartment(string apartmentId)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
@@ -59,14 +59,14 @@ public class ApartmentRepository
     }
 
 
-    //Get Apartments "Ikke færdig" Count. 
+    // Tæller antallet af lejligheder med status "ikke færdig"
     public async Task<long> GetApartmentsNotFinishedCount()
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.Status, "Ikke færdig");
         return await collection.CountDocumentsAsync(filter);
     }
 
-
+    //Henter lejligheden baseret på lejerens userID
     public async Task<Apartment> GetApartmentByUserId(string userId)
     {
         
@@ -76,7 +76,7 @@ public class ApartmentRepository
         return await collection.Find(filter).FirstOrDefaultAsync();
     }
 
-
+    // Tildeler en lejer til en lejlighed, baseret på lejligheds ID
     public async Task<bool> AssignTenantToApartment(string apartmentId, Tenant tenant)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
@@ -85,7 +85,7 @@ public class ApartmentRepository
 
         return result.ModifiedCount > 0; // Return true if a document was modified
     }
-    // Add Availability to an Apartment
+    //Opdaterer tilgængeligheden for en lejlighed baseret på lejligheds ID
     public async Task<bool> UpdateApartmentAvailability(string apartmentId, List<Availability> availabilities)
     {
         
@@ -103,7 +103,7 @@ public class ApartmentRepository
     }
 
 
-    // Get All Availabilities for an Apartment
+    // Henter alle tilgængeligheder for en lejglihed baseret på lejlighdeds ID
     public async Task<List<Availability>> GetAvailabilitiesByApartmentId(string apartmentId)
     {
         var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);

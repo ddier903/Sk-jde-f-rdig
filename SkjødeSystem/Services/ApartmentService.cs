@@ -15,7 +15,7 @@ public class ApartmentService : IApartmentService
         public ApartmentService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _serverUrl = configuration["ApiBaseUrl"]; // Get the API base URL from configuration
+            _serverUrl = configuration["ApiBaseUrl"]; // Henter API URL
         }
 
         // Hent alle lejligheder

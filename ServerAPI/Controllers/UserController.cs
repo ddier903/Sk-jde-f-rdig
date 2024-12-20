@@ -2,6 +2,8 @@
 using ServerAPI.Repositories;
 using Core; 
 
+
+// Håndterer API-Kald relateret til brugere som admins, underentreprenører og lejere
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -13,7 +15,7 @@ public class UserController : ControllerBase
         _repository = new UserRepository();
     }
 
-    //Add Admin
+    //Tilføjer en admin
     [HttpPost]
     [Route("AddAdmin")]
     public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
@@ -29,7 +31,7 @@ public class UserController : ControllerBase
 
     }
 
-    //Add Subcontractor
+    //Tilføjer en underentreprenør
 
     [HttpPost]
     [Route("AddSubcontractor")]
@@ -45,7 +47,7 @@ public class UserController : ControllerBase
         return Ok("Subcontractor added successfully");
     }
 
-    //Add Tenant
+    //Tilføjer lejer 
 
     [HttpPost]
     [Route("AddTenant")]
@@ -62,7 +64,7 @@ public class UserController : ControllerBase
 
     }
 
-    //Delete User
+    //Sletter en bruger baseret på deres userID
     [HttpDelete]
     [Route("DeleteUser{userId}")]
     public async Task<IActionResult> DeleteUser(string userId)
@@ -72,7 +74,7 @@ public class UserController : ControllerBase
 		return Ok("User deleted successfully");
 
 	}
-    //Update User
+    //Opdaterer en brugers data, baseret på userID
     [HttpPut]
     [Route("UpdateUser{userId}")]
     public async Task<IActionResult> UpdateUser(string userId, [FromBody] User updateduser)
@@ -83,7 +85,7 @@ public class UserController : ControllerBase
 
 	}
 
-    //Get User by Username and Password
+    //Autentificerer bruger baseret på brugernavn og adgangskode
     [HttpGet]
     [Route("Authenticate")]
 
@@ -98,7 +100,7 @@ public class UserController : ControllerBase
         return Ok(new { success = true });
     }
 
-    //Get logged in user:
+    //Henter detajler om den som er logget ind, baseret på brugernavn
 
     [HttpGet]
     [Route("GetLoggedInUser")]
@@ -114,7 +116,7 @@ public class UserController : ControllerBase
         return Ok(LoggedInUser);
     }
 
-    //Get USer by UserID
+    // Henter en bruger baseret på userID
     [HttpGet]
     [Route("GetUserById/{userId}")]
     public async Task<IActionResult> GetUserById(string userId)
@@ -130,7 +132,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    //Get All Subcontractors
+    //Henter alle underentreprenører
     [HttpGet]
     [Route("GetSubcontractors")]
     public async Task<IActionResult> GetAllSubcontractors()

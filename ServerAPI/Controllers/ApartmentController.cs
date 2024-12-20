@@ -3,6 +3,8 @@ using ServerAPI.Repositories;
 using Core;
 using MongoDB.Bson;
 
+
+// Kontrollere API-kald til lejlighedsrelateret ting
 [ApiController]
 [Route("api/[controller]")]
 public class ApartmentController : ControllerBase
@@ -14,7 +16,7 @@ public class ApartmentController : ControllerBase
         _repository = new ApartmentRepository();
     }
 
-    //Post apartment: 
+    //Post Lejlighed
 
     [HttpPost]
     [Route("AddApartment")]
@@ -29,7 +31,7 @@ public class ApartmentController : ControllerBase
         return Ok("Apartment added successfully");
     }
 
-    //Update apartment: 
+    //Opdatere lejlighed
     [HttpPut]
     [Route("UpdateApartment/{id}")]
     public async Task<IActionResult> UpdateApartment(string id,[FromBody] Apartment updatedApartment)
@@ -43,7 +45,7 @@ public class ApartmentController : ControllerBase
         return Ok("Apartment updated successfully");
     }
 
-    //Get all Apartments:
+    //Henter alle apartments
     [HttpGet]
     [Route("GetAllApartments")]
 
@@ -59,7 +61,7 @@ public class ApartmentController : ControllerBase
     }
 
 
-    // Get all apartments filtered by status:
+    // Henter alle lejligheder baseret på status
     [HttpGet]
     [Route("GetApartmentByStatus/{status}")]
     public async Task<IActionResult> GetApartmentsByStatus(string status)
@@ -74,7 +76,7 @@ public class ApartmentController : ControllerBase
         return Ok(apartments);
     }
 
-    //Get Apartment:
+    // Henter en specifik lejlighed
     [HttpGet]
     [Route("GetApartmentById/{id}")]
     public async Task<IActionResult> GetApartment(string id)
@@ -89,7 +91,7 @@ public class ApartmentController : ControllerBase
     }
 
 
-    //Get Apartments "Ikke færdig" Count. 
+    //Henter lejgliheder som ikke er færdige
     [HttpGet]
     [Route("GetApartmentsNotFinishedCount")]
     public async Task<IActionResult> GetApartmentsNotFinishedCount()
@@ -97,7 +99,8 @@ public class ApartmentController : ControllerBase
         var count = await _repository.GetApartmentsNotFinishedCount();
         return Ok(new { Count = count });
     }
-
+    
+    //Henter lejlighed baseret på bruger ID
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetApartmentByUserId(string userId)
     {
@@ -116,7 +119,7 @@ public class ApartmentController : ControllerBase
         return Ok(apartment);
     }
 
-
+    //Tildeler en lejer til en lejlighed
     [HttpPut("assign-tenant/{apartmentId}")]
     public async Task<IActionResult> AssignTenant(string apartmentId, [FromBody] Tenant tenant)
     {
@@ -135,6 +138,8 @@ public class ApartmentController : ControllerBase
         return Ok($"Tenant assigned to apartment with ID {apartmentId}.");
     }
 
+
+    // Opdaterer tilgængeligheden for en lejlighed
     [HttpPut("UpdateAvailability/{apartmentId}")]
     public async Task<IActionResult> UpdateAvailability(string apartmentId, [FromBody] List<Availability> availabilities)
     {
@@ -143,7 +148,7 @@ public class ApartmentController : ControllerBase
             return BadRequest("Availability list is null or empty.");
         }
 
-        // Convert each date in the list to UTC
+        
         foreach (var availability in availabilities)
         {
             availability.Date = availability.Date.ToUniversalTime();
@@ -159,7 +164,7 @@ public class ApartmentController : ControllerBase
         return Ok("Availability updated successfully.");
     }
 
-
+    // Henter tilgængelighed for en specifik lejlighed
     [HttpGet("GetAvailability/{apartmentId}")]
     public async Task<IActionResult> GetAvailability(string apartmentId)
     {
@@ -170,7 +175,7 @@ public class ApartmentController : ControllerBase
             return NotFound($"Apartment with ID {apartmentId} not found.");
         }
 
-      
+      // Konverter datoer til lokal format, hvis de findes
         if (apartment.Availability != null)
         {
             foreach (var availability in apartment.Availability)

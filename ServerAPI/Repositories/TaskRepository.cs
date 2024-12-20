@@ -18,14 +18,14 @@ public class TaskRepository
         collection = database.GetCollection<TaskItem>("Task");
     }
 
-    // Post Task:
+    // Tilføjer en opgave
 
     public async Task PostTask(TaskItem task)
     {
         await collection.InsertOneAsync(task);
     }
 
-    // Update Task: 
+    // Opdaterer en eksisterende opgave, baseret på dens ID
 
     public async Task UpdateTask(string taskId, TaskItem updatedtask)
     {
@@ -39,7 +39,7 @@ public class TaskRepository
         var result = await collection.UpdateOneAsync(filter, update);
     }
 
-    // Delete Task: 
+    // Sletter en opgave baseret på dens ID
 
     public async Task DeleteTask(string taskId)
     {
@@ -47,38 +47,35 @@ public class TaskRepository
         await collection.DeleteOneAsync(filter);
     }
 
-    //Get All Task by ApartmentID:
+    //Henter alle opgaver knyttet til en lejlighed, baseret på dens ID
     public async Task<List<TaskItem>> GetAllTaskByApartmentId(string id)
     {
         var filter = Builders<TaskItem>.Filter.Eq("AssignedApartment.ApartmentId", id);
         return await collection.Find(filter).ToListAsync();
     }
 
-    //Get Task by ApartmentID, sorted by Status: 
-
-
-    //Get All Task by Subconctractor:
+    //Henter alle opgaver der er knyttet til en underentreprenør
     public async Task<List<TaskItem>> GetAllTasksBySubcontractor(string id)
     {
         var filter = Builders<TaskItem>.Filter.Eq("AssignedTo.UserId", id);
         return await collection.Find(filter).ToListAsync();
     }
 
-    // Get all Tasks:
+    //Henter alle opgaver
     public async Task<List<TaskItem>> GetAllTasks()
     {
         var filter = Builders<TaskItem>.Filter.Empty;
         return await collection.Find(filter).ToListAsync();
     }
 
-    // Get Task by Id: 
+    // Henter en specifik opgave baseret på dens ID
     public async Task<TaskItem> GetTaskById(string taskId)
     {
         var filter = Builders<TaskItem>.Filter.Eq("TaskId", taskId);
         return await collection.Find(filter).FirstOrDefaultAsync(); ;
     }
 
-    // Get All Task by status:
+    // Filrerer opgaver baseret på deres status
     public async Task<List<TaskItem>> FilterTaskByStatus(string status)
     {
         var filter = Builders<TaskItem>.Filter.Eq("Status", status);

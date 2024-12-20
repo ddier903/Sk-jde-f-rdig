@@ -1,4 +1,4 @@
-﻿@page "/createavailability/{UserId}"
+﻿@page "/createavailability/{UserId}" 
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IApartmentService ApartmentService
@@ -9,37 +9,40 @@
 @if (apartment == null)
 {
     <div class="alert alert-danger">No apartment found for this user.</div>
+    
 }
 else
 {
     <div class="mb-3">
-        <h4>Lejligheds Adresse: @apartment.Address</h4>
+        <h4>Lejligheds Adresse: @apartment.Address</h4> 
     </div>
 
     <EditForm Model="@availability" OnValidSubmit="SaveAvailability">
+        // Form til at gemme ledighed for lejligheden.
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div>
             <label for="datePicker">Vælg Dato:</label>
-            <InputDate TValue="DateTime" id="datePicker" class="form-control" @bind-Value="availability.Date" />
+            <InputDate TValue="DateTime" id="datePicker" class="form-control" @bind-Value="availability.Date" /> 
         </div>
 
         <div>
             <label for="timeInput">Vælg Tid (timer/min):</label>
-            <input id="timeInput" type="text" class="form-control" @bind="timeInput" />
+            <input id="timeInput" type="text" class="form-control" @bind="timeInput" /> 
             @if (isTimeInputInvalid)
             {
                 <span class="text-danger">Invalid time format. Please use HH:mm.</span>
+                
             }
         </div>
 
         <div>
-            <button class="btn btn-primary mt-3" type="submit">Gem Ledighed</button>
+            <button class="btn btn-primary mt-3" type="submit">Gem Ledighed</button> 
         </div>
     </EditForm>
 
-    @if (Message != null)
+    @if (Message != null) // Viser en success, hvis ledighed er gemt korrekt.
     {
         <p class="text-success mt-3">@Message</p>
     }
@@ -50,6 +53,7 @@ else
     @if (availabilityDates == null || !availabilityDates.Any())
     {
         <p>No availabilities found.</p>
+       
     }
     else
     {
@@ -57,6 +61,7 @@ else
             @foreach (var avail in availabilityDates)
             {
                 <li>@avail.Date.ToString("dd.MM.yyyy") @avail.Date.TimeOfDay.ToString(@"hh\:mm")</li>
+                // Viser hver ledighedsdato og tid.
             }
         </ul>
     }
@@ -64,50 +69,50 @@ else
 
 @code {
     private Apartment apartment; 
-    private List<Availability> availabilityDates = new List<Availability>();
-    private string Message;
+    private List<Availability> availabilityDates = new List<Availability>(); 
+    private string Message; // Besked til bruger om succes eller fejl.
     private Availability availability = new Availability
         {
             Date = DateTime.Today 
         };
     private string timeInput = "00:00"; 
-    private bool isTimeInputInvalid = false;
-    private Tenant? currentUser;
+    private bool isTimeInputInvalid = false; 
+    private Tenant? currentUser; //henter den  nuværende bruger, 
 
     [Parameter]
     public string UserId { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
-        //Tjekker nuværende bruger:
+        // Tjekker nuværende bruger:
         currentUser = await localStorage.GetItemAsync<Tenant>("user");
         if (currentUser == null || currentUser.Role != "Tenant")
         {
-            NavigationManager.NavigateTo("/login");
+            NavigationManager.NavigateTo("/login"); // tilbage til login, hvis ikke en gyldig bruger.
         }
 
         try
         {
-
+            // Henter lejligheden baseret på brugerens ID.
             apartment = await ApartmentService.GetApartmentByUserId(UserId);
 
             if (apartment == null)
             {
-                Message = "No apartment found for this user.";
+                Message = "No apartment found for this user."; 
                 return;
             }
 
-
+            // Henter ledighedsdatoer for lejligheden.
             availabilityDates = await ApartmentService.GetAvailabilityByApartmentId(apartment.ApartmentId);
 
             if (availabilityDates == null || !availabilityDates.Any())
             {
-                Message = "No availability dates found for this apartment.";
+                Message = "No availability dates found for this apartment."; 
             }
         }
         catch (Exception ex)
         {
-
+            
         }
     }
 
@@ -115,34 +120,36 @@ else
     {
         if (availability.Date == DateTime.MinValue)
         {
-            Message = "Please select a valid date.";
+            Message = "Please select a valid date."; 
             return;
         }
 
         if (!TimeSpan.TryParseExact(timeInput, @"hh\:mm", null, out var parsedTime))
         {
-            isTimeInputInvalid = true;
+            isTimeInputInvalid = true; 
             return;
         }
 
-        isTimeInputInvalid = false;
+        isTimeInputInvalid = false; 
 
-
+        // Kombinerer dato og tid.
         availability.Date = availability.Date.Date + parsedTime;
 
-
+        // Initialiserer ledighedslisten, hvis den er tom, og tilføjer ny ledighed.
         apartment.Availability ??= new List<Availability>();
         apartment.Availability.Add(availability);
 
+        // Opdaterer ledighed i backend via ApartmentService.
         var success = await ApartmentService.UpdateApartmentAvailability(apartment.ApartmentId, apartment.Availability);
 
         if (success)
         {
+            
             availability = new Availability
                 {
                     Date = DateTime.Today
                 };
-            timeInput = "00:00"; // Reset time input
+            timeInput = "00:00";
             Message = "Ledighed gemt med succes!";
         }
     }

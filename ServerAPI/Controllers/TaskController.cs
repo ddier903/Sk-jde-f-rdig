@@ -3,6 +3,8 @@ using ServerAPI.Repositories;
 using Core;
 using System.Reflection;
 
+
+//Håndtere API-kald relateret til opgaver
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController : ControllerBase
@@ -14,7 +16,7 @@ public class TaskController : ControllerBase
         _repository = new TaskRepository();
     }
 
-    // Post Task:
+    //Tilføjer en ny opgave
     [HttpPost]
     [Route("AddTask")]
     public async Task<IActionResult> PostTask([FromBody] TaskItem task)
@@ -31,7 +33,7 @@ public class TaskController : ControllerBase
 
     }
 
-    // Update Task: 
+    //Opdaterer en eksisterende opgave baseret på ID
     [HttpPut]
     [Route("UpdateTask/{taskId}")]
     public async Task<IActionResult> UpdateTask(string taskId, [FromBody] TaskItem updatedtask)
@@ -42,7 +44,7 @@ public class TaskController : ControllerBase
 
     }
 
-    // Delete Task: 
+    //Sletter en opgave baseret på ID
     [HttpDelete]
     [Route("DeleteTask{taskId}")]
     public async Task<IActionResult> DeleteTask(string taskId)
@@ -53,7 +55,7 @@ public class TaskController : ControllerBase
 
     }
 
-    //Get Task by ApartmentID:
+    //Henter alle opgaver for en given lejlighed baseret på apartmentID
     [HttpGet]
     [Route("GetTaskByApartmentId{apartmentId}")]
     public async Task<IActionResult> GetAllTasksByApartmentId(string apartmentId)
@@ -69,10 +71,7 @@ public class TaskController : ControllerBase
     }
 
 
-    //Get Task by ApartmentID, sorted by Status: 
-
-
-    //Get Task by Subconctractor:
+    //Henter opgaver for en bestemt underentreprenør baseret på UserID
     [HttpGet("GetTaskBySubcontractor/{userId}")]
     public async Task<IActionResult> GetAllTasksBySubcontractor(string userId)
     {
@@ -90,7 +89,7 @@ public class TaskController : ControllerBase
     }
 
 
-// Get all Tasks:
+// Henter alle opgaver
 [HttpGet]
     [Route("GetAllTasks")]
     public async Task<IActionResult> GetAllTasks() 
@@ -104,7 +103,7 @@ public class TaskController : ControllerBase
         return Ok(tasks);
     }
 
-    // Get Task by Id: 
+    // Henter en opgave baseret på dens ID 
     [HttpGet("GetTasksById/{taskId}")]
     public async Task<IActionResult> GetTasksById(string taskId)
     {
@@ -121,7 +120,7 @@ public class TaskController : ControllerBase
         return Ok(task);
     }
 
-    // Get Tasks filtered by status:
+    // Filtrerer opgaver baseret på status
     [HttpGet]
     [Route("GetTasksByStatus{status}")]
     public async Task<IActionResult> FilterTaskByStatus(string status)

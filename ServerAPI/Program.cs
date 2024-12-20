@@ -5,16 +5,18 @@ using ServerAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
+// Tilføjer services til containeren så der kan bruges dependency injection
+//tilføjer Controllers + API-endpoints
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//registrerer vores repositories som scoped services, så de kan injectes i controllers bla
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<UserRepository>();
 
-// Add CORS Policy
+// Cors-Policy, tillader kommunikation mellem frontend og backend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorApp", policy =>
@@ -25,8 +27,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add controllers
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -34,15 +34,15 @@ var app = builder.Build();
 app.UseCors("AllowBlazorApp"); 
 
 
-
+// Swagger dokumentation
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
 
+app.UseAuthorization();
 
 app.MapControllers();
 
